@@ -1,10 +1,17 @@
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
