@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { API_BASE_URL } from '@env';
 import store from '../redux/store'; 
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 class API {
   static baseURL = API_BASE_URL;
@@ -12,7 +13,7 @@ class API {
     const state = store.getState();
     const token = state.auth.token;
     
-    if (this.token) {
+    if (token) {
       headers.Authorization = `Bearer ${token}`;
     }
     return headers;
