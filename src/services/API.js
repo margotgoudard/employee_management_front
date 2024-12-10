@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from '../redux/store'; 
+import { store } from '../redux/store';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 

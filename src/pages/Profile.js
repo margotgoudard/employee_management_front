@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Auth from '../services/Auth';
 import LoginForm from '../components/LoginForm';
 import ChangePasswordForm from '../components/ChangePasswordForm';
+import '../assets/styles/App.css';
 import logo from '../assets/images/logo.png';
 import background from '../assets/images/background.png';
 
@@ -15,7 +16,6 @@ const Login = () => {
   const handleLogin = async (email, password) => {
     try {
       const { user, token } = await Auth.login(email, password);
-
       dispatch({ type: 'auth/login', payload: { user, token } });
 
       if (user.last_connected) {
@@ -32,7 +32,7 @@ const Login = () => {
   const handleChangePassword = async (newPassword) => {
     try {
       alert('Mot de passe changé avec succès.');
-      navigate('/profile'); 
+      navigate('/profile');
     } catch (error) {
       console.error('Erreur lors du changement de mot de passe :', error);
       alert(error.message || 'Impossible de changer le mot de passe.');

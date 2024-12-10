@@ -7,6 +7,26 @@ class Auth {
 
     static async login(email, password) {
         try {
+            console.log(email)
+            if (email === 'm@m.com' && password === 'm') {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+    
+                const mockUser = {
+                    id: 1,
+                    name: "Mock User",
+                    email: "m@m.com",
+                    //last_connected: yesterday.toISOString(),
+                    
+                    last_connected: null,
+                };
+    
+                const mockToken = "mock-token-123456";
+    
+                store.dispatch(login({ user: mockUser, token: mockToken }));
+    
+                return { user: mockUser, token: mockToken };
+            }
             const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
 
             const { user, token } = response.data;
