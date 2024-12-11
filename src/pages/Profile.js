@@ -18,6 +18,20 @@ const Profile = () => {
     fetchFiches();
   }, [user]);
 
+  const getStatusClass = (status) => {
+    console.log(status)
+    switch (status) {
+      case 'Validée':
+        return 'status-green';
+      case 'En attente d\'approbation':
+        return 'status-orange';
+      case 'À compléter':
+        return 'status-gray';
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="user-dashboard">
       <div className="user-info">
@@ -55,7 +69,7 @@ const Profile = () => {
                 </div>
                 <div className="fiche-details">
                   <h3>{`${fiche.month} ${fiche.year}`}</h3>
-                  <p>{fiche.status}</p>
+                  <p className={`${getStatusClass(fiche.status)}`}>{fiche.status}</p>
                 </div>
               </div>
               <button className="view-button">Voir la fiche</button>
