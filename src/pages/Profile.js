@@ -1,15 +1,22 @@
-import React from 'react';
-import { useSelector } from 'react-redux'; 
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import '../assets/styles/Profile.css';
+import Mensual_Timetable_Sheet from '../services/Mensual_Timetable_Sheet';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
-  console.log(user)
-  const fiches = [
-    { month: 'Janvier 2025', status: 'À compléter' },
-    { month: 'Décembre 2024', status: 'En attente d\'approbation' },
-    { month: 'Novembre 2024', status: 'Validée' },
-  ];
+  const [fiches, setFiches] = useState([]);
+
+  useEffect(() => {
+    const fetchFiches = async () => {
+      if (user?.id_user) {
+        const fetchedFiches = await Mensual_Timetable_Sheet.fetchNotifications(user.id_user);
+        setFiches(fetchedFiches);
+      }
+    };
+
+    fetchFiches();
+  }, [user]);
 
   return (
     <div className="user-dashboard">
@@ -40,14 +47,14 @@ const Profile = () => {
       <div className="fiches-horaires">
         <h2>Fiches horaires mensuelles</h2>
         <div className="fiches-list">
-          {fiches.map((fiche, index) => (
-            <div className="fiche-card" key={index}>
+          {fiches.map((fiche) => (
+            <div className="fiche-card" key={fiche.id_timetable}>
               <div className="fiche-content">
                 <div className="fiche-icon">
                   <div className="icon-placeholder"></div>
                 </div>
                 <div className="fiche-details">
-                  <h3>{fiche.month}</h3>
+                  <h3>{`${fiche.month} ${fiche.year}`}</h3>
                   <p>{fiche.status}</p>
                 </div>
               </div>
