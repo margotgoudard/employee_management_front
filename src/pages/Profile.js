@@ -13,7 +13,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchFiches = async () => {
       if (user?.id_user) {
-        const fetchedFiches = await Mensual_Timetable_Sheet.fetchNotifications(user.id_user);
+        const fetchedFiches = await Mensual_Timetable_Sheet.fetchMensualTimetable(user.id_user);
         setFiches(fetchedFiches);
       }
     };
@@ -36,7 +36,7 @@ const Profile = () => {
   };
 
   const handleViewFiche = (id_timetable) => {
-    navigate(`/mensual_timetable_sheet/${id_timetable}`);
+    navigate(`/mensual_timetable/${id_timetable}`);
   };
 
   return (
@@ -81,7 +81,7 @@ const Profile = () => {
               </div>
               <button
                 className="view-button"
-                onClick={() => handleViewFiche(fiche.id_timetable)} // Redirect on click
+                onClick={() => handleViewFiche(fiche.id_timetable)} 
               >
                 Voir la fiche
               </button>

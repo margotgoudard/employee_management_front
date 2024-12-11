@@ -1,0 +1,158 @@
+.mensual-timetable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+
+  h2 {
+    font-size: 1em;
+  }
+  
+  .calendar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 300px;
+    margin-bottom: 10px;
+  }
+  
+  .monthly-details {
+    width: 300px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .detail-item {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .detail-item label {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .detail-item input,
+  .detail-item textarea {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .submit-button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Bulles rouges */
+  .bubble-red {
+    background-color: rgba(255, 0, 0, 0.2);
+    border: 2px solid red;
+    color: red;
+  }
+  
+  /* Bulles vertes */
+  .bubble-green {
+    background-color: rgba(0, 255, 0, 0.2);
+    border: 2px solid green;
+    color: green;
+  }
+  
+  /* Bulles oranges */
+  .bubble-orange {
+    background-color: rgba(255, 165, 0, 0.2);
+    border: 2px solid orange;
+    color: orange;
+  }
+
+.react-calendar__tile:hover {
+    transform: scale(1.1);
+}
+  
+.react-calendar__tile {
+    border-radius: 100%; 
+    height: 40px; 
+    max-width: 40px;
+    transition: transform 0.2s;
+    margin: 5px; 
+}
+
+.react-calendar__month-view__days__day {
+    margin: 5px; 
+}
+
+.react-calendar__month-view__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 10px; 
+    justify-content: center;
+    align-items: center;
+}
+
+  /* Bulles grises (jours normaux) */
+  .bubble-gray {
+    background-color: rgba(200, 200, 200, 0.2);
+    border: 2px solid gray; 
+    color: black;
+  }
+  
+  /* Jours désactivés */
+  .disabled-day {
+    background-color: #f0f0f0 !important; 
+    color: #d0d0d0 !important; 
+    pointer-events: none; 
+  }
+
+  .react-calendar {
+    border: none
+    }
+
+  /* Centrage parfait du texte dans le rond */
+  .react-calendar__tile span {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px; 
+  }
+  
+  .disabled-day, .bubble-gray, .bubble-red, .bubble-green, .bubble-orange {
+    margin: 5px; 
+}
+
+.bubble-black {
+    background-color: '#F5F5F5';
+    border-radius: 50%;
+    color: black;
+  }
+  
+  .bubble-gray {
+    background-color: gray;
+    border-radius: 50%;
+  }
+  
+  .disabled-day {
+    color: lightgray;
+    pointer-events: none;
+  }
+  

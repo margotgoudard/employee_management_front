@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Navbar from './components/Navbar';
 import './assets/styles/App.css'
+import Mensual_Timetable from './pages/Mensual_Timetable';
 
 const App = () => {
   const location = useLocation();
@@ -17,6 +18,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/mensual_timetable/:id_timetable" element={<Mensual_Timetable />} />
       </Routes>
     </div>
   );

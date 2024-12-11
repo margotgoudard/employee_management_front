@@ -115,5 +115,10 @@
     color: var(--blue-color);
     font-size: 1.5rem;
   }
+
+  .navbar-links .active {
+    color: var(--green-color);
+  }
+  
   
   
