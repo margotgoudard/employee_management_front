@@ -27,7 +27,7 @@ const Navbar = () => {
         </button>
         <div className="navbar-profile">
           <IoPerson className="icon-profile" />
-          <span className="profile-name">{user ? user.name : 'Guest'}</span>
+          <span className="profile-name">{user ? user.first_name : 'Guest'}</span>
         </div>
       </div>
     </nav>
