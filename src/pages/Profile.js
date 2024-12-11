@@ -1,53 +1,96 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import Auth from '../services/Auth';
-import LoginForm from '../components/LoginForm';
-import ChangePasswordForm from '../components/ChangePasswordForm';
-import '../assets/styles/App.css';
-import logo from '../assets/images/logo.png';
-import background from '../assets/images/background.png';
+import '../assets/styles/Profile.css';
+import Mensual_Timetable_Sheet from '../services/Mensual_Timetable_Sheet';
 
-const Login = () => {
-  const [showComponent, setShowComponent] = useState('login');
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+const Profile = () => {
+  const user = useSelector((state) => state.auth.user);
+  const [fiches, setFiches] = useState([]);
 
-  const handleLogin = async (email, password) => {
-    try {
-      const { user, token } = await Auth.login(email, password);
-      dispatch({ type: 'auth/login', payload: { user, token } });
+  const navigate = useNavigate(); 
 
-      if (user.last_connected) {
-        navigate('/profile');
-      } else {
-        setShowComponent('changePassword');
+  useEffect(() => {
+    const fetchFiches = async () => {
+      if (user?.id_user) {
+        const fetchedFiches = await Mensual_Timetable_Sheet.fetchNotifications(user.id_user);
+        setFiches(fetchedFiches);
       }
-    } catch (error) {
-      console.error('Erreur lors de la connexion :', error);
-      alert(error.message || 'Échec de la connexion. Vérifiez vos informations.');
+    };
+
+    fetchFiches();
+  }, [user]);
+
+  const getStatusClass = (status) => {
+    console.log(status)
+    switch (status) {
+      case 'Validée':
+        return 'status-green';
+      case 'En attente d\'approbation':
+        return 'status-orange';
+      case 'À compléter':
+        return 'status-gray';
+      default:
+        return '';
     }
   };
 
-  const handleChangePassword = async (newPassword) => {
-    try {
-      alert('Mot de passe changé avec succès.');
-      navigate('/profile');
-    } catch (error) {
-      console.error('Erreur lors du changement de mot de passe :', error);
-      alert(error.message || 'Impossible de changer le mot de passe.');
-    }
+  const handleViewFiche = (id_timetable) => {
+    navigate(`/mensual_timetable_sheet/${id_timetable}`);
   };
 
   return (
-    <div className="login-container" style={{ backgroundImage: `url(${background})` }}>
-      <div className="form-container">
-        <img src={logo} alt="Logo" className="logo" />
-        {showComponent === 'login' && <LoginForm onLogin={handleLogin} />}
-        {showComponent === 'changePassword' && <ChangePasswordForm onChangePassword={handleChangePassword} />}
+    <div className="user-dashboard">
+      <div className="user-info">
+        <h2>Informations personnelles</h2>
+        <div className="info-item">
+          <label>Nom</label>
+          <input type="text" value={user?.last_name || ''} readOnly />
+        </div>
+        <div className="info-item">
+          <label>Prénom</label>
+          <input type="text" value={user?.first_name || ''} readOnly />
+        </div>
+        <div className="info-item">
+          <label>Email</label>
+          <input type="text" value={user?.email || ''} readOnly />
+        </div>
+        <div className="info-item">
+          <label>Tel</label>
+          <input type="text" value={user?.phone || ''} readOnly />
+        </div>
+        <div className="info-item">
+          <label>Profession</label>
+          <input type="text" value={user?.role || ''} readOnly />
+        </div>
+      </div>
+
+      <div className="fiches-horaires">
+        <h2>Fiches horaires mensuelles</h2>
+        <div className="fiches-list">
+          {fiches.map((fiche) => (
+            <div className="fiche-card" key={fiche.id_timetable}>
+              <div className="fiche-content">
+                <div className="fiche-icon">
+                  <div className="icon-placeholder"></div>
+                </div>
+                <div className="fiche-details">
+                  <h3>{`${fiche.month} ${fiche.year}`}</h3>
+                  <p className={`${getStatusClass(fiche.status)}`}>{fiche.status}</p>
+                </div>
+              </div>
+              <button
+                className="view-button"
+                onClick={() => handleViewFiche(fiche.id_timetable)} // Redirect on click
+              >
+                Voir la fiche
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Profile;
