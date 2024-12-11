@@ -36,11 +36,11 @@
   
   .info-item {
     margin-bottom: 15px;
+    margin-right: 4%;
   }
   
   .info-item label {
     display: block;
-    font-weight: bold;
     margin-bottom: 5px;
     color: #555;
   }
@@ -112,5 +112,12 @@
   p.status-gray {
     color: gray;
   }
+
+  .fiche-card:hover {
+    background-color: #f0f0f0; 
+    transition: background-color 0.3s ease; 
+    cursor: pointer;
+  }
+  
   
  

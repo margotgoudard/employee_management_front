@@ -4,6 +4,7 @@ import logo from '../assets/images/logo.png';
 import { HiBellAlert } from "react-icons/hi2";
 import { IoPerson } from "react-icons/io5";
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
 
@@ -26,8 +27,10 @@ const Navbar = () => {
           <HiBellAlert className="icon-notification" />
         </button>
         <div className="navbar-profile">
-          <IoPerson className="icon-profile" />
-          <span className="profile-name">{user ? user.first_name : 'Guest'}</span>
+            <Link to="/profile" className="profile-link">
+                <IoPerson className="icon-profile" />
+            </Link>
+            <span className="profile-name">{user ? user.first_name : 'Guest'}</span>
         </div>
       </div>
     </nav>

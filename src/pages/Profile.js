@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Profile.css';
 import Mensual_Timetable_Sheet from '../services/Mensual_Timetable_Sheet';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
   const [fiches, setFiches] = useState([]);
+
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchFiches = async () => {
@@ -30,6 +33,10 @@ const Profile = () => {
       default:
         return '';
     }
+  };
+
+  const handleViewFiche = (id_timetable) => {
+    navigate(`/mensual_timetable_sheet/${id_timetable}`);
   };
 
   return (
@@ -72,7 +79,12 @@ const Profile = () => {
                   <p className={`${getStatusClass(fiche.status)}`}>{fiche.status}</p>
                 </div>
               </div>
-              <button className="view-button">Voir la fiche</button>
+              <button
+                className="view-button"
+                onClick={() => handleViewFiche(fiche.id_timetable)} // Redirect on click
+              >
+                Voir la fiche
+              </button>
             </div>
           ))}
         </div>
