@@ -66,93 +66,23 @@
     background-color: #0056b3;
   }
   
-  /* Bulles rouges */
-  .bubble-red {
-    background-color: rgba(255, 0, 0, 0.2);
-    border: 2px solid red;
-    color: red;
-  }
-  
-  /* Bulles vertes */
-  .bubble-green {
-    background-color: rgba(0, 255, 0, 0.2);
-    border: 2px solid green;
-    color: green;
-  }
-  
-  /* Bulles oranges */
-  .bubble-orange {
-    background-color: rgba(255, 165, 0, 0.2);
-    border: 2px solid orange;
-    color: orange;
-  }
-
-.react-calendar__tile:hover {
-    transform: scale(1.1);
-}
-  
-.react-calendar__tile {
-    border-radius: 100%; 
-    height: 40px; 
-    max-width: 40px;
-    transition: transform 0.2s;
-    margin: 5px; 
-}
-
-.react-calendar__month-view__days__day {
-    margin: 5px; 
-}
-
-.react-calendar__month-view__days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr); 
-    gap: 10px; 
+  .mensual-timetable {
+    background-color: #f2f2f2; /* Gris clair pour toute la page */
+    min-height: 100vh; /* Assure que le fond gris couvre toute la hauteur */
+    display: flex;
     justify-content: center;
     align-items: center;
-}
-
-  /* Bulles grises (jours normaux) */
-  .bubble-gray {
-    background-color: rgba(200, 200, 200, 0.2);
-    border: 2px solid gray; 
-    color: black;
+    padding: 20px;
+    box-sizing: border-box;
   }
   
-  /* Jours désactivés */
-  .disabled-day {
-    background-color: #f0f0f0 !important; 
-    color: #d0d0d0 !important; 
-    pointer-events: none; 
-  }
-
-  .react-calendar {
-    border: none
-    }
-
-  /* Centrage parfait du texte dans le rond */
-  .react-calendar__tile span {
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 14px; 
-  }
-  
-  .disabled-day, .bubble-gray, .bubble-red, .bubble-green, .bubble-orange {
-    margin: 5px; 
-}
-
-.bubble-black {
-    background-color: '#F5F5F5';
-    border-radius: 50%;
-    color: black;
-  }
-  
-  .bubble-gray {
-    background-color: gray;
-    border-radius: 50%;
-  }
-  
-  .disabled-day {
-    color: lightgray;
-    pointer-events: none;
+  .timetable-container {
+    background-color: #ffffff; /* Fond blanc autour des éléments */
+    border-radius: 8px; /* Coins arrondis pour une meilleure esthétique */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ajout d'une ombre subtile */
+    padding: 20px;
+    width: 100%;
+    max-width: 800px; /* Limite la largeur de la boîte */
+    box-sizing: border-box;
   }
   

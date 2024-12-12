@@ -1,0 +1,143 @@
+.react-calendar {
+    border: none
+    }
+
+      /* Bulles rouges */
+  .bubble-red {
+    background-color: rgba(255, 0, 0, 0.2);
+    border: 2px solid red;
+    color: red;
+  }
+  
+  /* Bulles vertes */
+  .bubble-green {
+    background-color: rgba(0, 255, 0, 0.2);
+    border: 2px solid green;
+    color: green;
+  }
+  
+  /* Bulles oranges */
+  .bubble-orange {
+    background-color: rgba(255, 165, 0, 0.2);
+    border: 2px solid orange;
+    color: orange;
+  }
+
+.react-calendar__tile:hover {
+    transform: scale(1.1);
+}
+  
+.react-calendar__tile {
+    border-radius: 100%; 
+    height: 40px; 
+    max-width: 40px;
+    transition: transform 0.2s;
+    margin: 5px; 
+}
+
+.react-calendar__month-view__days__day {
+    margin: 5px; 
+}
+
+.react-calendar__month-view__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 10px; 
+    justify-content: center;
+    align-items: center;
+}
+
+  /* Bulles grises (jours normaux) */
+  .bubble-gray {
+    background-color: rgba(200, 200, 200, 0.2);
+    border: 2px solid gray; 
+    color: black;
+  }
+  
+  /* Jours désactivés */
+  .disabled-day {
+    background-color: #f0f0f0 !important; 
+    color: #d0d0d0 !important; 
+    pointer-events: none; 
+  }
+
+  .react-calendar {
+    border: none
+    }
+
+  /* Centrage parfait du texte dans le rond */
+  .react-calendar__tile span {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px; 
+  }
+  
+  .disabled-day, .bubble-gray, .bubble-red, .bubble-green, .bubble-orange {
+    margin: 5px; 
+}
+
+.bubble-black {
+    background-color: '#F5F5F5';
+    border-radius: 50%;
+    color: black;
+  }
+  
+  .bubble-gray {
+    background-color: gray;
+    border-radius: 50%;
+  }
+  
+  .disabled-day {
+    color: lightgray;
+    pointer-events: none;
+  }
+  
+  .calendar-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .calendar-section {
+    flex: 3;
+  }
+  
+  .weekly-hours-summary {
+    flex: 1;
+    margin-left: 20px;
+    padding: 10px;
+    margin-top: 8.5%;
+  }
+  
+  .weekly-hours-summary {
+    flex: 1;
+    margin-left: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .weekly-hours-summary h3 {
+    font-size: 1em;
+  }
+  
+  .weekly-hours-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .weekly-hours-summary li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .hours-value {
+    text-align: right;
+  }
+  
+  
+  
