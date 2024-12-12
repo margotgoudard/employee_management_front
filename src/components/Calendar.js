@@ -50,17 +50,31 @@ const CalendarComponent = ({
       );
 
       if (matchedDay) {
-        if (!matchedDay.isCompleted) {
-          return 'bubble-black';
+        if (!matchedDay.is_completed) {
+          return 'bubble-blue';
         }
-        return 'bubble-gray';
+        else 
+        {   
+            if (matchedDay.status === 'Travaillé')
+            {
+                return 'bubble-gray';
+            }
+            else 
+            {
+                if (matchedDay.status === 'Week-end' || matchedDay.status === 'Férié') 
+            {
+                return 'bubble-dark-gray';
+            }
+            }
+        
+        return 'bubble-orange';
+        }
       }
       return 'disabled-day';
     }
     return '';
   };
 
-  // Fonction pour calculer les semaines affichées dans le calendrier
   const getWeeksInMonth = (date) => {
     const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
     const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);

@@ -1,27 +1,18 @@
-.react-calendar {
+:root {
+    --green-color: #2fac66;
+    --green-hover-color: #218838;
+    --blue-color: #3b568e;
+    --white-color: #ffffff;
+    --input-color: #eaeaea;
+    --border-color: #ccc;
+    --text-color: #000000;
+    --background-overlay: rgba(255, 255, 255, 0.95);
+    --box-shadow-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .react-calendar {
     border: none
     }
-
-      /* Bulles rouges */
-  .bubble-red {
-    background-color: rgba(255, 0, 0, 0.2);
-    border: 2px solid red;
-    color: red;
-  }
-  
-  /* Bulles vertes */
-  .bubble-green {
-    background-color: rgba(0, 255, 0, 0.2);
-    border: 2px solid green;
-    color: green;
-  }
-  
-  /* Bulles oranges */
-  .bubble-orange {
-    background-color: rgba(255, 165, 0, 0.2);
-    border: 2px solid orange;
-    color: orange;
-  }
 
 .react-calendar__tile:hover {
     transform: scale(1.1);
@@ -33,6 +24,10 @@
     max-width: 40px;
     transition: transform 0.2s;
     margin: 5px; 
+}
+
+.react-calendar__tile:hover {
+    background-color: var(--green-color) !important;
 }
 
 .react-calendar__month-view__days__day {
@@ -47,12 +42,6 @@
     align-items: center;
 }
 
-  /* Bulles grises (jours normaux) */
-  .bubble-gray {
-    background-color: rgba(200, 200, 200, 0.2);
-    border: 2px solid gray; 
-    color: black;
-  }
   
   /* Jours désactivés */
   .disabled-day {
@@ -76,17 +65,31 @@
     margin: 5px; 
 }
 
-.bubble-black {
-    background-color: '#F5F5F5';
+.bubble-blue {
+    background-color: var(--blue-color);
     border-radius: 50%;
-    color: black;
+    color: white;
   }
+
   
   .bubble-gray {
-    background-color: gray;
+    background-color: #f5f5f5;
     border-radius: 50%;
+    color: #515151;
+  }
+
+  .bubble-dark-gray {
+    background-color: #d9d9d9;
+    border-radius: 50%;
+    color: #515151;
   }
   
+  .bubble-orange {
+    background-color: orange;
+    border-radius: 50%;
+    color: white;
+  }
+
   .disabled-day {
     color: lightgray;
     pointer-events: none;
@@ -138,6 +141,3 @@
   .hours-value {
     text-align: right;
   }
-  
-  
-  

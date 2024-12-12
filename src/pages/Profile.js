@@ -22,7 +22,6 @@ const Profile = () => {
   }, [user]);
 
   const getStatusClass = (status) => {
-    console.log(status)
     switch (status) {
       case 'Validée':
         return 'status-green';

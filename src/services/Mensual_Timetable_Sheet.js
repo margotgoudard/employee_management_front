@@ -35,7 +35,7 @@ class Mensual_Timetable_Sheet {
                         status: day % 2 === 0 ? 'Travaillé' : 'Weekend-end',
                         comment: day % 2 === 0 ? 'RAS' : 'Manque d\'informations',
                         on_call_duty: day % 5 === 0,
-                        isCompleted : day % 4 === 0 ? true : false
+                        is_completed : day % 4 === 0 ? true : false
                     }))
                 ]
             },
@@ -56,7 +56,7 @@ class Mensual_Timetable_Sheet {
                         status: day % 3 === 0 ? 'Férié' : 'Congés payés',
                         comment: day % 3 === 0 ? 'Vérifié' : 'Attente de vérification',
                         on_call_duty: day % 7 === 0,
-                        isCompleted : day % 4 === 0 ? true : false
+                        is_completed : day % 4 === 0 ? true : false
                     }))
                 ]
             },
@@ -77,7 +77,7 @@ class Mensual_Timetable_Sheet {
                         status: day % 4 === 0 ? 'Arrêt maladie' : 'Congés sans solde',
                         comment: day % 4 === 0 ? 'Approuvé' : 'RAS',
                         on_call_duty: day % 6 === 0,
-                        isCompleted : day % 4 === 0 ? true : false,
+                        is_completed : day % 4 === 0 ? true : false,
                     }))
                 ]
             }

@@ -16,7 +16,6 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <img src={logo} alt="PSS Logo" className="navbar-logo" />
-      </div>
       <ul className="navbar-links">
         <li>
           <Link 
@@ -36,6 +35,7 @@ const Navbar = () => {
           <a href="#mes-documents" className={isActive('/mes-documents') ? 'active' : ''}>Mes documents</a>
         </li>
       </ul>
+      </div>
       <div className="navbar-right">
         <button className="navbar-notification">
           <HiBellAlert className="icon-notification" />

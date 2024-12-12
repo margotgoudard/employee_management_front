@@ -77,9 +77,6 @@ const Mensual_Timetable = () => {
     if (selectedTimetable && selectedTimetable.daily_timetable_sheets) {
       const calculateWeeklyHours = async () => {
         const dailySheets = selectedTimetable.daily_timetable_sheets;
-        const firstDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-        const firstWeekDay = firstDayOfMonth.getDay(); // Sunday = 0, Monday = 1, etc.
-        const weekStartOffset = (firstWeekDay + 6) % 7; // Adjust for Monday start
   
         const weeks = [];
         let currentWeek = [];
@@ -90,7 +87,6 @@ const Mensual_Timetable = () => {
           const dayOfWeek = (dayDate.getDay() + 6) % 7;
   
           if (dayOfWeek === 0 && currentWeek.length > 0) {
-            // End of the week
             const weekHours = await Promise.all(
               currentWeek.map(async (weekDay) => {
                 const data = await Daily_Timetable_Sheet.fetchWorkedHoursByDailyTimetable(
@@ -107,7 +103,6 @@ const Mensual_Timetable = () => {
         }
   
         if (currentWeek.length > 0) {
-            console.log(currentWeek)
           const weekHours = await Promise.all(
             currentWeek.map(async (weekDay) => {
               const data = await Daily_Timetable_Sheet.fetchWorkedHoursByDailyTimetable(

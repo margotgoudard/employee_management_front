@@ -15,7 +15,6 @@ const Login = () => {
   const handleLogin = async (email, password) => {
     try {
       const { user, token } = await Auth.login(email, password);
-      console.log(user)
       dispatch({ type: 'auth/login', payload: { user, token } });
 
       if (user.last_connected) {
