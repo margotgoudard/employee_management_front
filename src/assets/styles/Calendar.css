@@ -10,6 +10,21 @@
     --box-shadow-color: rgba(0, 0, 0, 0.2);
   }
   
+  .calendar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 300px;
+    margin-bottom: 10px;
+  }
+
   .react-calendar {
     border: none
     }
@@ -28,6 +43,7 @@
 
 .react-calendar__tile:hover {
     background-color: var(--green-color) !important;
+    color: white
 }
 
 .react-calendar__month-view__days__day {
@@ -42,9 +58,7 @@
     align-items: center;
 }
 
-  
-  /* Jours désactivés */
-  .disabled-day {
+.disabled-day {
     background-color: #f0f0f0 !important; 
     color: #d0d0d0 !important; 
     pointer-events: none; 
@@ -54,7 +68,6 @@
     border: none
     }
 
-  /* Centrage parfait du texte dans le rond */
   .react-calendar__tile span {
     display: inline-block;
     vertical-align: middle;

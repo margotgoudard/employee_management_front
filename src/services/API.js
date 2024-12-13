@@ -1,10 +1,8 @@
 import axios from 'axios';
 import { store } from '../redux/store';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
 class API {
-  static baseURL = API_BASE_URL;
+  static baseURL = process.env.REACT_APP_API_BASE_URL;
 
   static async getHeaders() {
     const headers = {
@@ -22,7 +20,6 @@ class API {
   static async get(endpoint, params = {}) {
     const url = new URL(`${this.baseURL}${endpoint}`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-
     const headers = await this.getHeaders();
 
     const response = await axios.get(url.toString(), {

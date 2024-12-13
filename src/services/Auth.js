@@ -27,7 +27,7 @@ class Auth {
                     country_address: "France",
                     is_admin: false,
                     is_sup_admin: false,
-                    last_connected: new Date().toISOString(), // Vous pouvez remplacer par hier avec `yesterday.toISOString()`
+                    last_connected: new Date().toISOString(),
                   };                  
     
                 const mockToken = "mock-token-123456";

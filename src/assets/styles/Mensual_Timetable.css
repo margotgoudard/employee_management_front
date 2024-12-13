@@ -3,86 +3,32 @@
     flex-direction: column;
     padding: 20px;
     font-family: Arial, sans-serif;
+    margin-top: 67px;
   }
 
   h2 {
     font-size: 1em;
   }
   
-  .calendar-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .calendar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 300px;
-    margin-bottom: 10px;
-  }
-  
-  .monthly-details {
-    width: 300px;
-    padding: 15px;
-    border-radius: 8px;
-    background-color: #f5f5f5;
-  }
-  
-  .detail-item {
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .detail-item label {
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-  
-  .detail-item input,
-  .detail-item textarea {
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .submit-button {
-    margin-top: 10px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
-  
   .mensual-timetable {
-    background-color: #f2f2f2; /* Gris clair pour toute la page */
-    min-height: 100vh; /* Assure que le fond gris couvre toute la hauteur */
+    background-color: #f2f2f2; 
+    min-height: 100vh;
     display: flex;
     padding: 20px;
     box-sizing: border-box;
   }
   
   .timetable-container {
-    background-color: #ffffff; /* Fond blanc autour des éléments */
-    border-radius: 8px; /* Coins arrondis pour une meilleure esthétique */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ajout d'une ombre subtile */
+    background-color: #ffffff; 
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
     padding: 20px;
     width: 100%;
-    max-width: 800px; /* Limite la largeur de la boîte */
+    max-width: 800px; 
     box-sizing: border-box;
     display: flex;
-  flex-direction: column; /* Si vous voulez que Calendar et Details soient empilés */
-  align-items: center; /* Centre les enfants horizontalement */
-  justify-content: center; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
   }
   

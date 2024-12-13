@@ -13,13 +13,22 @@ const Profile = () => {
   useEffect(() => {
     const fetchFiches = async () => {
       if (user?.id_user) {
-        const fetchedFiches = await Mensual_Timetable_Sheet.fetchMensualTimetable(user.id_user);
+        const fetchedFiches = await Mensual_Timetable_Sheet.fetchMensualTimetablesByUser(user.id_user);
         setFiches(fetchedFiches);
       }
     };
 
     fetchFiches();
   }, [user]);
+
+  const months = [
+    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+  ];
+
+  const getMonthName = (monthNumber) => {
+    return months[monthNumber - 1] || ''; // Le tableau commence à 0, donc -1
+  };
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -74,7 +83,7 @@ const Profile = () => {
                   <div className="icon-placeholder"></div>
                 </div>
                 <div className="fiche-details">
-                  <h3>{`${fiche.month} ${fiche.year}`}</h3>
+                  <h3>{`${getMonthName(fiche.month)} ${fiche.year}`}</h3>
                   <p className={`${getStatusClass(fiche.status)}`}>{fiche.status}</p>
                 </div>
               </div>
