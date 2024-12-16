@@ -3,7 +3,7 @@ import API from "./API";
 class Mensual_Timetable_Sheet {
 
     static async updateMensualTimetable(mensual_timetable) {
-        const endpoint = `/mensual-timetable-sheet/${mensual_timetable.id_timetable}`;
+        const endpoint = `/mensual-timetable-sheets/${mensual_timetable.id_timetable}`;
         await API.put(endpoint, mensual_timetable);
         const response = await API.get(endpoint); 
         return response;

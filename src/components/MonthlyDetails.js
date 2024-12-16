@@ -39,7 +39,7 @@ const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable }) => {
         <div className="input-container">
         <input
           name="totalHours"
-          value={selectedTimetable?.totalHours || 0}
+          value={selectedTimetable?.totalWorkedHours || 0}
           readOnly
         />
         <span className="input-suffix" >heures</span>
@@ -51,7 +51,7 @@ const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable }) => {
         <input
           type="number"
           name="totalExpenses"
-          value={selectedTimetable?.totalExpenses || 0}
+          value={selectedTimetable?.totalExpenseNotes || 0}
           readOnly
         />
         <span className="input-suffix">CHF</span>
