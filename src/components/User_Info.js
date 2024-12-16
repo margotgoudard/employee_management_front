@@ -1,7 +1,7 @@
 import React from 'react';
 import '../assets/styles/Profile.css';
 
-const UserInfo = ({ user }) => {
+const User_Info = ({ user }) => {
   return (
     <div className="user-info">
       <h2>Informations personnelles</h2>
@@ -29,4 +29,4 @@ const UserInfo = ({ user }) => {
   );
 };
 
-export default UserInfo;
+export default User_Info;

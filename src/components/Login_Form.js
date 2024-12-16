@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Form from './Form';
 
-const LoginForm = ({ onLogin }) => {
+const Login_Form = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -33,4 +33,4 @@ const LoginForm = ({ onLogin }) => {
   );
 };
 
-export default LoginForm;
+export default Login_Form;

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Profile.css';
 
-const MonthlyTimetables = ({ fiches }) => {
+const Monthly_Timetables = ({ fiches }) => {
   const navigate = useNavigate();
 
   const months = [
@@ -59,4 +59,4 @@ const MonthlyTimetables = ({ fiches }) => {
   );
 };
 
-export default MonthlyTimetables;
+export default Monthly_Timetables;

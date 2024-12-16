@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import '../assets/styles/Profile.css';
 import Mensual_Timetable_Sheet from '../services/Mensual_Timetable_Sheet';
-import UserInfo from '../components/UserInfo';
-import MonthlyTimetables from '../components/MonthlyTimetables';
+import Monthly_Timetables from '../components/Monthly_Timetables';
+import User_Info from '../components/User_Info';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
@@ -22,8 +22,8 @@ const Profile = () => {
 
   return (
     <div className="user-dashboard">
-      <UserInfo user={user} />
-      <MonthlyTimetables fiches={fiches} />
+      <User_Info user={user} />
+      <Monthly_Timetables fiches={fiches} />
     </div>
   );
 };
