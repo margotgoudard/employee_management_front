@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import Mensual_Timetable_Sheet from '../services/Mensual_Timetable_Sheet';
-import Daily_Timetable_Sheet from '../services/Daily_Timetable_Sheet';
-import '../assets/styles/Mensual_Timetable.css';
-import MonthlyDetails from '../components/MonthlyDetails';
-import CalendarComponent from '../components/Calendar';
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import Mensual_Timetable_Sheet from "../services/Mensual_Timetable_Sheet";
+import Daily_Timetable_Sheet from "../services/Daily_Timetable_Sheet";
+import "../assets/styles/Mensual_Timetable.css";
+import Monthly_Details from "../components/Monthly_Details";
+import CalendarComponent from "../components/Calendar";
+import Expense_Report_Details from "../components/Expense_Report_Details";
 
 const Mensual_Timetable = () => {
   const user = useSelector((state) => state.auth.user);
@@ -15,13 +16,16 @@ const Mensual_Timetable = () => {
   const [selectedTimetable, setSelectedTimetable] = useState({
     daily_timetable_sheets: [],
   });
+  const [showExpenseDetails, setShowExpenseDetails] = useState(false); // État pour afficher ou masquer les détails
 
   useEffect(() => {
     const fetchTimetableData = async () => {
       try {
-        const data = await Mensual_Timetable_Sheet.fetchMensualTimetablesByUser(user.id_user);
+        const data = await Mensual_Timetable_Sheet.fetchMensualTimetablesByUser(
+          user.id_user
+        );
         setTimetableData(data || []);
-  
+
         if (data && data.length > 0) {
           let selected = data.find((t) => t.id_timetable === parseInt(id_timetable));
           if (!selected) {
@@ -34,30 +38,29 @@ const Mensual_Timetable = () => {
         console.error("Error fetching timetable data:", err);
       }
     };
-  
+
     fetchTimetableData();
   }, [user.id_user, id_timetable]);
-  
+
   useEffect(() => {
     if (!selectedTimetable || !selectedTimetable.id_timetable) {
       return;
     }
-  
+
     const fetchAndCalculateData = async () => {
       try {
         const dailyTimetables = await Daily_Timetable_Sheet.fetchDailyTimetableByMensualTimetable(
           selectedTimetable.id_timetable
         );
         setSelectedTimetable((prev) => ({
-            ...prev,
-            daily_timetable_sheets: dailyTimetables,
-          }));
-
+          ...prev,
+          daily_timetable_sheets: dailyTimetables,
+        }));
       } catch (error) {
         console.error("Error fetching or calculating timetable data:", error);
       }
     };
-  
+
     fetchAndCalculateData();
   }, [selectedTimetable.id_timetable]);
 
@@ -87,17 +90,30 @@ const Mensual_Timetable = () => {
 
   return (
     <div className="mensual-timetable">
-      <div className="timetable-container">
-        <CalendarComponent
-          selectedDate={selectedDate}
-          selectedTimetable={selectedTimetable}
-          onDateChange={handleDateChange}
-          onMonthChange={handleMonthChange}
-        />
-        <MonthlyDetails 
-          selectedTimetable={selectedTimetable}
-          setSelectedTimetable={setSelectedTimetable} 
-        />
+      <div className="content-layout">
+        <div className="timetable-layout">
+          <div className="main-section">
+            <CalendarComponent
+              selectedDate={selectedDate}
+              selectedTimetable={selectedTimetable}
+              onDateChange={handleDateChange}
+              onMonthChange={handleMonthChange}
+            />
+            <Monthly_Details
+              selectedTimetable={selectedTimetable}
+              setSelectedTimetable={setSelectedTimetable}
+              onToggleExpenseDetails={() => setShowExpenseDetails(!showExpenseDetails)}
+            />
+          </div>
+        </div>
+
+        {showExpenseDetails && (
+          <div className="expense-details-section">
+            <Expense_Report_Details
+              mensualTimetableId={selectedTimetable?.id_timetable}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

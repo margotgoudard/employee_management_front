@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Auth from '../services/Auth';
 import logo from '../assets/images/logo.png';
-import background from '../assets/images/background.png';
+import background from '../assets/images/background.jpg';
 import Change_Password_Form from '../components/Change_Password_Form';
 import Login_Form from '../components/Login_Form';
 

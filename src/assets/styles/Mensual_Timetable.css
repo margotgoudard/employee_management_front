@@ -1,34 +1,54 @@
 .mensual-timetable {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    margin-top: 67px;
-  }
+  display: flex;
+  flex-direction: column;
+  margin-top: 67px;
+  background-color: #f2f2f2; 
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.content-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  width: 100%;
+}
+
+.timetable-layout {
+  background-color: #ffffff; 
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+  padding: 20px;
+  flex: 2; 
+  max-width: 50%;
+}
+
+.main-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.expense-details-section {
+  flex: 1; 
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
 
   h2 {
     font-size: 1em;
   }
   
-  .mensual-timetable {
-    background-color: #f2f2f2; 
-    min-height: 100vh;
-    display: flex;
+  .expense-report-details {
+    flex: 1;
+    background: #f9f9f9;
     padding: 20px;
-    box-sizing: border-box;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
-  .timetable-container {
-    background-color: #ffffff; 
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
-    padding: 20px;
-    width: 100%;
-    max-width: 800px; 
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: center; 
-  }
   

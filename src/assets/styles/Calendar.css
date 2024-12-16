@@ -26,7 +26,7 @@
   }
 
   .react-calendar {
-    border: none
+    border: none !important
     }
 
 .react-calendar__tile:hover {
@@ -36,9 +36,9 @@
 .react-calendar__tile {
     border-radius: 100%; 
     height: 40px; 
-    max-width: 40px;
+    max-width: 40px !important;
     transition: transform 0.2s;
-    margin: 5px; 
+    margin: 10px; 
 }
 
 .react-calendar__tile:hover {
@@ -80,7 +80,6 @@
 
 .bubble-blue {
     background-color: var(--blue-color) !important;
-    border-radius: 50%;
     color: white !important;
   }
 
@@ -99,7 +98,7 @@
   
   .bubble-orange {
     background-color: orange !important;
-    border-radius: 50%;
+    border-radius: 50% !important;
     color: white;
   }
 
@@ -156,28 +155,9 @@
   }
 
   .bubble-half {
-    background: linear-gradient(to right, var(--blue-color) 50%, orange 50%);
-    border-radius: 50%;
+    background: linear-gradient(to right, var(--blue-color) 50%, orange 50%) !important;
+    border-radius: 50% !important;
     color: white !important;
   }
   
-  .expense-report-details {
-    margin: 20px 0;
-  }
-  
-  .expense-report-details h3 {
-    margin-bottom: 10px;
-  }
-  
-  .expense-item {
-    background-color: #f9f9f9;
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .expense-item p {
-    margin: 5px 0;
-  }
   
