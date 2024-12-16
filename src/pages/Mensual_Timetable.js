@@ -48,7 +48,6 @@ const Mensual_Timetable = () => {
         const dailyTimetables = await Daily_Timetable_Sheet.fetchDailyTimetableByMensualTimetable(
           selectedTimetable.id_timetable
         );
-        console.log(dailyTimetables)
         setSelectedTimetable((prev) => ({
             ...prev,
             daily_timetable_sheets: dailyTimetables,

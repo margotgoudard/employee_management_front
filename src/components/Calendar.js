@@ -24,20 +24,17 @@ const CalendarComponent = ({
   const getTileClassName = ({ date, view }) => {
     if (!selectedTimetable.daily_timetable_sheets || !Array.isArray(selectedTimetable.daily_timetable_sheets)) {
       return 'disabled-day';
-    }
-
-    selectedTimetable.daily_timetable_sheets.forEach((d) => {
-        const dayDate = new Date(d.day);
-        console.log(`Checking d.day: ${d.day}, Parsed day: ${dayDate.getDate()}, Selected date: ${date.getDate()}`);
-      });
-      
+    }      
     
     const matchedDay = selectedTimetable.daily_timetable_sheets.find((d) => {
-        const dayDate = new Date(d.day); 
-        return dayDate.getDate() === date.getDate() &&
-               dayDate.getMonth() === date.getMonth() &&
-               dayDate.getFullYear() === date.getFullYear();
-      });
+      const dayDate = new Date(d.day); 
+
+      return (
+        dayDate.getUTCDate() === date.getUTCDate() &&
+        dayDate.getUTCMonth() === date.getUTCMonth() &&
+        dayDate.getUTCFullYear() === date.getUTCFullYear()
+      );
+    });
 
     if (matchedDay) {
       if (!matchedDay.is_completed) {
@@ -45,10 +42,17 @@ const CalendarComponent = ({
       } else {
         if (matchedDay.status === 'Travaillé') {
           return 'bubble-gray';
-        } else if (matchedDay.status === 'Week-end' || matchedDay.status === 'Férié') {
+        } else { 
+          if (matchedDay.status === 'Week-end' || matchedDay.status === 'Férié') {
           return 'bubble-dark-gray';
+          } 
+            else {
+              if(matchedDay.status === 'Demi-journée') {
+                return 'bubble-half';
+              }
+          return 'bubble-orange';
+          }
         }
-        return 'bubble-orange';
       }
     }
     return 'disabled-day';

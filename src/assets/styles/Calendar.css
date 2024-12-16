@@ -79,32 +79,32 @@
 }
 
 .bubble-blue {
-    background-color: var(--blue-color);
+    background-color: var(--blue-color) !important;
     border-radius: 50%;
-    color: white;
+    color: white !important;
   }
 
   
   .bubble-gray {
-    background-color: #f5f5f5;
+    background-color: #f5f5f5 !important;
     border-radius: 50%;
-    color: #515151;
+    color: #515151 !important;
   }
 
   .bubble-dark-gray {
-    background-color: #d9d9d9;
+    background-color: #d9d9d9 !important;
     border-radius: 50%;
-    color: #515151;
+    color: #515151 !important;
   }
   
   .bubble-orange {
-    background-color: orange;
+    background-color: orange !important;
     border-radius: 50%;
     color: white;
   }
 
   .disabled-day {
-    color: lightgray;
+    color: lightgray !important;
     pointer-events: none;
   }
   
@@ -154,3 +154,10 @@
   .hours-value {
     text-align: right;
   }
+
+  .bubble-half {
+    background: linear-gradient(to right, var(--blue-color) 50%, orange 50%);
+    border-radius: 50%;
+    color: white !important;
+  }
+  
