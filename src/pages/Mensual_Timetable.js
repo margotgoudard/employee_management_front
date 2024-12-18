@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import Mensual_Timetable_Sheet from "../services/Mensual_Timetable_Sheet";
-import Daily_Timetable_Sheet from "../services/Daily_Timetable_Sheet";
+import Mensual_Timetable_Sheet_Service from "../services/Mensual_Timetable_Sheet";
+import Daily_Timetable_Sheet from "../components/Daily_Timetable_Sheet";
 import "../assets/styles/Mensual_Timetable.css";
 import Monthly_Details from "../components/Monthly_Details";
 import CalendarComponent from "../components/Calendar";
 import Expense_Report_Details from "../components/Expense_Report_Details";
+import Daily_Timetable_Sheet_Service from "../services/Daily_Timetable_Sheet";
 
 const Mensual_Timetable = () => {
   const user = useSelector((state) => state.auth.user);
@@ -16,12 +17,36 @@ const Mensual_Timetable = () => {
   const [selectedTimetable, setSelectedTimetable] = useState({
     daily_timetable_sheets: [],
   });
-  const [showExpenseDetails, setShowExpenseDetails] = useState(false); // État pour afficher ou masquer les détails
+  const [showExpenseDetails, setShowExpenseDetails] = useState(false); 
+  const [showDailyDetails, setShowDailyDetails] = useState(false); 
+  const [selectedDailyTimetable, setSelectedDailyTimetable] = useState(null);
 
+  const handleDayClick = (day) => {
+    const selectedDailyTimetable = selectedTimetable.daily_timetable_sheets.find(
+      (d) => {
+        const dayDate = new Date(d.day);
+        return (
+          dayDate.getDate() === day.getDate() &&
+          dayDate.getMonth() === day.getMonth() &&
+          dayDate.getFullYear() === day.getFullYear()
+        );
+      }
+    );
+  
+    if (selectedDailyTimetable) {
+      setSelectedDailyTimetable(selectedDailyTimetable);
+      setShowExpenseDetails(false);
+      setShowDailyDetails(true); 
+    } else {
+      console.warn("No daily timetable found for this day.");
+    }
+  };
+  
+  
   useEffect(() => {
     const fetchTimetableData = async () => {
       try {
-        const data = await Mensual_Timetable_Sheet.fetchMensualTimetablesByUser(
+        const data = await Mensual_Timetable_Sheet_Service.fetchMensualTimetablesByUser(
           user.id_user
         );
         setTimetableData(data || []);
@@ -49,7 +74,7 @@ const Mensual_Timetable = () => {
 
     const fetchAndCalculateData = async () => {
       try {
-        const dailyTimetables = await Daily_Timetable_Sheet.fetchDailyTimetableByMensualTimetable(
+        const dailyTimetables = await Daily_Timetable_Sheet_Service.fetchDailyTimetableByMensualTimetable(
           selectedTimetable.id_timetable
         );
         setSelectedTimetable((prev) => ({
@@ -88,6 +113,23 @@ const Mensual_Timetable = () => {
     }
   };
 
+  const refreshDailyTimetable = async (dailyTimetable) => {  
+    try {
+      setSelectedTimetable((prev) => ({
+        ...prev,
+        daily_timetable_sheets: prev.daily_timetable_sheets.map((d) =>
+          d.id_daily_timetable === dailyTimetable.id_daily_timetable
+            ? dailyTimetable 
+            : d 
+        ),
+      }));
+      setSelectedDailyTimetable(dailyTimetable)
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour des plannings quotidiens :", error);
+    }
+  };
+  
+
   return (
     <div className="mensual-timetable">
       <div className="content-layout">
@@ -98,12 +140,17 @@ const Mensual_Timetable = () => {
               selectedTimetable={selectedTimetable}
               onDateChange={handleDateChange}
               onMonthChange={handleMonthChange}
+              onDayClick={handleDayClick}
             />
             <Monthly_Details
               selectedTimetable={selectedTimetable}
               setSelectedTimetable={setSelectedTimetable}
-              onToggleExpenseDetails={() => setShowExpenseDetails(!showExpenseDetails)}
-            />
+              onToggleExpenseDetails={() => (
+                setShowExpenseDetails(!showExpenseDetails),
+                setShowDailyDetails(false),
+                setSelectedDailyTimetable(null)
+              )}
+             />
           </div>
         </div>
 
@@ -114,6 +161,16 @@ const Mensual_Timetable = () => {
             />
           </div>
         )}
+
+        {showDailyDetails && selectedDailyTimetable && (
+          <Daily_Timetable_Sheet
+          dailyTimetable={{ 
+            ...selectedDailyTimetable, 
+            onUpdate: refreshDailyTimetable 
+          }}
+        />
+        )}
+
       </div>
     </div>
   );

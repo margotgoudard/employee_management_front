@@ -9,17 +9,8 @@ const CalendarComponent = ({
   onDateChange,
   onMonthChange,
   selectedTimetable,
+  onDayClick
 }) => {
-  
-  const isTileDisabled = ({ date, view }) => {
-    if (view === 'month' && selectedTimetable.daily_timetable_sheets ) {
-      return !selectedTimetable.daily_timetable_sheets.some(
-        (d) =>
-          d.day === date.getDate()
-      );
-    }
-    return false;
-  };
 
   const getTileClassName = ({ date, view }) => {
     if (!selectedTimetable.daily_timetable_sheets || !Array.isArray(selectedTimetable.daily_timetable_sheets)) {
@@ -28,7 +19,6 @@ const CalendarComponent = ({
     
     const matchedDay = selectedTimetable.daily_timetable_sheets.find((d) => {
       const dayDate = new Date(d.day); 
-
       return (
         dayDate.getUTCDate() === date.getUTCDate() &&
         dayDate.getUTCMonth() === date.getUTCMonth() &&
@@ -71,8 +61,10 @@ const CalendarComponent = ({
           onChange={onDateChange}
           locale="fr-FR"
           tileClassName={getTileClassName}
-          tileDisabled={isTileDisabled}
           showNavigation={false}
+          onClickDay={(value) => {
+            onDayClick(value);
+          }}
         />
       </div>
     </div>

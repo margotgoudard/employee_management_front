@@ -81,6 +81,7 @@
 .bubble-blue {
     background-color: var(--blue-color) !important;
     color: white !important;
+    cursor: pointer;
   }
 
   

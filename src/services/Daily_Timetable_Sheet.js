@@ -48,6 +48,12 @@ class Daily_Timetable_Sheet {
             };
     }
     
+    static async updateDailyTimetable(daily_timetable) {
+        const endpoint = `/daily-timetable-sheets/${daily_timetable.id_daily_timetable}`;
+        await API.put(endpoint, daily_timetable);
+        const response = await API.get(endpoint); 
+        return response;
+    }
 }
 
 export default Daily_Timetable_Sheet;
