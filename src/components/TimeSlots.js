@@ -91,10 +91,11 @@ const TimeSlots = ({
           </button>
         </div>
       ))}
-
-      <button onClick={onAddNewTimeSlot}>
-        Ajouter une plage horaire <LuCirclePlus />
-      </button>
+      <div className="button-container">
+        <button className="add-time-slot-button" onClick={onAddNewTimeSlot}>
+          Ajouter une plage horaire <LuCirclePlus />
+        </button>
+      </div>
     </div>
   );
 };

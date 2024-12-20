@@ -64,28 +64,27 @@ input
   margin-bottom: 20px;
 }
 
-.status-container,
-.oncall-container {
-  display: flex;
-  align-items: center;
-}
-
-
 input[type="checkbox"] {
   margin-left: 10px;
   transform: scale(1.2);
   margin-top: 10px;
 }
 
-.status-container,
 .oncall-container {
   display: flex;
   align-items: center;
 }
 
-.status-container label,
 .oncall-container label {
   margin-right: 10px;
+}
+
+.status-container label,
+.status-container select,
+.status-container input[type="checkbox"] {
+  margin: 0; 
+  white-space: nowrap;
+  display: inline-block;
 }
 
 select,
@@ -100,6 +99,7 @@ input[type="checkbox"] {
   justify-content: center; 
   align-items: center;
   gap: 20px; 
+  flex-wrap: nowrap;
 }
 
 .asterinte-checkbox {
@@ -188,4 +188,41 @@ button.save-button:hover {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
+}
+
+.expense-reports-container {
+  width: 100%; 
+  box-sizing: border-box;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px; 
+}
+
+button.add-expense-button {
+  color: var(--blue-color);
+  border: none;
+  cursor: pointer;
+  padding: 15px 30px;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px; 
+}
+
+button.add-time-slot-button {
+  color: var(--blue-color);
+  border: none;
+  cursor: pointer;
+  padding: 15px 30px;
+  font-size: 1rem;
+  border-radius: 8px;
 }

@@ -25,7 +25,7 @@ const ExpenseReports = ({
   };  
 
   return (
-    <div>
+    <div className="expense-reports-container">
       <h3>Notes de frais :</h3>
       {expenseNotes.length === 0 && newExpenses.length === 0 && (
         <p>Vous n'avez aucune note de frais.</p>
@@ -64,10 +64,11 @@ const ExpenseReports = ({
           <ExpenseReportItem
             report={{
               feeCategory:expense.feeCategory,
-              amount: expense.amount || "N/A",
-              client: expense.client || "N/A",
-              motive: expense.motive || "N/A",
-              document_name: "Aucun document",
+              amount: expense.amount,
+              client: expense.client,
+              motive: expense.motive,
+              document_name: expense.document_name,
+              document: expense.document,
               dailyTimetable: { day: new Date() },
             }}
           />
@@ -76,11 +77,16 @@ const ExpenseReports = ({
           </button>
         </div>
       );
-})}
+    })}
 
-      <button onClick={() => setShowAddForm(true)}>
-        Ajouter une note de frais <LuCirclePlus />
-      </button>
+      <div className="button-container">
+        <button
+          className="add-expense-button"
+          onClick={() => setShowAddForm(true)}
+        >
+          Ajouter une note de frais <LuCirclePlus />
+        </button>
+      </div>
 
       {showAddForm && (
         <AddExpenseReportForm

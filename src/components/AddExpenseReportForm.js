@@ -9,26 +9,27 @@ const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel, onCreateCategory
     amount: "",
     motive: "",
     document: null,
-    newCategory: "", 
+    newCategory: "",
   });
 
   const [isOtherCategory, setIsOtherCategory] = useState(false);
+  const [documentName, setDocumentName] = useState(""); 
 
   const handleAdd = async () => {
     const { id_fee_category, client, amount, motive, newCategory } = formState;
-  
+
     if (!client || !amount || (!motive && !isOtherCategory)) {
       alert("Veuillez remplir tous les champs.");
       return;
     }
-  
+
     let feeCategoryId = id_fee_category;
     let createdCategory = null;
-  
+
     if (isOtherCategory && newCategory) {
       try {
-        const createdCategory = await onCreateCategory(newCategory); 
-        feeCategoryId = createdCategory.id_fee_category; 
+        const createdCategory = await onCreateCategory(newCategory);
+        feeCategoryId = createdCategory.id_fee_category;
       } catch (error) {
         console.error("Erreur lors de la création de la catégorie :", error);
         alert("Impossible de créer une nouvelle catégorie. Veuillez réessayer.");
@@ -36,24 +37,26 @@ const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel, onCreateCategory
       }
     } else {
       createdCategory = feeCategories.find(
-        (category) => category.id_fee_category === id_fee_category
+        (category) => category.id_fee_category === Number(id_fee_category)
       );
     }
-  
+
     const newExpense = {
       ...formState,
-      id_fee_category: feeCategoryId, 
-      feeCategory: createdCategory || null, 
-      tempId: Date.now(), 
+      id_fee_category: feeCategoryId,
+      feeCategory: createdCategory || null,
+      tempId: Date.now(),
     };
-  
-    onAdd(newExpense); 
+
+    onAdd(newExpense);
   };
-  
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
-    setFormState({ ...formState, document: file });
+    if (file) {
+      setFormState({ ...formState, document: file, document_name: file.name });
+      setDocumentName(file.name);
+    }
   };
 
   const handleCategoryChange = (value) => {
@@ -143,6 +146,7 @@ const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel, onCreateCategory
             style={{ display: "none" }}
             onChange={handleFileUpload}
           />
+          {documentName && <p className="file-name">{documentName}</p>} 
         </div>
       </div>
 

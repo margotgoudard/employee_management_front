@@ -28,6 +28,11 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow: hidden; 
+  position: relative; 
+  max-width: 100%;
+  padding: 20px;
+  box-sizing: border-box; 
 }
 
 .expense-details-section {
