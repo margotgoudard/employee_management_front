@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Auth from '../services/Auth';
-import LoginForm from '../components/LoginForm';
-import ChangePasswordForm from '../components/ChangePasswordForm';
 import logo from '../assets/images/logo.png';
-import background from '../assets/images/background.png';
+import background from '../assets/images/background.jpg';
+import ChangePasswordForm from '../components/ChangePasswordForm';
+import LoginForm from '../components/LoginForm';
+import User from '../services/User';
 
 const Login = () => {
   const [showComponent, setShowComponent] = useState('login');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
 
   const handleLogin = async (email, password) => {
     try {
       const { user, token } = await Auth.login(email, password);
-      console.log(user)
       dispatch({ type: 'auth/login', payload: { user, token } });
 
       if (user.last_connected) {
@@ -31,7 +32,7 @@ const Login = () => {
 
   const handleChangePassword = async (newPassword) => {
     try {
-      alert('Mot de passe changé avec succès.');
+      await User.ChangePassword(user, newPassword);
       navigate('/profile'); 
     } catch (error) {
       console.error('Erreur lors du changement de mot de passe :', error);

@@ -1,0 +1,72 @@
+.add-expense-report-form {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 100%; 
+  box-sizing: border-box; 
+  overflow: hidden;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  max-width: 100%; 
+  box-sizing: border-box;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+input,
+select {
+  width: calc(100% - 20px); 
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box; 
+}
+
+.expense-category {
+  display: flex;
+  gap: 10px;
+  max-width: 100%; 
+  flex-wrap: wrap; 
+}
+
+.file-upload label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #333;
+  cursor: pointer;
+  width: 100%; 
+}
+
+.add-button,
+.cancel-button {
+  display: inline-block;
+  width: auto;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.add-button {
+  background-color: #4caf50;
+  color: white;
+  margin-right: 10px;
+  border: none;
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: black;
+  border: none;
+}

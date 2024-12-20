@@ -1,0 +1,164 @@
+:root {
+    --green-color: #2fac66;
+    --green-hover-color: #218838;
+    --blue-color: #3b568e;
+    --white-color: #ffffff;
+    --input-color: #eaeaea;
+    --border-color: #ccc;
+    --text-color: #000000;
+    --background-overlay: rgba(255, 255, 255, 0.95);
+    --box-shadow-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .calendar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 300px;
+    margin-bottom: 10px;
+  }
+
+  .react-calendar {
+    border: none !important
+    }
+
+.react-calendar__tile:hover {
+    transform: scale(1.1);
+}
+  
+.react-calendar__tile {
+    border-radius: 100%; 
+    height: 40px; 
+    max-width: 40px !important;
+    transition: transform 0.2s;
+    margin: 10px; 
+}
+
+.react-calendar__tile:hover {
+    background-color: var(--green-color) !important;
+    color: white
+}
+
+.react-calendar__month-view__days__day {
+    margin: 5px; 
+}
+
+.react-calendar__month-view__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 10px; 
+    justify-content: center;
+    align-items: center;
+}
+
+.disabled-day {
+    background-color: #f0f0f0 !important; 
+    color: #d0d0d0 !important; 
+    pointer-events: none; 
+  }
+
+  .react-calendar {
+    border: none
+    }
+
+  .react-calendar__tile span {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px; 
+  }
+  
+  .disabled-day, .bubble-gray, .bubble-red, .bubble-green, .bubble-orange {
+    margin: 5px; 
+}
+
+.bubble-blue {
+    background-color: var(--blue-color) !important;
+    color: white !important;
+    cursor: pointer;
+  }
+
+  
+  .bubble-gray {
+    background-color: #f5f5f5 !important;
+    border-radius: 50%;
+    color: #515151 !important;
+  }
+
+  .bubble-dark-gray {
+    background-color: #d9d9d9 !important;
+    border-radius: 50%;
+    color: #515151 !important;
+  }
+  
+  .bubble-orange {
+    background-color: orange !important;
+    border-radius: 50% !important;
+    color: white;
+  }
+
+  .disabled-day {
+    color: lightgray !important;
+    pointer-events: none;
+  }
+  
+  .calendar-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .calendar-section {
+    flex: 3;
+  }
+  
+  .weekly-hours-summary {
+    flex: 1;
+    margin-left: 20px;
+    padding: 10px;
+    margin-top: 8.5%;
+  }
+  
+  .weekly-hours-summary {
+    flex: 1;
+    margin-left: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .weekly-hours-summary h3 {
+    font-size: 1em;
+  }
+  
+  .weekly-hours-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .weekly-hours-summary li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .hours-value {
+    text-align: right;
+  }
+
+  .bubble-half {
+    background: linear-gradient(to right, var(--blue-color) 50%, orange 50%) !important;
+    border-radius: 50% !important;
+    color: white !important;
+  }
+  
+  

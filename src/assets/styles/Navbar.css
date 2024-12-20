@@ -1,119 +1,104 @@
-:root {
-    --green-color: #2fac66;
-    --green-hover-color: #218838;
-    --blue-color: #3b568e;
-    --white-color: #ffffff;
-    --input-color: #eaeaea;
-    --border-color: #ccc;
-    --text-color: #000000;
-    --background-overlay: rgba(255, 255, 255, 0.95);
-    --box-shadow-color: rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Navbar Container */
+/* Navbar Container */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    background-color: white;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  /* Logo */
-  .navbar-logo {
-    height: 60px;
-    object-fit: contain;
-  }
- 
- /* Navbar Links */
- .navbar-links {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    justify-content: flex-start; 
-    flex-grow: 1; 
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex; /* Utilise Flexbox */
+  align-items: center; /* Aligne verticalement les éléments */
+  justify-content: space-between; /* Espace entre gauche et droite */
+  padding: 0.5rem 1rem;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  z-index: 1000; /* Garde la navbar au-dessus des autres éléments */
 }
 
+/* Navbar Left Section */
+.navbar-left {
+  display: flex; /* Aligne le logo et les onglets horizontalement */
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Logo */
+.navbar-logo {
+  height: 50px;
+  object-fit: contain;
+}
+
+/* Navbar Links */
+.navbar-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
 .navbar-links li {
-    position: relative;
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center; /* Aligne le texte verticalement */
+  padding: 0 1rem; /* Espace horizontal autour de chaque lien */
+  position: relative; /* Nécessaire pour le séparateur */
 }
 
 .navbar-links li:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 15%; 
-    bottom: 15%;
-    width: 1px;
-    background-color: var(--blue-color);
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 25%; /* Ajuste la hauteur du séparateur */
+  bottom: 25%;
+  width: 1px;
+  background-color: var(--blue-color); /* Couleur du trait */
 }
 
 .navbar-links li a {
-    text-decoration: none;
-    color: var(--blue-color);
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 0.5rem 1rem; 
-    text-align: left; 
+  text-decoration: none;
+  color: var(--blue-color);
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
 }
 
 .navbar-links li a:hover {
-    color: var(--green-color);
+  color: var(--green-color);
 }
 
-  
-  /* Right Section */
-  .navbar-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  
+/* Right Section */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Espacement entre notification et profil */
+}
+
 /* Notification Icon */
 .navbar-notification {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }  
-  
-  .notification-icon {
-    color: #3b568e;
-  }
-  
-  /* Profile Section */
-  .navbar-profile {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .profile-icon {
-    font-size: 1.5rem;
-    color: #000;
-  }
-  
-  .profile-name {
-    font-size: 1rem;
-    color: #000;
-  }
-  
-  .icon-notification {
-    color: var(--blue-color);
-    font-size: 1.5rem; 
-  }
-  
-  .icon-profile {
-    color: var(--blue-color);
-    font-size: 1.5rem;
-  }
-  
-  
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-notification {
+  color: var(--blue-color);
+  font-size: 1.5rem;
+}
+
+/* Profile Section */
+.navbar-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-profile {
+  color: var(--blue-color);
+  font-size: 1.5rem;
+}
+
+.profile-name {
+  font-size: 1rem;
+  color: var(--text-color);
+}

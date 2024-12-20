@@ -18,6 +18,17 @@ class User {
       throw error; 
     }
   }
+
+  static async ChangePassword(user, newPassword) {
+    try {
+    const endpoint = `/users/${user.id_user}`;
+    await API.get(endpoint); 
+  } catch (error) {
+    console.error("Erreur lors de la modification du mot de passe :", error);
+    throw error; 
+  }
+
+  }
 }
 
 export default User;

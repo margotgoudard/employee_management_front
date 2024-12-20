@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import Form from './Form';
 
 const LoginForm = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
+  const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
 
   const fields = [
     {
-      name: 'email',
-      label: 'Email',
+      name: 'mail',
+      label: 'Mail',
       type: 'email',
-      value: email,
-      onChange: setEmail,
+      value: mail,
+      onChange: setMail,
       required: true,
     },
     {
@@ -28,7 +28,7 @@ const LoginForm = ({ onLogin }) => {
     <Form
       fields={fields}
       buttonText="CONNEXION"
-      onSubmit={({ email, password }) => onLogin(email, password)}
+      onSubmit={({ mail, password }) => onLogin(mail, password)}
     />
   );
 };

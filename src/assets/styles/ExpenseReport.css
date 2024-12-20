@@ -1,0 +1,95 @@
+.expense-report-container {
+    padding: 20px;
+  }
+  
+  .expense-report-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+.expense-report-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    flex-wrap: wrap;
+    margin-bottom: 1%;
+  }
+  
+  
+  .expense-report-text {
+    flex: 2;
+    margin-left: 5%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .expense-report-text p {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .expense-report-text p:first-child {
+    margin-top: 2%;
+  }
+  
+  .expense-report-text p:last-child {
+    padding-bottom: 2%;
+  }
+  
+  .document-preview-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .document-preview-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .document-preview-box {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .document-preview-box img,
+  .document-preview-box iframe {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    cursor: pointer;
+  }
+  
+  .document-name {
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .expense-report-date {
+    flex: 1;
+    text-align: right;
+    font-size: 12px;
+    color: gray;
+    padding-right: 20px;
+    align-self: flex-start;
+    margin-top: 1%;
+  }
+  
+  .expense-report-text {
+    gap: 10px; 
+}
+
+.expense-report-text p:first-child {
+    margin-top: 15px; 
+}
+
+.expense-report-text p:last-child {
+    padding-bottom: 15px; 
+}
