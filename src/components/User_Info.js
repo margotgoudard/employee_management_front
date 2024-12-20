@@ -15,7 +15,7 @@ const User_Info = ({ user }) => {
       </div>
       <div className="info-item">
         <label>Email</label>
-        <input type="text" value={user?.email || ''} readOnly />
+        <input type="text" value={user?.mail || ''} readOnly />
       </div>
       <div className="info-item">
         <label>Tel</label>
