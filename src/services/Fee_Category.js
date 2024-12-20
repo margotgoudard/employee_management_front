@@ -15,9 +15,9 @@ class Fee_Category {
 
     static async createFeeCategory(fee_category) {
         try {
-            const endpoint = `/fee_categories`;
+            const endpoint = `/fee-categories`;
             const response = await API.post(endpoint, fee_category);
-            return response.data; 
+            return response.feeCategory; 
         } catch (error) {
             console.error('Error adding fee category:', error);
             throw error; 

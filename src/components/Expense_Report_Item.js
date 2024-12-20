@@ -1,6 +1,7 @@
 import React from "react";
 
 const ExpenseReportItem = ({ report }) => {
+
   const renderDocumentPreview = (documentBase64, documentName) => {
     if (!documentBase64) return null;
 

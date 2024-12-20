@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
 import ExpenseReportItem from "./Expense_Report_Item";
 import AddExpenseReportForm from "./Add_Expense_Report_Form";
+import Fee_Category from "../services/Fee_Category";
 
 const ExpenseReports = ({
   expenseNotes,
@@ -17,6 +18,11 @@ const ExpenseReports = ({
     onAddNewExpense(newExpense);
     setShowAddForm(false); 
   };
+
+  const handleCreateCategory = async (name) => {
+    const response = await Fee_Category.createFeeCategory({ name });
+    return response;
+  };  
 
   return (
     <div>
@@ -52,15 +58,12 @@ const ExpenseReports = ({
 
       {newExpenses.length > 0 && <h4>Nouvelles notes de frais :</h4>}
 
-      {newExpenses.map((expense) => (
+      {newExpenses.map((expense) => {
+        return (
         <div key={expense.tempId} className="new-expense-note-item">
           <ExpenseReportItem
             report={{
-              feeCategory:
-                feeCategories.find(
-                  (category) =>
-                    category.id_place_category === expense.id_fee_category
-                ) || { name: "N/A" },
+              feeCategory:expense.feeCategory,
               amount: expense.amount || "N/A",
               client: expense.client || "N/A",
               motive: expense.motive || "N/A",
@@ -72,7 +75,8 @@ const ExpenseReports = ({
             <LuCircleMinus />
           </button>
         </div>
-      ))}
+      );
+})}
 
       <button onClick={() => setShowAddForm(true)}>
         Ajouter une note de frais <LuCirclePlus />
@@ -80,10 +84,11 @@ const ExpenseReports = ({
 
       {showAddForm && (
         <AddExpenseReportForm
-          feeCategories={feeCategories}
-          onAdd={handleAddNewExpense}
-          onCancel={() => setShowAddForm(false)}
-        />
+        feeCategories={feeCategories}
+        onAdd={handleAddNewExpense}
+        onCancel={() => setShowAddForm(false)}
+        onCreateCategory={handleCreateCategory}
+      />      
       )}
     </div>
   );

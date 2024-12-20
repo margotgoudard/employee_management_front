@@ -93,16 +93,10 @@ import Fee_Category from "../services/Fee_Category";
       ]);
     };  
   
-    const handleAddNewExpense = () => {
+    const handleAddNewExpense = (newExpense) => {
       setNewExpenses([
         ...newExpenses,
-        {
-          id_fee_category: "",
-          client: "",
-          amount: "",
-          motive: "",
-          tempId: Date.now(),
-        },
+        newExpense
       ]);
     };
     
