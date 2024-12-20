@@ -1,20 +1,20 @@
 import API from "./API";
 
-const ExpenseReportService = {
+class ExpenseReportService {
 
-    async getExpenseReportsByMensualTimetable(id_timetable) {
+    static async getExpenseReportsByMensualTimetable(id_timetable) {
         const endpoint = `/expense-reports/mensual/${id_timetable}`;
         const response = await API.get(endpoint);
         return response; 
-    },
+    }
 
-    async getExpenseReportsByDailyTimetable(id_daily_timetable) {
+    static async getExpenseReportsByDailyTimetable(id_daily_timetable) {
         const endpoint = `/expense-reports/daily/${id_daily_timetable}`;
         const response = await API.get(endpoint);
         return response; 
-    },
+    }
 
-    async createExpenseReport(expense_report) {
+    static async createExpenseReport(expense_report) {
         try {
             const endpoint = `/expense-reports`;
             const response = await API.post(endpoint, expense_report);
@@ -23,9 +23,9 @@ const ExpenseReportService = {
             console.error('Error adding expense report:', error);
             throw error; 
         }
-    },
+    }
 
-    async deleteExpenseReport(id_expense_report) {
+    static async deleteExpenseReport(id_expense_report) {
         try {
             const endpoint = `/expense-reports/${id_expense_report}`
             const response = await API.delete(endpoint);
@@ -34,9 +34,9 @@ const ExpenseReportService = {
             console.error('Error deleting expense report:', error);
             throw error;
         }
-    },
+    }
 
-    async updateExpenseReport(expense_report) {
+    static async updateExpenseReport(expense_report) {
         const endpoint = `/expense-reports/${expense_report.id_expense_report}`;
         await API.put(endpoint, expense_report);
         const response = await API.get(endpoint); 

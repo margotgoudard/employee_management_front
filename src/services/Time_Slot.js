@@ -1,14 +1,14 @@
 import API from "./API";
 
-const Time_Slot = {
+class Time_Slot {
 
-    async getTimeSlotsByDailyTimetable(id_daily_timetable) {
+    static async getTimeSlotsByDailyTimetable(id_daily_timetable) {
         const endpoint = `/time-slots/timesheet/${id_daily_timetable}`;
         const response = await API.get(endpoint);
         return response; 
-    },
+    }
 
-    async createTimeSlot(time_slot) {
+    static async createTimeSlot(time_slot) {
         try {
             const endpoint = `/time-slots`;
             const response = await API.post(endpoint, time_slot);
@@ -17,9 +17,9 @@ const Time_Slot = {
             console.error('Error adding time slot:', error);
             throw error; 
         }
-    },
+    }
 
-    async deleteTimeSlot(id_time_slot) {
+    static async deleteTimeSlot(id_time_slot) {
         try {
             const endpoint = `/time-slots/${id_time_slot}`
             const response = await API.delete(endpoint);
@@ -28,9 +28,9 @@ const Time_Slot = {
             console.error('Error deleting time slot:', error);
             throw error;
         }
-    },
+    }
 
-    async updateTimeSlot(time_slot) {
+    static async updateTimeSlot(time_slot) {
         try {
             const endpoint = `/time-slots/${time_slot.id_time_slot}`;
             const response = await API.put(endpoint, time_slot);

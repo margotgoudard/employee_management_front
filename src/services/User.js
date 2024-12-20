@@ -1,7 +1,6 @@
 import API from "./API";
 import { updateUser } from "../redux/authSlice";
 import { store } from "../redux/store";
-import { useSelector } from "react-redux";
 
 class User {
   static async update(user) {

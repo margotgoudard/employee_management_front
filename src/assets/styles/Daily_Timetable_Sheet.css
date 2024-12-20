@@ -182,3 +182,10 @@ button.save-button:hover {
 .expense-container {
   width: 100%;
 }
+
+.expense-note-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
