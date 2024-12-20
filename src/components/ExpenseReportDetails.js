@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
-import "../assets/styles/Expense_Report.css"; 
-import Expense_Report from "../services/Expense_Report";
-import Daily_Timetable_Sheet from "../services/Daily_Timetable_Sheet";
-import Fee_Category from "../services/Fee_Category";
-import ExpenseReportItem from "./Expense_Report_Item";
+import "../assets/styles/ExpenseReport.css"; 
+import ExpenseReport from "../services/ExpenseReport";
+import DailyTimetableSheet from "../services/DailyTimetableSheet";
+import FeeCategory from "../services/FeeCategory";
+import ExpenseReportItem from "./ExpenseReportItem";
 
-const Expense_Report_Details = ({ mensualTimetableId }) => {
+const ExpenseReportDetails = ({ mensualTimetableId }) => {
   const [expenseReports, setExpenseReports] = useState([]);
 
   useEffect(() => {
     const fetchExpenseReports = async () => {
       try {
-        const data = await Expense_Report.getExpenseReportsByMensualTimetable(
+        const data = await ExpenseReport.getExpenseReportsByMensualTimetable(
           mensualTimetableId
         );
 
         const reportsWithDetails = await Promise.all(
           data.map(async (report) => {
             const dailyTimetable =
-              await Daily_Timetable_Sheet.fetchDailyTimetableById(
+              await DailyTimetableSheet.fetchDailyTimetableById(
                 report.id_daily_timetable
               );
 
-            const feeCategory = await Fee_Category.fetchFeeCategoryById(
+            const feeCategory = await FeeCategory.fetchFeeCategoryById(
               report.id_fee_category
             );
 
@@ -61,4 +61,4 @@ const Expense_Report_Details = ({ mensualTimetableId }) => {
   );
 };
 
-export default Expense_Report_Details;
+export default ExpenseReportDetails;

@@ -1,6 +1,6 @@
 import API from "./API";
 
-class Mensual_Timetable_Sheet {
+class MensualTimetableSheet {
 
     static async updateMensualTimetable(mensual_timetable) {
         const endpoint = `/mensual-timetable-sheets/${mensual_timetable.id_timetable}`;
@@ -126,4 +126,4 @@ class Mensual_Timetable_Sheet {
     }
 }
 
-export default Mensual_Timetable_Sheet;
+export default MensualTimetableSheet;

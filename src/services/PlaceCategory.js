@@ -1,6 +1,6 @@
 import API from "./API";
 
-class Place_Category {
+class PlaceCategory {
 
     static async fetchPlaceCategories() {
         try {
@@ -14,4 +14,4 @@ class Place_Category {
     
 }
 
-export default Place_Category;
+export default PlaceCategory;

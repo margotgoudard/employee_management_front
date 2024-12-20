@@ -1,16 +1,16 @@
 import React from "react";
-import "../assets/styles/Monthly_Details.css";
-import Mensual_Timetable_Sheet from "../services/Mensual_Timetable_Sheet";
+import "../assets/styles/MonthlyDetails.css";
+import MensualTimetableSheet from "../services/MensualTimetableSheet";
 import { LiaSearchDollarSolid } from "react-icons/lia";
 
-const Monthly_Details = ({ selectedTimetable, setSelectedTimetable, onToggleExpenseDetails }) => {
+const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpenseDetails }) => {
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setSelectedTimetable((prevTimetable) => ({
       ...prevTimetable,
       [name]: value,
     }));
-    await Mensual_Timetable_Sheet.updateMensualTimetable(selectedTimetable);
+    await MensualTimetableSheet.updateMensualTimetable(selectedTimetable);
   };
 
   return (
@@ -71,4 +71,4 @@ const Monthly_Details = ({ selectedTimetable, setSelectedTimetable, onToggleExpe
   );
 };
 
-export default Monthly_Details;
+export default MonthlyDetails;

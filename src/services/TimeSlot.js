@@ -1,6 +1,6 @@
 import API from "./API";
 
-class Time_Slot {
+class TimeSlot {
 
     static async getTimeSlotsByDailyTimetable(id_daily_timetable) {
         const endpoint = `/time-slots/timesheet/${id_daily_timetable}`;
@@ -43,4 +43,4 @@ class Time_Slot {
 
 }
       
-export default Time_Slot;
+export default TimeSlot;

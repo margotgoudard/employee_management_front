@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Auth from '../services/Auth';
 import logo from '../assets/images/logo.png';
 import background from '../assets/images/background.jpg';
-import Change_Password_Form from '../components/Change_Password_Form';
-import Login_Form from '../components/Login_Form';
+import ChangePasswordForm from '../components/ChangePasswordForm';
+import LoginForm from '../components/LoginForm';
 import User from '../services/User';
 
 const Login = () => {
@@ -44,8 +44,8 @@ const Login = () => {
     <div className="login-container" style={{ backgroundImage: `url(${background})` }}>
       <div className="form-container">
         <img src={logo} alt="Logo" className="logo" />
-        {showComponent === 'login' && <Login_Form onLogin={handleLogin} />}
-        {showComponent === 'changePassword' && <Change_Password_Form onChangePassword={handleChangePassword} />}
+        {showComponent === 'login' && <LoginForm onLogin={handleLogin} />}
+        {showComponent === 'changePassword' && <ChangePasswordForm onChangePassword={handleChangePassword} />}
       </div>
     </div>
   );

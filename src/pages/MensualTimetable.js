@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import Mensual_Timetable_Sheet_Service from "../services/Mensual_Timetable_Sheet";
-import Daily_Timetable_Sheet from "../components/Daily_Timetable_Sheet";
-import "../assets/styles/Mensual_Timetable.css";
-import Monthly_Details from "../components/Monthly_Details";
+import MensualTimetableSheetService from "../services/MensualTimetableSheet";
+import DailyTimetableSheet from "../components/DailyTimetableSheet";
+import "../assets/styles/MensualTimetable.css";
+import MonthlyDetails from "../components/MonthlyDetails";
 import CalendarComponent from "../components/Calendar";
-import Expense_Report_Details from "../components/Expense_Report_Details";
-import Daily_Timetable_Sheet_Service from "../services/Daily_Timetable_Sheet";
+import ExpenseReportDetails from "../components/ExpenseReportDetails";
+import DailyTimetableSheetService from "../services/DailyTimetableSheet";
 
-const Mensual_Timetable = () => {
+const MensualTimetable = () => {
   const user = useSelector((state) => state.auth.user);
   const { id_timetable } = useParams();
   const [timetableData, setTimetableData] = useState([]);
@@ -46,7 +46,7 @@ const Mensual_Timetable = () => {
   useEffect(() => {
     const fetchTimetableData = async () => {
       try {
-        const data = await Mensual_Timetable_Sheet_Service.fetchMensualTimetablesByUser(
+        const data = await MensualTimetableSheetService.fetchMensualTimetablesByUser(
           user.id_user
         );
         setTimetableData(data || []);
@@ -74,7 +74,7 @@ const Mensual_Timetable = () => {
 
     const fetchAndCalculateData = async () => {
       try {
-        const dailyTimetables = await Daily_Timetable_Sheet_Service.fetchDailyTimetableByMensualTimetable(
+        const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
           selectedTimetable.id_timetable
         );
         setSelectedTimetable((prev) => ({
@@ -142,7 +142,7 @@ const Mensual_Timetable = () => {
               onMonthChange={handleMonthChange}
               onDayClick={handleDayClick}
             />
-            <Monthly_Details
+            <MonthlyDetails
               selectedTimetable={selectedTimetable}
               setSelectedTimetable={setSelectedTimetable}
               onToggleExpenseDetails={() => (
@@ -156,14 +156,14 @@ const Mensual_Timetable = () => {
 
         {showExpenseDetails && (
           <div className="expense-details-section">
-            <Expense_Report_Details
+            <ExpenseReportDetails
               mensualTimetableId={selectedTimetable?.id_timetable}
             />
           </div>
         )}
 
         {showDailyDetails && selectedDailyTimetable && (
-          <Daily_Timetable_Sheet
+          <DailyTimetableSheet
           dailyTimetable={{ 
             ...selectedDailyTimetable, 
             onUpdate: refreshDailyTimetable 
@@ -176,4 +176,4 @@ const Mensual_Timetable = () => {
   );
 };
 
-export default Mensual_Timetable;
+export default MensualTimetable;

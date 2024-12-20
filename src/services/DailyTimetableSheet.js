@@ -1,6 +1,6 @@
 import API from "./API";
 
-class Daily_Timetable_Sheet {
+class DailyTimetableSheet {
 
     static async fetchWorkedHoursByDailyTimetable(id_daily_timetable) {
         try {
@@ -56,4 +56,4 @@ class Daily_Timetable_Sheet {
     }
 }
 
-export default Daily_Timetable_Sheet;
+export default DailyTimetableSheet;

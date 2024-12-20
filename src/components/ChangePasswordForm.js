@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Form from './Form';
 
-const Change_Password_Form = ({ onChangePassword }) => {
+const ChangePasswordForm = ({ onChangePassword }) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -35,4 +35,4 @@ const Change_Password_Form = ({ onChangePassword }) => {
   return <Form fields={fields} buttonText="CRÉER" onSubmit={handleSubmit} />;
 };
 
-export default Change_Password_Form;
+export default ChangePasswordForm;

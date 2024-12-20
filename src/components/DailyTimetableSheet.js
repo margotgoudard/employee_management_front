@@ -1,17 +1,15 @@
   import React, { useEffect, useState } from "react";
-  import Time_Slot from "../services/Time_Slot";
-  import ExpenseReportService from "../services/Expense_Report";
-  import DailyTimetableService from "../services/Daily_Timetable_Sheet";
-  import "../assets/styles/Daily_Timetable_Sheet.css";
-  import { LuCirclePlus } from "react-icons/lu";
-  import { LuCircleMinus } from "react-icons/lu";
-  import Place_Category from "../services/Place_Category";
+  import TimeSlot from "../services/TimeSlot";
+  import ExpenseReportService from "../services/ExpenseReport";
+  import DailyTimetableService from "../services/DailyTimetableSheet";
+  import "../assets/styles/DailyTimetableSheet.css";
+  import PlaceCategory from "../services/PlaceCategory";
   import Notification from "./Notification";
-import TimeSlots from "./Time_Slots";
-import ExpenseReports from "./Expense_Report";
-import Fee_Category from "../services/Fee_Category";
+import TimeSlots from "./TimeSlots";
+import ExpenseReports from "./ExpenseReport";
+import FeeCategory from "../services/FeeCategory";
   
-  const Daily_Timetable_Sheet = ({ dailyTimetable }) => {
+  const DailyTimetableSheet = ({ dailyTimetable }) => {
     const [timeSlots, setTimeSlots] = useState([]);
     const [expenseNotes, setExpenseNotes] = useState([]);
     const [newTimeSlots, setNewTimeSlots] = useState([]);
@@ -33,10 +31,10 @@ import Fee_Category from "../services/Fee_Category";
   
     useEffect(() => {
       const fetchData = async () => {
-        const slots = await Time_Slot.getTimeSlotsByDailyTimetable(dailyTimetable.id_daily_timetable);
-        const categories = await Place_Category.fetchPlaceCategories();
+        const slots = await TimeSlot.getTimeSlotsByDailyTimetable(dailyTimetable.id_daily_timetable);
+        const categories = await PlaceCategory.fetchPlaceCategories();
         const expenses = await ExpenseReportService.getExpenseReportsByDailyTimetable(dailyTimetable.id_daily_timetable);
-        const feeCategories = await Fee_Category.fetchFeeCategories();
+        const feeCategories = await FeeCategory.fetchFeeCategories();
 
         setTimeSlots(slots);
         setInitialTimeSlots(slots); 
@@ -138,7 +136,7 @@ import Fee_Category from "../services/Fee_Category";
         });
     
         for (let id_time_slot of timeSlotsToDelete) {
-          await Time_Slot.deleteTimeSlot(id_time_slot);
+          await TimeSlot.deleteTimeSlot(id_time_slot);
         }
     
         for (let id_expense_report of expenseNotesToDelete) {
@@ -147,7 +145,7 @@ import Fee_Category from "../services/Fee_Category";
     
         for (let slot of newTimeSlots) {
           const { tempId, ...timeSlotData } = slot;
-          await Time_Slot.createTimeSlot({
+          await TimeSlot.createTimeSlot({
             ...timeSlotData,
             id_daily_timetable: dailyTimetable.id_daily_timetable,
           });
@@ -162,7 +160,7 @@ import Fee_Category from "../services/Fee_Category";
         }
     
         for (let slot of modifiedTimeSlots) {
-          await Time_Slot.updateTimeSlot(slot); 
+          await TimeSlot.updateTimeSlot(slot); 
         }
     
         for (let note of modifiedExpenseNotes) {
@@ -251,5 +249,5 @@ import Fee_Category from "../services/Fee_Category";
     );
   };
   
-  export default Daily_Timetable_Sheet;
+  export default DailyTimetableSheet;
   

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import '../assets/styles/Profile.css';
-import Mensual_Timetable_Sheet from '../services/Mensual_Timetable_Sheet';
-import Monthly_Timetables from '../components/Monthly_Timetables';
-import User_Info from '../components/User_Info';
+import MensualTimetableSheet from '../services/MensualTimetableSheet';
+import MonthlyTimetables from '../components/MonthlyTimetables';
+import UserInfo from '../components/UserInfo';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
@@ -12,7 +12,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchFiches = async () => {
       if (user?.id_user) {
-        const fetchedFiches = await Mensual_Timetable_Sheet.fetchMensualTimetablesByUser(user.id_user);
+        const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(user.id_user);
         setFiches(fetchedFiches);
       }
     };
@@ -22,8 +22,8 @@ const Profile = () => {
 
   return (
     <div className="user-dashboard">
-      <User_Info user={user} />
-      <Monthly_Timetables fiches={fiches} />
+      <UserInfo user={user} />
+      <MonthlyTimetables fiches={fiches} />
     </div>
   );
 };

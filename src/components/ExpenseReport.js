@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
-import ExpenseReportItem from "./Expense_Report_Item";
-import AddExpenseReportForm from "./Add_Expense_Report_Form";
-import Fee_Category from "../services/Fee_Category";
+import ExpenseReportItem from "./ExpenseReportItem";
+import AddExpenseReportForm from "./AddExpenseReportForm";
+import FeeCategory from "../services/FeeCategory";
 
 const ExpenseReports = ({
   expenseNotes,
@@ -20,7 +20,7 @@ const ExpenseReports = ({
   };
 
   const handleCreateCategory = async (name) => {
-    const response = await Fee_Category.createFeeCategory({ name });
+    const response = await FeeCategory.createFeeCategory({ name });
     return response;
   };  
 

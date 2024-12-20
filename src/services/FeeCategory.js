@@ -1,6 +1,6 @@
 import API from "./API";
 
-class Fee_Category {
+class FeeCategory {
 
     static async fetchFeeCategoryById(id_fee_category) {
         try {
@@ -37,4 +37,4 @@ class Fee_Category {
     
 }
 
-export default Fee_Category;
+export default FeeCategory;
