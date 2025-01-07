@@ -104,17 +104,28 @@ const MensualTimetable = () => {
   }, [selectedTimetable?.id_timetable]);
 
   const handleMonthChange = (increment) => {
-    const currentIndex = timetableData.findIndex(
-      (t) => t.id_timetable === selectedTimetable?.id_timetable
+    const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + increment, 1);
+    setSelectedDate(newDate);
+  
+    const newTimetable = timetableData.find(
+      (t) => t.year === newDate.getFullYear() && t.month === newDate.getMonth() + 1
     );
-    const newIndex = currentIndex + increment;
-
-    if (newIndex >= 0 && newIndex < timetableData.length) {
-      const newTimetable = timetableData[newIndex];
-      const newDate = new Date(newTimetable.year, newTimetable.month - 1, 1);
-
-      setSelectedTimetable(newTimetable);
-      setSelectedDate(newDate);
+  
+    if (newTimetable) {
+      dispatch(setSelectedTimetable(newTimetable));
+  
+      const fetchDailyTimetables = async () => {
+        try {
+          const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
+            newTimetable.id_timetable
+          );
+          dispatch(updateDailyTimetables(dailyTimetables));
+        } catch (error) {
+          console.error("Erreur lors de la récupération des données journalières :", error);
+        }
+      };
+  
+      fetchDailyTimetables();
     }
   };
 
@@ -144,7 +155,6 @@ const MensualTimetable = () => {
 
   const showNotification = (message, type) => {
     setNotification({ message, type });
-    console.log(notification)
 
     setTimeout(() => {
       setNotification({ message: "", type: "" });
