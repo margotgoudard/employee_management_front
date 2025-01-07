@@ -27,11 +27,6 @@
     transition: background-color 0.3s ease;
   }
   
-  .sidebar li:hover,
-  .sidebar li.active {
-    background-color: #1abc9c;
-  }
-  
   .main-content {
     flex: 1;
     padding: 20px;
@@ -97,5 +92,31 @@
     margin: 0;
     font-size: 12px;
     color: #666;
+  }
+  
+  .sidebar li {
+    padding: 10px 15px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: left;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .sidebar li:not(.active) {
+    color: white;
+    background-color: transparent;
+  }
+  
+  .sidebar li.active {
+    color: var(--blue-color);
+    background-color: white;
+    border: 1px solid var(--blue-color);
+    font-weight: bold;
+  }
+  
+  .sidebar li:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: lightblue;
   }
   

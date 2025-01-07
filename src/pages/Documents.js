@@ -5,8 +5,8 @@ import '../assets/styles/Document.css';
 import { useSelector } from 'react-redux';
 
 const Documents = () => {
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categories, setCategories] = useState([{ id_document_category: 'all', name: 'Tout' }]); // Catégorie par défaut "Tout"
+  const [selectedCategory, setSelectedCategory] = useState('all'); // Sélection par défaut : "Tout"
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -29,8 +29,7 @@ const Documents = () => {
           uniqueCategoryIds.map((id) => DocumentCategoryService.fetchDocumentCategoryById(id))
         );
 
-        setCategories(categoriesData);
-        setSelectedCategory(categoriesData[0]?.id_document_category);
+        setCategories((prevCategories) => [...prevCategories, ...categoriesData]); // Ajouter les catégories à "Tout"
       } catch (err) {
         console.error('Erreur lors de la récupération des documents ou des catégories :', err);
       }
@@ -40,8 +39,8 @@ const Documents = () => {
   }, [user.id_user]);
 
   useEffect(() => {
-    if (selectedCategory === null) {
-      setFilteredDocuments(documents);
+    if (selectedCategory === 'all') {
+      setFilteredDocuments(documents); // Afficher tous les documents si "Tout" est sélectionné
     } else {
       const filtered = documents?.filter((doc) => doc.id_document_category === selectedCategory);
       setFilteredDocuments(filtered);
