@@ -10,7 +10,7 @@ const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
   const location = useLocation();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => location.pathname.startsWith(path);
 
   return (
     <nav className="navbar">
@@ -20,7 +20,7 @@ const Navbar = () => {
         <li>
           <Link 
             to="/mensual_timetable/:id_timetable"
-            className={isActive('/mensual_timetable/:id_timetable') ? 'active' : ''}
+            className={isActive('/mensual_timetable') ? 'active' : ''}
           >
             Fiche horaire
           </Link>

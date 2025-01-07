@@ -1,10 +1,9 @@
-/* Navbar Container */
 .navbar {
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
-  display: flex; /* Utilise Flexbox */
+  display: flex; 
   align-items: center; /* Aligne verticalement les éléments */
   justify-content: space-between; /* Espace entre gauche et droite */
   padding: 0.5rem 1rem;
@@ -101,4 +100,8 @@
 .profile-name {
   font-size: 1rem;
   color: var(--text-color);
+}
+
+.navbar-links .active {
+  color: var(--green-color);
 }
