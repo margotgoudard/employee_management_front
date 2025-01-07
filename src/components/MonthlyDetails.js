@@ -3,7 +3,7 @@ import "../assets/styles/MonthlyDetails.css";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 import { LiaSearchDollarSolid } from "react-icons/lia";
 
-const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpenseDetails }) => {
+const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpenseDetails, onSubmitSuccess }) => {
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setSelectedTimetable((prevTimetable) => ({
@@ -13,9 +13,29 @@ const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpen
     await MensualTimetableSheet.updateMensualTimetable(selectedTimetable);
   };
 
+  const handleSubmit = async () => {
+    const updatedTimetable = {
+      ...selectedTimetable,
+      status: "En attente d'approbation",
+    };
+
+    setSelectedTimetable(updatedTimetable);
+    
+    try {
+      await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
+      
+      if (onSubmitSuccess) {
+        onSubmitSuccess();
+      }
+    } catch (error) {
+      console.error("Erreur lors de la soumission :", error);
+    }
+  };
+
   return (
     <div className="monthly-details">
       <h3>Fiche du mois</h3>
+
       <div className="detail-item">
         <label>Total commissions</label>
         <div className="input-container">
@@ -66,6 +86,12 @@ const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpen
           value={selectedTimetable?.comment || ""}
           onChange={handleChange}
         />
+      </div>
+
+      <div className="submit-button-container">
+        <button className="submit-button" onClick={handleSubmit}>
+          Soumettre
+        </button>
       </div>
     </div>
   );

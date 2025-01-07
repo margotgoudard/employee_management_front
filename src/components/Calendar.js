@@ -13,11 +13,11 @@ const CalendarComponent = ({
 }) => {
 
   const getTileClassName = ({ date, view }) => {
-    if (!selectedTimetable.daily_timetable_sheets || !Array.isArray(selectedTimetable.daily_timetable_sheets)) {
+    if (!selectedTimetable?.daily_timetable_sheets || !Array.isArray(selectedTimetable?.daily_timetable_sheets)) {
       return 'disabled-day';
     }      
     
-    const matchedDay = selectedTimetable.daily_timetable_sheets.find((d) => {
+    const matchedDay = selectedTimetable?.daily_timetable_sheets.find((d) => {
       const dayDate = new Date(d.day); 
       return (
         dayDate.getUTCDate() === date.getUTCDate() &&
@@ -53,7 +53,7 @@ const CalendarComponent = ({
       <div className="calendar-section">
         <div className="calendar-header">
           <BsArrowLeft onClick={() => onMonthChange(-1)} />
-          <h2>{selectedDate.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}</h2>
+          <h2>{selectedDate?.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}</h2>
           <BsArrowRight onClick={() => onMonthChange(1)} />
         </div>
         <Calendar

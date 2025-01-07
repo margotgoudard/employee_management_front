@@ -11,15 +11,15 @@
   }
   
   .notification.success {
-    background-color: #4caf50; /* Vert pour le succès */
+    background-color: #4caf50; 
   }
   
   .notification.warning {
-    background-color: #ff9800; /* Orange pour les avertissements */
+    background-color: #ff9800;
   }
   
   .notification.error {
-    background-color: #f44336; /* Rouge pour les erreurs */
+    background-color: #f44336; 
   }
   
   @keyframes fadeInOut {

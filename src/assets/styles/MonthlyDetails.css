@@ -98,3 +98,20 @@ input[type="number"] {
     transform: scale(1.2); 
     color: var(--blue-color); 
 }
+
+.submit-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: var(--blue-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
