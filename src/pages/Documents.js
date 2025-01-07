@@ -17,7 +17,6 @@ const Documents = () => {
     const fetchDocumentsAndCategories = async () => {
       try {
         const allDocuments = await DocumentService.fetchDocumentsByIdUser(user.id_user);
-        console.log(allDocuments)
         setDocuments(allDocuments);
         setFilteredDocuments(allDocuments);
   
