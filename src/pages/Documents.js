@@ -5,8 +5,8 @@ import '../assets/styles/Document.css';
 import { useSelector } from 'react-redux';
 
 const Documents = () => {
-  const [categories, setCategories] = useState([{ id_document_category: 'all', name: 'Tout' }]); // Catégorie par défaut "Tout"
-  const [selectedCategory, setSelectedCategory] = useState('all'); // Sélection par défaut : "Tout"
+  const [categories, setCategories] = useState([{ id_document_category: 'all', name: 'Tout' }]);
+  const [selectedCategory, setSelectedCategory] = useState('all'); 
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,7 +17,6 @@ const Documents = () => {
     const fetchDocumentsAndCategories = async () => {
       try {
         const allDocuments = await DocumentService.fetchDocumentsByIdUser(user.id_user);
-        console.log(allDocuments);
         setDocuments(allDocuments);
         setFilteredDocuments(allDocuments);
 
@@ -29,7 +28,7 @@ const Documents = () => {
           uniqueCategoryIds.map((id) => DocumentCategoryService.fetchDocumentCategoryById(id))
         );
 
-        setCategories((prevCategories) => [...prevCategories, ...categoriesData]); // Ajouter les catégories à "Tout"
+        setCategories((prevCategories) => [...prevCategories, ...categoriesData]); 
       } catch (err) {
         console.error('Erreur lors de la récupération des documents ou des catégories :', err);
       }
@@ -40,7 +39,7 @@ const Documents = () => {
 
   useEffect(() => {
     if (selectedCategory === 'all') {
-      setFilteredDocuments(documents); // Afficher tous les documents si "Tout" est sélectionné
+      setFilteredDocuments(documents); 
     } else {
       const filtered = documents?.filter((doc) => doc.id_document_category === selectedCategory);
       setFilteredDocuments(filtered);
@@ -55,8 +54,8 @@ const Documents = () => {
   }, [searchTerm, documents]);
 
   const sortedDocuments = [...filteredDocuments].sort((a, b) => {
-    const dateA = new Date(a.updated_at);
-    const dateB = new Date(b.updated_at);
+    const dateA = new Date(a.updatedAt);
+    const dateB = new Date(b.updatedAt);
     return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
   });
 
@@ -66,9 +65,9 @@ const Documents = () => {
         <ul>
           {categories.map((category) => (
             <li
-              key={category.id_document_category}
-              className={selectedCategory === category.id_document_category ? 'active' : ''}
-              onClick={() => setSelectedCategory(category.id_document_category)}
+              key={category.id_category}
+              className={selectedCategory === category.id_category ? 'active' : ''}
+              onClick={() => setSelectedCategory(category.id_category)}
             >
               {category.name}
             </li>
@@ -99,13 +98,13 @@ const Documents = () => {
           {sortedDocuments.map((doc) => (
             <div key={doc.id_document} className="document-card">
               {doc.type === 'pdf' ? (
-                <iframe src={doc.url} title={doc.name} className="document-preview"></iframe>
+                <iframe src={doc.document} title={doc.name} className="document-preview"></iframe>
               ) : (
-                <img src={doc.url} alt={doc.name} className="document-preview" />
+                <img src={doc.document} alt={doc.name} className="document-preview" />
               )}
               <div className="document-info">
                 <h4>{doc.name}</h4>
-                <p>Mis à jour : {new Date(doc.updated_at).toLocaleDateString()}</p>
+                <p>Mis à jour : {new Date(doc.updatedAt).toLocaleDateString()}</p>
               </div>
             </div>
           ))}
