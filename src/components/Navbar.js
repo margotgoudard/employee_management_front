@@ -48,6 +48,14 @@ const Navbar = () => {
     }
   };
 
+  const handleDocumentsClick = async () => {
+    try {
+      navigate(`/documents`);
+    } catch (err) {
+      console.error('Erreur lors de la récupération de la fiche horaire :', err);
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -72,7 +80,8 @@ const Navbar = () => {
             </button>
           </li>
           <li>
-            <button className={`navbar-button ${isActive('/mes-documents') ? 'active' : ''}`}>
+            <button className={`navbar-button ${isActive('/documents') ? 'active' : ''}`}>
+              onClick={handleDocumentsClick}
               Mes documents
             </button>
           </li>
