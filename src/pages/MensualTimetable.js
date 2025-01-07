@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import MensualTimetableSheetService from "../services/MensualTimetableSheet";
 import DailyTimetableSheet from "../components/DailyTimetableSheet";
@@ -9,19 +9,24 @@ import CalendarComponent from "../components/Calendar";
 import ExpenseReportDetails from "../components/ExpenseReportDetails";
 import DailyTimetableSheetService from "../services/DailyTimetableSheet";
 import Notification from "../components/Notification";
+import {
+  setTimetables,
+  setSelectedTimetable,
+  updateDailyTimetables,
+} from "../redux/timetableSlice";
 
 const MensualTimetable = () => {
   const user = useSelector((state) => state.auth.user);
   const { id_timetable } = useParams();
   const [timetableData, setTimetableData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTimetable, setSelectedTimetable] = useState({
-    daily_timetable_sheets: [],
-  });
   const [showExpenseDetails, setShowExpenseDetails] = useState(false);
   const [showDailyDetails, setShowDailyDetails] = useState(false);
   const [selectedDailyTimetable, setSelectedDailyTimetable] = useState(null);
-  const [notification, setNotification] = useState({ message: "", type: "" }); // État pour la notification
+  const [notification, setNotification] = useState({ message: "", type: "" });
+
+  const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
+  const dispatch = useDispatch();
 
   const handleDayClick = (day) => {
     const selectedDailyTimetable = selectedTimetable.daily_timetable_sheets.find(
@@ -53,11 +58,22 @@ const MensualTimetable = () => {
         setTimetableData(data || []);
 
         if (data && data.length > 0) {
-          let selected = data.find((t) => t.id_timetable === parseInt(id_timetable));
-          if (!selected) {
-            selected = data[data.length - 1];
+          let selected;
+          
+          if (id_timetable) {
+            selected = data.find((t) => t.id_timetable === parseInt(id_timetable));
           }
-          setSelectedTimetable(selected);
+  
+          if (!selected) {
+            const currentDate = new Date();
+            selected = data.find(
+              (t) =>
+                t.year === currentDate.getFullYear() &&
+                t.month === currentDate.getMonth() + 1
+            ) || data[data.length - 1]; 
+          }
+
+          dispatch(setSelectedTimetable(selected));
           setSelectedDate(new Date(selected.year, selected.month - 1, 1));
         }
       } catch (err) {
@@ -69,7 +85,7 @@ const MensualTimetable = () => {
   }, [user.id_user, id_timetable]);
 
   useEffect(() => {
-    if (!selectedTimetable || !selectedTimetable.id_timetable) {
+    if (!selectedTimetable || !selectedTimetable?.id_timetable) {
       return;
     }
 
@@ -78,21 +94,18 @@ const MensualTimetable = () => {
         const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
           selectedTimetable.id_timetable
         );
-        setSelectedTimetable((prev) => ({
-          ...prev,
-          daily_timetable_sheets: dailyTimetables,
-        }));
+        dispatch(updateDailyTimetables(dailyTimetables));
       } catch (error) {
         console.error("Error fetching or calculating timetable data:", error);
       }
     };
 
     fetchAndCalculateData();
-  }, [selectedTimetable.id_timetable]);
+  }, [selectedTimetable?.id_timetable]);
 
   const handleMonthChange = (increment) => {
     const currentIndex = timetableData.findIndex(
-      (t) => t.id_timetable === selectedTimetable.id_timetable
+      (t) => t.id_timetable === selectedTimetable?.id_timetable
     );
     const newIndex = currentIndex + increment;
 
@@ -116,14 +129,13 @@ const MensualTimetable = () => {
 
   const refreshDailyTimetable = async (dailyTimetable) => {
     try {
-      setSelectedTimetable((prev) => ({
-        ...prev,
-        daily_timetable_sheets: prev.daily_timetable_sheets.map((d) =>
+      dispatch(updateDailyTimetables(
+        selectedTimetable.daily_timetable_sheets.map((d) =>
           d.id_daily_timetable === dailyTimetable.id_daily_timetable
             ? dailyTimetable
             : d
-        ),
-      }));
+        )
+      ));
       setSelectedDailyTimetable(dailyTimetable);
     } catch (error) {
       console.error("Erreur lors de la mise à jour des plannings quotidiens :", error);
@@ -153,7 +165,7 @@ const MensualTimetable = () => {
             />
             <MonthlyDetails
               selectedTimetable={selectedTimetable}
-              setSelectedTimetable={setSelectedTimetable}
+              setSelectedTimetable={(timetable) => dispatch(setSelectedTimetable(timetable))}
               onToggleExpenseDetails={() => (
                 setShowExpenseDetails(!showExpenseDetails),
                 setShowDailyDetails(false),

@@ -4,28 +4,25 @@
   right: 0;
   left: 0;
   display: flex; 
-  align-items: center; /* Aligne verticalement les éléments */
-  justify-content: space-between; /* Espace entre gauche et droite */
+  align-items: center;
+  justify-content: space-between; 
   padding: 0.5rem 1rem;
   background-color: white;
   border-bottom: 1px solid #ddd;
-  z-index: 1000; /* Garde la navbar au-dessus des autres éléments */
+  z-index: 1000;
 }
 
-/* Navbar Left Section */
 .navbar-left {
-  display: flex; /* Aligne le logo et les onglets horizontalement */
+  display: flex; 
   align-items: center;
   gap: 1rem;
 }
 
-/* Logo */
 .navbar-logo {
   height: 50px;
   object-fit: contain;
 }
 
-/* Navbar Links */
 .navbar-links {
   display: flex;
   list-style: none;
@@ -35,19 +32,19 @@
 
 .navbar-links li {
   display: flex;
-  align-items: center; /* Aligne le texte verticalement */
-  padding: 0 1rem; /* Espace horizontal autour de chaque lien */
-  position: relative; /* Nécessaire pour le séparateur */
+  align-items: center; 
+  padding: 0 1rem; 
+  position: relative; 
 }
 
 .navbar-links li:not(:last-child)::after {
   content: "";
   position: absolute;
   right: 0;
-  top: 25%; /* Ajuste la hauteur du séparateur */
+  top: 25%; 
   bottom: 25%;
   width: 1px;
-  background-color: var(--blue-color); /* Couleur du trait */
+  background-color: var(--blue-color); 
 }
 
 .navbar-links li a {
@@ -62,14 +59,12 @@
   color: var(--green-color);
 }
 
-/* Right Section */
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 1rem; /* Espacement entre notification et profil */
+  gap: 1rem;
 }
 
-/* Notification Icon */
 .navbar-notification {
   background: none;
   border: none;
@@ -85,7 +80,6 @@
   font-size: 1.5rem;
 }
 
-/* Profile Section */
 .navbar-profile {
   display: flex;
   align-items: center;

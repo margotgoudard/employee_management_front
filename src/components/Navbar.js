@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
+  const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable); 
   const location = useLocation();
 
   const isActive = (path) => location.pathname.startsWith(path);
@@ -16,25 +17,25 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <img src={logo} alt="PSS Logo" className="navbar-logo" />
-      <ul className="navbar-links">
-        <li>
-          <Link 
-            to="/mensual_timetable/:id_timetable"
-            className={isActive('/mensual_timetable') ? 'active' : ''}
-          >
-            Fiche horaire
-          </Link>
-        </li>
-        <li>
-          <a href="#dashboard" className={isActive('/dashboard') ? 'active' : ''}>Dashboard</a>
-        </li>
-        <li>
-          <a href="#mon-equipe" className={isActive('/mon-equipe') ? 'active' : ''}>Mon équipe</a>
-        </li>
-        <li>
-          <a href="#mes-documents" className={isActive('/mes-documents') ? 'active' : ''}>Mes documents</a>
-        </li>
-      </ul>
+        <ul className="navbar-links">
+          <li>
+            <Link
+              to={`/mensual_timetable/${selectedTimetable?.id_timetable || ''}`} 
+              className={isActive('/mensual_timetable') ? 'active' : ''}
+            >
+              Fiche horaire
+            </Link>
+          </li>
+          <li>
+            <a href="#dashboard" className={isActive('/dashboard') ? 'active' : ''}>Dashboard</a>
+          </li>
+          <li>
+            <a href="#mon-equipe" className={isActive('/mon-equipe') ? 'active' : ''}>Mon équipe</a>
+          </li>
+          <li>
+            <a href="#mes-documents" className={isActive('/mes-documents') ? 'active' : ''}>Mes documents</a>
+          </li>
+        </ul>
       </div>
       <div className="navbar-right">
         <button className="navbar-notification">

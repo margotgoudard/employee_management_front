@@ -13,11 +13,11 @@ const CalendarComponent = ({
 }) => {
 
   const getTileClassName = ({ date, view }) => {
-    if (!selectedTimetable.daily_timetable_sheets || !Array.isArray(selectedTimetable.daily_timetable_sheets)) {
+    if (!selectedTimetable?.daily_timetable_sheets || !Array.isArray(selectedTimetable?.daily_timetable_sheets)) {
       return 'disabled-day';
     }      
     
-    const matchedDay = selectedTimetable.daily_timetable_sheets.find((d) => {
+    const matchedDay = selectedTimetable?.daily_timetable_sheets.find((d) => {
       const dayDate = new Date(d.day); 
       return (
         dayDate.getUTCDate() === date.getUTCDate() &&

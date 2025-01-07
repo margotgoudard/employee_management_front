@@ -87,7 +87,6 @@
     background-color: var(--green-hover-color);
   }
   
-  /* Responsive Styles */
   @media (max-width: 768px) {
     .form-container {
       width: 90%;
