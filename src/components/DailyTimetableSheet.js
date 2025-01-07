@@ -4,11 +4,11 @@
   import DailyTimetableService from "../services/DailyTimetableSheet";
   import "../assets/styles/DailyTimetableSheet.css";
   import PlaceCategory from "../services/PlaceCategory";
-  import Notification from "./Notification";
-import TimeSlots from "./TimeSlots";
-import ExpenseReports from "./ExpenseReport";
-import FeeCategory from "../services/FeeCategory";
-  
+  import Alert from "./Alert";
+  import TimeSlots from "./TimeSlots";
+  import ExpenseReports from "./ExpenseReport";
+  import FeeCategory from "../services/FeeCategory";
+    
   const DailyTimetableSheet = ({ dailyTimetable }) => {
     const [timeSlots, setTimeSlots] = useState([]);
     const [expenseNotes, setExpenseNotes] = useState([]);
@@ -20,13 +20,13 @@ import FeeCategory from "../services/FeeCategory";
     const [isDutyCall, setIsDutyCall] = useState(dailyTimetable.on_call_duty || false);
     const [placeCategories, setPlaceCategories] = useState([]);
     const [feeCategories, setFeeCategories] = useState([]);
-    const [notification, setNotification] = useState({ show: false, message: "", type: "" });
+    const [alert, setAlert] = useState({ show: false, message: "", type: "" });
     const [initialTimeSlots, setInitialTimeSlots] = useState([]);
     const [initialExpenseNotes, setInitialExpenseNotes] = useState([]);
     
-    const showNotification = (message, type) => {
-      setNotification({ show: true, message, type });
-      setTimeout(() => setNotification({ show: false, message: "", type: "" }), 2000);
+    const showAlert = (message, type) => {
+      setAlert({ show: true, message, type });
+      setTimeout(() => setAlert({ show: false, message: "", type: "" }), 2000);
     };
   
     useEffect(() => {
@@ -177,7 +177,7 @@ import FeeCategory from "../services/FeeCategory";
           dailyTimetable.onUpdate(daily_timetable_modified);
         }
     
-        showNotification("Enregistrement réussi !", "success");
+        showAlert("Enregistrement réussi !", "success");
       } catch (error) {
         console.error("Erreur lors de l'enregistrement :", error);
       }
@@ -185,7 +185,7 @@ import FeeCategory from "../services/FeeCategory";
   
     return (
       <div className="daily-timetable-sheet">
-          {notification && <Notification message={notification.message} type={notification.type} />}
+          {alert && <Alert message={alert.message} type={alert.type} />}
         <div className="date-container">
           <h2>
             {new Date(dailyTimetable.day).toLocaleDateString("fr-FR", {

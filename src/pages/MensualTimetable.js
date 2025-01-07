@@ -8,7 +8,7 @@ import MonthlyDetails from "../components/MonthlyDetails";
 import CalendarComponent from "../components/Calendar";
 import ExpenseReportDetails from "../components/ExpenseReportDetails";
 import DailyTimetableSheetService from "../services/DailyTimetableSheet";
-import Notification from "../components/Notification";
+import Alert from "../components/Alert";
 import {
   setTimetables,
   setSelectedTimetable,
@@ -23,7 +23,7 @@ const MensualTimetable = () => {
   const [showExpenseDetails, setShowExpenseDetails] = useState(false);
   const [showDailyDetails, setShowDailyDetails] = useState(false);
   const [selectedDailyTimetable, setSelectedDailyTimetable] = useState(null);
-  const [notification, setNotification] = useState({ message: "", type: "" });
+  const [alert, setAlert] = useState({ message: "", type: "" });
 
   const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
   const dispatch = useDispatch();
@@ -154,11 +154,11 @@ const MensualTimetable = () => {
     }
   };
 
-  const showNotification = (message, type) => {
-    setNotification({ message, type });
+  const showAlert = (message, type) => {
+    setAlert({ message, type });
 
     setTimeout(() => {
-      setNotification({ message: "", type: "" });
+      setAlert({ message: "", type: "" });
     }, 3000);
   };
 
@@ -182,7 +182,7 @@ const MensualTimetable = () => {
                 setShowDailyDetails(false),
                 setSelectedDailyTimetable(null)
               )}
-              onSubmitSuccess={() => showNotification("Votre fiche horaire a été soumise avec succès", "success")}
+              onSubmitSuccess={() => showAlert("Votre fiche horaire a été soumise avec succès", "success")}
             />
           </div>
         </div>
@@ -205,8 +205,8 @@ const MensualTimetable = () => {
         )}
       </div>
 
-      {notification.message && (
-        <Notification message={notification.message} type={notification.type} />
+      {alert.message && (
+        <Alert message={alert.message} type={alert.type} />
       )}
     </div>
   );

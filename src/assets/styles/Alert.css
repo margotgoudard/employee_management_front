@@ -1,4 +1,4 @@
-.notification {
+.alert {
     position: fixed;
     top: 10px;
     right: 10px;
@@ -10,15 +10,15 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   }
   
-  .notification.success {
+  .alert.success {
     background-color: #4caf50; 
   }
   
-  .notification.warning {
+  .alert.warning {
     background-color: #ff9800;
   }
   
-  .notification.error {
+  .alert.error {
     background-color: #f44336; 
   }
   
@@ -29,7 +29,7 @@
     100% { opacity: 0; transform: translateY(-10px); }
   }
   
-  .notification {
+  .alert {
     animation: fadeInOut 2s ease-in-out;
   }
   
