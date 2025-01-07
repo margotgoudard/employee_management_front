@@ -53,7 +53,7 @@ const CalendarComponent = ({
       <div className="calendar-section">
         <div className="calendar-header">
           <BsArrowLeft onClick={() => onMonthChange(-1)} />
-          <h2>{selectedDate.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}</h2>
+          <h2>{selectedDate?.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}</h2>
           <BsArrowRight onClick={() => onMonthChange(1)} />
         </div>
         <Calendar

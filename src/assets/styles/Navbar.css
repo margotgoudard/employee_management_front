@@ -3,9 +3,9 @@
   top: 0;
   right: 0;
   left: 0;
-  display: flex; 
+  display: flex;
   align-items: center;
-  justify-content: space-between; 
+  justify-content: space-between;
   padding: 0.5rem 1rem;
   background-color: white;
   border-bottom: 1px solid #ddd;
@@ -13,7 +13,7 @@
 }
 
 .navbar-left {
-  display: flex; 
+  display: flex;
   align-items: center;
   gap: 1rem;
 }
@@ -21,6 +21,7 @@
 .navbar-logo {
   height: 50px;
   object-fit: contain;
+  cursor: pointer;
 }
 
 .navbar-links {
@@ -32,33 +33,39 @@
 
 .navbar-links li {
   display: flex;
-  align-items: center; 
-  padding: 0 1rem; 
-  position: relative; 
+  align-items: center;
+  padding: 0 1rem;
+  position: relative;
 }
 
 .navbar-links li:not(:last-child)::after {
   content: "";
   position: absolute;
   right: 0;
-  top: 25%; 
+  top: 25%;
   bottom: 25%;
   width: 1px;
-  background-color: var(--blue-color); 
+  background-color: var(--blue-color);
 }
 
-.navbar-links li a {
-  text-decoration: none;
+.navbar-button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
   color: var(--blue-color);
-  font-size: 1rem;
-  font-weight: 500;
-  text-align: left;
+  transition: color 0.3s ease;
 }
 
-.navbar-links li a:hover {
-  color: var(--green-color);
+.navbar-button:hover {
+  color: var(--green-color)
 }
 
+.navbar-button.active {
+  color: var(--green-color); 
+}
+  
 .navbar-right {
   display: flex;
   align-items: center;
@@ -73,6 +80,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 10px;
 }
 
 .icon-notification {
@@ -96,6 +104,9 @@
   color: var(--text-color);
 }
 
-.navbar-links .active {
-  color: var(--green-color);
+.profile-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
 }

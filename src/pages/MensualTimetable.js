@@ -19,7 +19,7 @@ const MensualTimetable = () => {
   const user = useSelector((state) => state.auth.user);
   const { id_timetable } = useParams();
   const [timetableData, setTimetableData] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
   const [showExpenseDetails, setShowExpenseDetails] = useState(false);
   const [showDailyDetails, setShowDailyDetails] = useState(false);
   const [selectedDailyTimetable, setSelectedDailyTimetable] = useState(null);
@@ -50,40 +50,41 @@ const MensualTimetable = () => {
   };
 
   useEffect(() => {
+    if (selectedTimetable && selectedTimetable.year && selectedTimetable.month) {
+      setSelectedDate(new Date(selectedTimetable.year, selectedTimetable.month - 1, 1));
+    }
+  }, [selectedTimetable]);
+  
+  useEffect(() => {
     const fetchTimetableData = async () => {
       try {
         const data = await MensualTimetableSheetService.fetchMensualTimetablesByUser(
           user.id_user
         );
         setTimetableData(data || []);
-
-        if (data && data.length > 0) {
-          let selected;
-          
-          if (id_timetable) {
-            selected = data.find((t) => t.id_timetable === parseInt(id_timetable));
-          }
   
-          if (!selected) {
-            const currentDate = new Date();
-            selected = data.find(
-              (t) =>
-                t.year === currentDate.getFullYear() &&
-                t.month === currentDate.getMonth() + 1
-            ) || data[data.length - 1]; 
+        let selected;
+  
+        if (id_timetable) {
+          selected = data.find((t) => t.id_timetable === parseInt(id_timetable));
+  
+          if (selected) {
+            dispatch(setSelectedTimetable(selected));
+  
+            const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
+              selected.id_timetable
+            );
+            dispatch(updateDailyTimetables(dailyTimetables));
           }
-
-          dispatch(setSelectedTimetable(selected));
-          setSelectedDate(new Date(selected.year, selected.month - 1, 1));
         }
       } catch (err) {
-        console.error("Error fetching timetable data:", err);
+        console.error('Erreur lors de la récupération des données :', err);
       }
     };
-
+  
     fetchTimetableData();
-  }, [user.id_user, id_timetable]);
-
+  }, [user.id_user, id_timetable, dispatch]);
+  
   useEffect(() => {
     if (!selectedTimetable || !selectedTimetable?.id_timetable) {
       return;

@@ -1,17 +1,52 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../assets/styles/Navbar.css';
 import logo from '../assets/images/logo.png';
 import { HiBellAlert } from "react-icons/hi2";
 import { IoPerson } from "react-icons/io5";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import MensualTimetableSheetService from '../services/MensualTimetableSheet';
+import DailyTimetableSheetService from '../services/DailyTimetableSheet';
+import { setSelectedTimetable, updateDailyTimetables } from '../redux/timetableSlice';
 
 const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
-  const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable); 
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const isActive = (path) => location.pathname.startsWith(path);
+
+  const handleFicheHoraireClick = async () => {
+    try {
+      const data = await MensualTimetableSheetService.fetchMensualTimetablesByUser(user.id_user);
+
+      if (data && data.length > 0) {
+        const currentDate = new Date();
+        let selected = data.find(
+          (t) =>
+            t.year === currentDate.getFullYear() &&
+            t.month === currentDate.getMonth() + 1
+        );
+
+        if (!selected) {
+          selected = data[data.length - 1]; 
+        }
+
+        dispatch(setSelectedTimetable(selected));
+
+        const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
+          selected.id_timetable
+        );
+
+        dispatch(updateDailyTimetables(dailyTimetables));
+
+        navigate(`/mensual_timetable/${selected.id_timetable}`);
+      }
+    } catch (err) {
+      console.error('Erreur lors de la récupération de la fiche horaire :', err);
+    }
+  };
 
   return (
     <nav className="navbar">
@@ -19,21 +54,27 @@ const Navbar = () => {
         <img src={logo} alt="PSS Logo" className="navbar-logo" />
         <ul className="navbar-links">
           <li>
-            <Link
-              to={`/mensual_timetable/${selectedTimetable?.id_timetable || ''}`} 
-              className={isActive('/mensual_timetable') ? 'active' : ''}
+            <button
+              onClick={handleFicheHoraireClick}
+              className={`navbar-button ${isActive('/mensual_timetable') ? 'active' : ''}`}
             >
               Fiche horaire
-            </Link>
+            </button>
           </li>
           <li>
-            <a href="#dashboard" className={isActive('/dashboard') ? 'active' : ''}>Dashboard</a>
+            <button className={`navbar-button ${isActive('/dashboard') ? 'active' : ''}`}>
+              Dashboard
+            </button>
           </li>
           <li>
-            <a href="#mon-equipe" className={isActive('/mon-equipe') ? 'active' : ''}>Mon équipe</a>
+            <button className={`navbar-button ${isActive('/mon-equipe') ? 'active' : ''}`}>
+              Mon équipe
+            </button>
           </li>
           <li>
-            <a href="#mes-documents" className={isActive('/mes-documents') ? 'active' : ''}>Mes documents</a>
+            <button className={`navbar-button ${isActive('/mes-documents') ? 'active' : ''}`}>
+              Mes documents
+            </button>
           </li>
         </ul>
       </div>
@@ -42,9 +83,9 @@ const Navbar = () => {
           <HiBellAlert className="icon-notification" />
         </button>
         <div className="navbar-profile">
-          <Link to="/profile" className="profile-link">
+          <button className="profile-link" onClick={() => navigate('/profile')}>
             <IoPerson className="icon-profile" />
-          </Link>
+          </button>
           <span className="profile-name">{user ? user.first_name : 'Guest'}</span>
         </div>
       </div>
