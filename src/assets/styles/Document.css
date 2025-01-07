@@ -1,0 +1,131 @@
+.documents-page {
+    display: flex;
+    height: 100vh;
+    margin-top: 3%;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background-color:var(--blue-color);
+    color: white;
+    padding: 20px;
+  }
+  
+  .sidebar h3 {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20%;
+}
+  
+  .sidebar li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    margin-top: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .filters {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .filters button {
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filters button.active,
+  .filters button:hover {
+    background-color: var(--green-color);
+    color: white;
+  }
+  
+  .documents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .document-card {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .document-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .document-info p {
+    margin: 0;
+    font-size: 12px;
+    color: #666;
+  }
+
+  .sidebar li {
+    padding: 10px 15px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: left;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .sidebar li:not(.active) {
+    color: white;
+    background-color: transparent;
+  }
+  
+  .sidebar li.active {
+    color: var(--blue-color);
+    background-color: white;
+    border: 1px solid var(--blue-color);
+    font-weight: bold;
+  }
+  
+  .sidebar li:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: lightblue;
+  }
+
+  .document-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+
+  .document-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  
+  
+  
