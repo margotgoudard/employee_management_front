@@ -10,38 +10,42 @@ const Documents = () => {
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState('desc'); 
+  const [sortOrder, setSortOrder] = useState('desc');
   const user = useSelector((state) => state.auth.user); 
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchDocumentsAndCategories = async () => {
       try {
-        const data = await DocumentCategoryService.fetchCategories();
-        setCategories(data);
-        setSelectedCategory(data[0]?.id_document_category); 
+        const allDocuments = await DocumentService.fetchDocumentsByIdUser(user.id_user);
+        setDocuments(allDocuments);
+        setFilteredDocuments(allDocuments);
+
+        const uniqueCategoryIds = [
+          ...new Set(allDocuments.map((doc) => doc.id_document_category))
+        ];
+
+        const categoriesData = await Promise.all(
+          uniqueCategoryIds.map((id) => DocumentCategoryService.fetchDocumentCategoryById(id))
+        );
+
+        setCategories(categoriesData);
+        setSelectedCategory(categoriesData[0]?.id_document_category); 
       } catch (err) {
-        console.error('Erreur lors de la récupération des catégories :', err);
+        console.error('Erreur lors de la récupération des documents ou des catégories :', err);
       }
     };
 
-    fetchCategories();
-  }, []);
+    fetchDocumentsAndCategories();
+  }, [user.id_user]);
 
   useEffect(() => {
-    if (!selectedCategory) return;
-
-    const fetchDocuments = async () => {
-      try {
-        const data = await DocumentService.fetchDocumentsByCategory(user.id_user, selectedCategory);
-        setDocuments(data);
-        setFilteredDocuments(data); 
-      } catch (err) {
-        console.error('Erreur lors de la récupération des documents :', err);
-      }
-    };
-
-    fetchDocuments();
-  }, [selectedCategory, user.id_user]);
+    if (selectedCategory === null) {
+      setFilteredDocuments(documents);
+    } else {
+      const filtered = documents.filter((doc) => doc.id_document_category === selectedCategory);
+      setFilteredDocuments(filtered);
+    }
+  }, [selectedCategory, documents]);
 
   useEffect(() => {
     const filtered = documents.filter((doc) =>

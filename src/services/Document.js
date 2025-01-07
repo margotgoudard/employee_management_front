@@ -2,7 +2,7 @@ import API from "./API";
 
 class Document {
 
-    static async fetchDocumentsCategoryByIdUser(id_user) {
+    static async fetchDocumentsByIdUser(id_user) {
         try {
             const endpoint = `/documents/${id_user}`;
             const response = await API.get(endpoint);

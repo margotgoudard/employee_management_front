@@ -4,7 +4,7 @@ class DocumentCategory {
 
     static async fetchDocumentCategoryById(id_document_category) {
         try {
-            const endpoint = `/document-category/${id_document_category}`;
+            const endpoint = `/document-categories/${id_document_category}`;
             const response = await API.get(endpoint);
             return response; 
         } catch (error) {

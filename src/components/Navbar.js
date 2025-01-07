@@ -80,9 +80,10 @@ const Navbar = () => {
             </button>
           </li>
           <li>
-            <button className={`navbar-button ${isActive('/documents') ? 'active' : ''}`}>
+            <button
               onClick={handleDocumentsClick}
-              Mes documents
+              className={`navbar-button ${isActive('/documents') ? 'active' : ''}`}>
+                Mes documents
             </button>
           </li>
         </ul>
