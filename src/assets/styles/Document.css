@@ -57,7 +57,7 @@
   
   .filters button.active,
   .filters button:hover {
-    background-color: #1abc9c;
+    background-color: var(--green-color);
     color: white;
   }
   
@@ -75,16 +75,9 @@
     text-align: center;
   }
   
-  .document-preview {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    margin-bottom: 10px;
-  }
-  
   .document-info h4 {
     margin: 0 0 5px 0;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
   }
   
@@ -93,7 +86,7 @@
     font-size: 12px;
     color: #666;
   }
-  
+
   .sidebar li {
     padding: 10px 15px;
     margin: 5px 0;
@@ -119,4 +112,20 @@
     background-color: rgba(255, 255, 255, 0.2);
     color: lightblue;
   }
+
+  .document-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+
+  .document-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  
+  
   

@@ -5,7 +5,7 @@ import '../assets/styles/Document.css';
 import { useSelector } from 'react-redux';
 
 const Documents = () => {
-  const [categories, setCategories] = useState([{ id_document_category: 'all', name: 'Tout' }]);
+  const [categories, setCategories] = useState([{ id_category: 'all', name: 'Tout' }]);
   const [selectedCategory, setSelectedCategory] = useState('all'); 
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
@@ -17,26 +17,35 @@ const Documents = () => {
     const fetchDocumentsAndCategories = async () => {
       try {
         const allDocuments = await DocumentService.fetchDocumentsByIdUser(user.id_user);
+        console.log(allDocuments)
         setDocuments(allDocuments);
         setFilteredDocuments(allDocuments);
+  
+        const uniqueCategoryIds = [...new Set(allDocuments.map((doc) => doc.id_document_category))];
+        
+        const categoriesData = [];
+        for (const id of uniqueCategoryIds) {
+          const category = await DocumentCategoryService.fetchDocumentCategoryById(id);
+          categoriesData.push(category);
+        }
+  
+        setCategories((prevCategories) => {
+            const allCategories = [...prevCategories, ...categoriesData];
+            const uniqueCategories = allCategories.filter(
+              (cat, index, self) =>
+                index === self.findIndex((c) => c.id_category === cat.id_category)
+            );
+            return uniqueCategories;
+          });
 
-        const uniqueCategoryIds = [
-          ...new Set(allDocuments.map((doc) => doc.id_document_category))
-        ];
-
-        const categoriesData = await Promise.all(
-          uniqueCategoryIds.map((id) => DocumentCategoryService.fetchDocumentCategoryById(id))
-        );
-
-        setCategories((prevCategories) => [...prevCategories, ...categoriesData]); 
-      } catch (err) {
+        } catch (err) {
         console.error('Erreur lors de la récupération des documents ou des catégories :', err);
       }
     };
-
+  
     fetchDocumentsAndCategories();
   }, [user.id_user]);
-
+  
   useEffect(() => {
     if (selectedCategory === 'all') {
       setFilteredDocuments(documents); 
@@ -47,11 +56,17 @@ const Documents = () => {
   }, [selectedCategory, documents]);
 
   useEffect(() => {
-    const filtered = documents.filter((doc) =>
+    const categoryFiltered = selectedCategory === 'all'
+      ? documents
+      : documents.filter((doc) => doc.id_document_category === selectedCategory);
+  
+    const filtered = categoryFiltered.filter((doc) =>
       doc.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+  
     setFilteredDocuments(filtered);
-  }, [searchTerm, documents]);
+  }, [searchTerm, selectedCategory, documents]);
+  
 
   const sortedDocuments = [...filteredDocuments].sort((a, b) => {
     const dateA = new Date(a.updatedAt);
@@ -95,19 +110,52 @@ const Documents = () => {
         </div>
 
         <div className="documents-grid">
-          {sortedDocuments.map((doc) => (
+        {sortedDocuments.map((doc) => {
+            const fileExtension = doc.name.split('.').pop().toLowerCase();
+
+            const isImage = ['png', 'jpg', 'jpeg'].includes(fileExtension);
+            const isPdf = fileExtension === 'pdf';
+            const isHtml = fileExtension === 'html';
+            
+            const downloadUrl = `data:application/octet-stream;base64,${doc.document}`;
+
+            return (
             <div key={doc.id_document} className="document-card">
-              {doc.type === 'pdf' ? (
-                <iframe src={doc.document} title={doc.name} className="document-preview"></iframe>
-              ) : (
-                <img src={doc.document} alt={doc.name} className="document-preview" />
-              )}
-              <div className="document-info">
+                <a href={downloadUrl} download={doc.name} className="document-link">
+                {isImage && (
+                    <img
+                    src={`data:image/${fileExtension};base64,${doc.document}`}
+                    alt={doc.name}
+                    className="document-preview"
+                    />
+                )}
+                {isPdf && (
+                    <iframe
+                    src={`data:application/pdf;base64,${doc.document}`}
+                    title={doc.name}
+                    className="document-preview"
+                    ></iframe>
+                )}
+                {isHtml && (
+                    <iframe
+                    srcDoc={atob(doc.document)}
+                    title={doc.name}
+                    className="document-preview"
+                    ></iframe>
+                )}
+                {!isImage && !isPdf && !isHtml && (
+                    <div className="document-unavailable">
+                    <p>Aperçu non disponible pour ce type de fichier</p>
+                    </div>
+                )}
+                </a>
+                <div className="document-info">
                 <h4>{doc.name}</h4>
                 <p>Mis à jour : {new Date(doc.updatedAt).toLocaleDateString()}</p>
-              </div>
+                </div>
             </div>
-          ))}
+            );
+        })}
         </div>
       </div>
     </div>
