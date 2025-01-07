@@ -11,12 +11,13 @@ const Documents = () => {
   const [filteredDocuments, setFilteredDocuments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
-  const user = useSelector((state) => state.auth.user); 
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     const fetchDocumentsAndCategories = async () => {
       try {
         const allDocuments = await DocumentService.fetchDocumentsByIdUser(user.id_user);
+        console.log(allDocuments);
         setDocuments(allDocuments);
         setFilteredDocuments(allDocuments);
 
@@ -29,7 +30,7 @@ const Documents = () => {
         );
 
         setCategories(categoriesData);
-        setSelectedCategory(categoriesData[0]?.id_document_category); 
+        setSelectedCategory(categoriesData[0]?.id_document_category);
       } catch (err) {
         console.error('Erreur lors de la récupération des documents ou des catégories :', err);
       }
@@ -42,7 +43,7 @@ const Documents = () => {
     if (selectedCategory === null) {
       setFilteredDocuments(documents);
     } else {
-      const filtered = documents.filter((doc) => doc.id_document_category === selectedCategory);
+      const filtered = documents?.filter((doc) => doc.id_document_category === selectedCategory);
       setFilteredDocuments(filtered);
     }
   }, [selectedCategory, documents]);
@@ -54,14 +55,11 @@ const Documents = () => {
     setFilteredDocuments(filtered);
   }, [searchTerm, documents]);
 
-  useEffect(() => {
-    const sorted = [...filteredDocuments].sort((a, b) => {
-      const dateA = new Date(a.updated_at);
-      const dateB = new Date(b.updated_at);
-      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
-    });
-    setFilteredDocuments(sorted);
-  }, [sortOrder, filteredDocuments]);
+  const sortedDocuments = [...filteredDocuments].sort((a, b) => {
+    const dateA = new Date(a.updated_at);
+    const dateB = new Date(b.updated_at);
+    return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+  });
 
   return (
     <div className="documents-page">
@@ -100,7 +98,7 @@ const Documents = () => {
         </div>
 
         <div className="documents-grid">
-          {filteredDocuments.map((doc) => (
+          {sortedDocuments.map((doc) => (
             <div key={doc.id_document} className="document-card">
               {doc.type === 'pdf' ? (
                 <iframe src={doc.url} title={doc.name} className="document-preview"></iframe>

@@ -4,7 +4,7 @@ class Document {
 
     static async fetchDocumentsByIdUser(id_user) {
         try {
-            const endpoint = `/documents/${id_user}`;
+            const endpoint = `/documents/user/${id_user}`;
             const response = await API.get(endpoint);
             return response; 
         } catch (error) {
