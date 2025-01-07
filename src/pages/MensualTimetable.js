@@ -8,6 +8,7 @@ import MonthlyDetails from "../components/MonthlyDetails";
 import CalendarComponent from "../components/Calendar";
 import ExpenseReportDetails from "../components/ExpenseReportDetails";
 import DailyTimetableSheetService from "../services/DailyTimetableSheet";
+import Notification from "../components/Notification";
 
 const MensualTimetable = () => {
   const user = useSelector((state) => state.auth.user);
@@ -17,9 +18,10 @@ const MensualTimetable = () => {
   const [selectedTimetable, setSelectedTimetable] = useState({
     daily_timetable_sheets: [],
   });
-  const [showExpenseDetails, setShowExpenseDetails] = useState(false); 
-  const [showDailyDetails, setShowDailyDetails] = useState(false); 
+  const [showExpenseDetails, setShowExpenseDetails] = useState(false);
+  const [showDailyDetails, setShowDailyDetails] = useState(false);
   const [selectedDailyTimetable, setSelectedDailyTimetable] = useState(null);
+  const [notification, setNotification] = useState({ message: "", type: "" }); // État pour la notification
 
   const handleDayClick = (day) => {
     const selectedDailyTimetable = selectedTimetable.daily_timetable_sheets.find(
@@ -32,17 +34,16 @@ const MensualTimetable = () => {
         );
       }
     );
-  
+
     if (selectedDailyTimetable) {
       setSelectedDailyTimetable(selectedDailyTimetable);
       setShowExpenseDetails(false);
-      setShowDailyDetails(true); 
+      setShowDailyDetails(true);
     } else {
       console.warn("No daily timetable found for this day.");
     }
   };
-  
-  
+
   useEffect(() => {
     const fetchTimetableData = async () => {
       try {
@@ -113,22 +114,30 @@ const MensualTimetable = () => {
     }
   };
 
-  const refreshDailyTimetable = async (dailyTimetable) => {  
+  const refreshDailyTimetable = async (dailyTimetable) => {
     try {
       setSelectedTimetable((prev) => ({
         ...prev,
         daily_timetable_sheets: prev.daily_timetable_sheets.map((d) =>
           d.id_daily_timetable === dailyTimetable.id_daily_timetable
-            ? dailyTimetable 
-            : d 
+            ? dailyTimetable
+            : d
         ),
       }));
-      setSelectedDailyTimetable(dailyTimetable)
+      setSelectedDailyTimetable(dailyTimetable);
     } catch (error) {
       console.error("Erreur lors de la mise à jour des plannings quotidiens :", error);
     }
   };
-  
+
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+    console.log(notification)
+
+    setTimeout(() => {
+      setNotification({ message: "", type: "" });
+    }, 3000);
+  };
 
   return (
     <div className="mensual-timetable">
@@ -150,7 +159,8 @@ const MensualTimetable = () => {
                 setShowDailyDetails(false),
                 setSelectedDailyTimetable(null)
               )}
-             />
+              onSubmitSuccess={() => showNotification("Votre fiche horaire a été soumise avec succès", "notification.success")}
+            />
           </div>
         </div>
 
@@ -164,14 +174,17 @@ const MensualTimetable = () => {
 
         {showDailyDetails && selectedDailyTimetable && (
           <DailyTimetableSheet
-          dailyTimetable={{ 
-            ...selectedDailyTimetable, 
-            onUpdate: refreshDailyTimetable 
-          }}
-        />
+            dailyTimetable={{
+              ...selectedDailyTimetable,
+              onUpdate: refreshDailyTimetable,
+            }}
+          />
         )}
-
       </div>
+
+      {notification.message && (
+        <Notification message={notification.message} type={notification.type} />
+      )}
     </div>
   );
 };

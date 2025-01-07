@@ -13,9 +13,21 @@ const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpen
     await MensualTimetableSheet.updateMensualTimetable(selectedTimetable);
   };
 
+  const handleSubmit = async () => {
+    const updatedTimetable = {
+      ...selectedTimetable,
+      status: "En attente d'approbation",
+    };
+
+    setSelectedTimetable(updatedTimetable);
+    
+    await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
+  };
+
   return (
     <div className="monthly-details">
       <h3>Fiche du mois</h3>
+
       <div className="detail-item">
         <label>Total commissions</label>
         <div className="input-container">
@@ -66,6 +78,12 @@ const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpen
           value={selectedTimetable?.comment || ""}
           onChange={handleChange}
         />
+      </div>
+
+      <div className="submit-button-container">
+        <button className="submit-button" onClick={handleSubmit}>
+          Soumettre
+        </button>
       </div>
     </div>
   );
