@@ -159,7 +159,7 @@ const MensualTimetable = () => {
                 setShowDailyDetails(false),
                 setSelectedDailyTimetable(null)
               )}
-              onSubmitSuccess={() => showNotification("Votre fiche horaire a été soumise avec succès", "notification.success")}
+              onSubmitSuccess={() => showNotification("Votre fiche horaire a été soumise avec succès", "success")}
             />
           </div>
         </div>

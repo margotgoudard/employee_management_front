@@ -3,7 +3,7 @@ import "../assets/styles/MonthlyDetails.css";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 import { LiaSearchDollarSolid } from "react-icons/lia";
 
-const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpenseDetails }) => {
+const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpenseDetails, onSubmitSuccess }) => {
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setSelectedTimetable((prevTimetable) => ({
@@ -21,7 +21,15 @@ const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpen
 
     setSelectedTimetable(updatedTimetable);
     
-    await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
+    try {
+      await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
+      
+      if (onSubmitSuccess) {
+        onSubmitSuccess();
+      }
+    } catch (error) {
+      console.error("Erreur lors de la soumission :", error);
+    }
   };
 
   return (
