@@ -18,7 +18,8 @@
   .sidebar ul {
     list-style: none;
     padding: 0;
-  }
+    margin-top: 20%;
+}
   
   .sidebar li {
     padding: 10px;
@@ -35,6 +36,9 @@
     flex: 1;
     padding: 20px;
     overflow-y: auto;
+    margin-top: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
   }
   
   .header {

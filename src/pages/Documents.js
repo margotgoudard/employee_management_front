@@ -64,7 +64,6 @@ const Documents = () => {
   return (
     <div className="documents-page">
       <div className="sidebar">
-        <h3>Catégories</h3>
         <ul>
           {categories.map((category) => (
             <li
