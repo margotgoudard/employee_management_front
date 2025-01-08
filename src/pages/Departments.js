@@ -8,22 +8,53 @@ const Departments = () => {
   const [users, setUsers] = useState([]);
   const user = useSelector((state) => state.auth.user); 
 
-  /*
   useEffect(() => {
-    const fetchDepartmentsAndUsers = async () => {
+    const fetchDepartmentsRecursively = async (departmentId, collectedDepartments) => {
       try {
-        const response = await Department.fetchDepartmentByUserId(user.id_user);
-        for each id department 
-        const subordinates = await Department.fetchSUporbinatesByManagerAndDepartment(user.id_user, department.id_department)
-        setDepartments(response);
+        const dept = await Department.fetchDepartmentById(departmentId);
+        if (dept && !collectedDepartments.some(d => d.id_department === dept.id_department)) {
+          collectedDepartments.push(dept);
+
+          if (dept.id_sup_department) {
+            // Récursion : récupérer le département parent
+            await fetchDepartmentsRecursively(dept.id_sup_department, collectedDepartments);
+          }
+        }
+      } catch (err) {
+        console.error(`Erreur lors de la récupération du département ${departmentId} :`, err);
+      }
+    };
+
+    const fetchData = async () => {
+      try {
+        // Récupération des départements et utilisateurs sous la responsabilité du manager
+        const fetchedDepartments = await Department.fetchDepartmentByUserId(user.id_user);
+        const fetchedUsers = await Department.fetchAllSubordinatesByManager(user.id_user);
+
+        // Ajout des départements des utilisateurs
+        const userDepartments = fetchedUsers.map((u) => u.id_department);
+        const uniqueUserDepartments = [...new Set(userDepartments)];
+
+        let allDepartments = [...fetchedDepartments];
+
+        // Récupération récursive des départements parents
+        for (const deptId of uniqueUserDepartments) {
+          await fetchDepartmentsRecursively(deptId, allDepartments);
+        }
+
+        // Supprimer les doublons
+        allDepartments = [...new Map(allDepartments.map(dept => [dept.id_department, dept])).values()];
+
+        setDepartments(allDepartments);
+        setUsers(fetchedUsers);
       } catch (err) {
         console.error('Erreur lors de la récupération des départements et des utilisateurs :', err);
       }
     };
 
-    fetchDepartmentsAndUsers();
+    fetchData();
   }, [user.id_user]);
-*/
+
   const renderDepartmentHierarchy = (parentId = null) => {
     const filteredDepartments = departments.filter(
       (dept) => dept.id_sup_department === parentId
