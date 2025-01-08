@@ -17,7 +17,7 @@ const Navbar = () => {
 
   const isActive = (path) => location.pathname.startsWith(path);
 
-  const handleFicheHoraireClick = async () => {
+  const handleTimetableClick = async () => {
     try {
       const data = await MensualTimetableSheetService.fetchMensualTimetablesByUser(user.id_user);
 
@@ -44,7 +44,7 @@ const Navbar = () => {
         navigate(`/mensual_timetable/${selected.id_timetable}`);
       }
     } catch (err) {
-      console.error('Erreur lors de la récupération de la fiche horaire :', err);
+      console.error('Erreur lors de la navigation vers fiche horaire', err);
     }
   };
 
@@ -52,7 +52,15 @@ const Navbar = () => {
     try {
       navigate(`/documents`);
     } catch (err) {
-      console.error('Erreur lors de la récupération de la fiche horaire :', err);
+      console.error('Erreur lors de la navigation vers documents', err);
+    }
+  };
+
+  const handleDepartmentClick = async () => {
+    try {
+      navigate(`/departments`);
+    } catch (err) {
+      console.error('Erreur lors de la navigation vers departments', err);
     }
   };
 
@@ -63,7 +71,7 @@ const Navbar = () => {
         <ul className="navbar-links">
           <li>
             <button
-              onClick={handleFicheHoraireClick}
+              onClick={handleTimetableClick}
               className={`navbar-button ${isActive('/mensual_timetable') ? 'active' : ''}`}
             >
               Fiche horaire
@@ -75,7 +83,9 @@ const Navbar = () => {
             </button>
           </li>
           <li>
-            <button className={`navbar-button ${isActive('/departments') ? 'active' : ''}`}>
+            <button   
+              onClick={handleDepartmentClick}
+              className={`navbar-button ${isActive('/departments') ? 'active' : ''}`}>
               Mes équipes
             </button>
           </li>
