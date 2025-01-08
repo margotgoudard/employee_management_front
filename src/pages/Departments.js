@@ -79,14 +79,16 @@ const Departments = () => {
         {filteredDepartments.map((dept) => (
           <li key={dept.id_department}>
             <div
-              className="department-name"
-              onClick={() => toggleUsers(dept.id_department)}
-              style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+            className="department-name"
+            onClick={() => toggleUsers(dept.id_department)}
+            style={{
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+            }}
             >
-              <span>{dept.name}</span>
-              <span style={{ marginLeft: '8px' }}>
-                {expandedUsers[dept.id_department] ? '▲' : '▼'}
-              </span>
+            <span>{expandedUsers[dept.id_department] ? '-' : '+'}</span>
+            <span>{dept.name}</span>
             </div>
             {expandedUsers[dept.id_department] && (
               <ul className="user-list">
@@ -108,8 +110,8 @@ const Departments = () => {
 
   return (
     <div className="department-page">
-      <h2>Départements et utilisateurs sous votre responsabilité</h2>
       <div className="department-hierarchy">
+      <h2>Départements et utilisateurs sous votre responsabilité</h2>
         {renderDepartmentHierarchy()}
       </div>
     </div>
