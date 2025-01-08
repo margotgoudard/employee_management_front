@@ -107,7 +107,10 @@ const MensualTimetable = () => {
   const handleMonthChange = (increment) => {
     const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + increment, 1);
     setSelectedDate(newDate);
-  
+    setSelectedDailyTimetable(null);
+    setShowDailyDetails(false);
+    setShowExpenseDetails(false);
+
     const newTimetable = timetableData.find(
       (t) => t.year === newDate.getFullYear() && t.month === newDate.getMonth() + 1
     );
