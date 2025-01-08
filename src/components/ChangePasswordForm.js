@@ -29,7 +29,7 @@ const ChangePasswordForm = ({ onChangePassword }) => {
       alert('Les mots de passe ne correspondent pas.');
       return;
     }
-    onChangePassword(data['new-password']);
+    onChangePassword(data['new-password'], data['confirm-password']);
   };
 
   return <Form fields={fields} buttonText="CRÉER" onSubmit={handleSubmit} />;

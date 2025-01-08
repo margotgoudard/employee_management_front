@@ -30,9 +30,9 @@ const Login = () => {
     }
   };
 
-  const handleChangePassword = async (newPassword) => {
+  const handleChangePassword = async (newPassword, confirmationPassword) => {
     try {
-      await User.ChangePassword(user, newPassword);
+      await User.ChangePassword(user, newPassword, confirmationPassword);
       navigate('/profile'); 
     } catch (error) {
       console.error('Erreur lors du changement de mot de passe :', error);
