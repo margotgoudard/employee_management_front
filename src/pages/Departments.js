@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../assets/styles/Department.css';
 import { useSelector } from 'react-redux';
+import Department from '../services/Department';
 
 const Departments = () => {
   const [departments, setDepartments] = useState([]);
@@ -11,7 +12,7 @@ const Departments = () => {
   useEffect(() => {
     const fetchDepartmentsAndUsers = async () => {
       try {
-        const response = await axios.get(`/api/departments/${user.id_user}`);
+        const response = await Department.fetchDepartmentByUserId(user.id_user);
         setDepartments(response.data.departments);
         setUsers(response.data.users);
       } catch (err) {
@@ -22,7 +23,6 @@ const Departments = () => {
     fetchDepartmentsAndUsers();
   }, [user.id_user]);
 
-  // Fonction récursive pour afficher les départements en hiérarchie
   const renderDepartmentHierarchy = (parentId = null) => {
     const filteredDepartments = departments.filter(
       (dept) => dept.id_sup_department === parentId

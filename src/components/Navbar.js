@@ -75,7 +75,7 @@ const Navbar = () => {
             </button>
           </li>
           <li>
-            <button className={`navbar-button ${isActive('/department') ? 'active' : ''}`}>
+            <button className={`navbar-button ${isActive('/departments') ? 'active' : ''}`}>
               Mes équipes
             </button>
           </li>
