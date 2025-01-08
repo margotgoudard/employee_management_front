@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../assets/styles/Department.css';
 import { useSelector } from 'react-redux';
 import Department from '../services/Department';
@@ -9,12 +8,14 @@ const Departments = () => {
   const [users, setUsers] = useState([]);
   const user = useSelector((state) => state.auth.user); 
 
+  /*
   useEffect(() => {
     const fetchDepartmentsAndUsers = async () => {
       try {
         const response = await Department.fetchDepartmentByUserId(user.id_user);
-        setDepartments(response.data.departments);
-        setUsers(response.data.users);
+        for each id department 
+        const subordinates = await Department.fetchSUporbinatesByManagerAndDepartment(user.id_user, department.id_department)
+        setDepartments(response);
       } catch (err) {
         console.error('Erreur lors de la récupération des départements et des utilisateurs :', err);
       }
@@ -22,7 +23,7 @@ const Departments = () => {
 
     fetchDepartmentsAndUsers();
   }, [user.id_user]);
-
+*/
   const renderDepartmentHierarchy = (parentId = null) => {
     const filteredDepartments = departments.filter(
       (dept) => dept.id_sup_department === parentId
