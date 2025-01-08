@@ -2,16 +2,6 @@ import API from "./API";
 
 class Department {
 
-    static async fetchDepartmentByUserId(id_user) {
-        try {
-            const endpoint = `/subordinations/departments/${id_user}`;
-            const response = await API.get(endpoint);
-            return response.subordinates; 
-        } catch (error) {
-            console.error("Erreur lors de la récupération des départements", error);
-        }
-    }
-
     static async fetchDepartmentById(id_department) {
         try {
             const endpoint = `/departments/${id_department}`;

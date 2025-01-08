@@ -1,6 +1,7 @@
 .department-page {
     padding: 20px;
     font-family: Arial, sans-serif;
+    margin-top: 4%;
   }
   
   .department-hierarchy ul {
@@ -21,4 +22,5 @@
     margin: 5px 0;
     font-style: italic;
   }
+  
   

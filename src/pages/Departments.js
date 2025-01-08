@@ -6,7 +6,8 @@ import Department from '../services/Department';
 const Departments = () => {
   const [departments, setDepartments] = useState([]);
   const [users, setUsers] = useState([]);
-  const user = useSelector((state) => state.auth.user); 
+  const [expandedUsers, setExpandedUsers] = useState({});
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     const fetchDepartmentsRecursively = async (departmentId, collectedDepartments) => {
@@ -16,7 +17,6 @@ const Departments = () => {
           collectedDepartments.push(dept);
 
           if (dept.id_sup_department) {
-            // Récursion : récupérer le département parent
             await fetchDepartmentsRecursively(dept.id_sup_department, collectedDepartments);
           }
         }
@@ -27,26 +27,33 @@ const Departments = () => {
 
     const fetchData = async () => {
       try {
-        // Récupération des départements et utilisateurs sous la responsabilité du manager
-        const fetchedDepartments = await Department.fetchDepartmentByUserId(user.id_user);
+        const fetchedDepartment = await Department.fetchDepartmentById(user.id_department);
         const fetchedUsers = await Department.fetchAllSubordinatesByManager(user.id_user);
 
-        // Ajout des départements des utilisateurs
-        const userDepartments = fetchedUsers.map((u) => u.id_department);
+        const currentUser = {
+          user: {
+            id_user: user.id_user,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            department: fetchedDepartment,
+          },
+        };
+
+        const updatedUsers = [currentUser, ...fetchedUsers];
+
+        const userDepartments = updatedUsers.map((u) => u.user.department?.id_department).filter(Boolean);
         const uniqueUserDepartments = [...new Set(userDepartments)];
 
-        let allDepartments = [...fetchedDepartments];
+        let allDepartments = fetchedDepartment ? [fetchedDepartment] : [];
 
-        // Récupération récursive des départements parents
         for (const deptId of uniqueUserDepartments) {
           await fetchDepartmentsRecursively(deptId, allDepartments);
         }
 
-        // Supprimer les doublons
         allDepartments = [...new Map(allDepartments.map(dept => [dept.id_department, dept])).values()];
 
         setDepartments(allDepartments);
-        setUsers(fetchedUsers);
+        setUsers(updatedUsers);
       } catch (err) {
         console.error('Erreur lors de la récupération des départements et des utilisateurs :', err);
       }
@@ -54,6 +61,13 @@ const Departments = () => {
 
     fetchData();
   }, [user.id_user]);
+
+  const toggleUsers = (departmentId) => {
+    setExpandedUsers((prev) => ({
+      ...prev,
+      [departmentId]: !prev[departmentId],
+    }));
+  };
 
   const renderDepartmentHierarchy = (parentId = null) => {
     const filteredDepartments = departments.filter(
@@ -64,16 +78,27 @@ const Departments = () => {
       <ul>
         {filteredDepartments.map((dept) => (
           <li key={dept.id_department}>
-            <div className="department-name">{dept.name}</div>
-            <ul className="user-list">
-              {users
-                .filter((user) => user.id_department === dept.id_department)
-                .map((user) => (
-                  <li key={user.id_user} className="user-item">
-                    {user.name} ({user.email})
-                  </li>
-                ))}
-            </ul>
+            <div
+              className="department-name"
+              onClick={() => toggleUsers(dept.id_department)}
+              style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+            >
+              <span>{dept.name}</span>
+              <span style={{ marginLeft: '8px' }}>
+                {expandedUsers[dept.id_department] ? '▲' : '▼'}
+              </span>
+            </div>
+            {expandedUsers[dept.id_department] && (
+              <ul className="user-list">
+                {users
+                  .filter((user) => user.user.department.id_department === dept.id_department)
+                  .map((user) => (
+                    <li key={user.user.id_user} className="user-item">
+                      {user.user.first_name} {user.user.last_name}
+                    </li>
+                  ))}
+              </ul>
+            )}
             {renderDepartmentHierarchy(dept.id_department)}
           </li>
         ))}
@@ -83,7 +108,7 @@ const Departments = () => {
 
   return (
     <div className="department-page">
-      <h2>Départements et utilisateurs sous la responsabilité de {user.name}</h2>
+      <h2>Départements et utilisateurs sous votre responsabilité</h2>
       <div className="department-hierarchy">
         {renderDepartmentHierarchy()}
       </div>
