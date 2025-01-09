@@ -127,7 +127,7 @@ const Departments = () => {
                       key={user.user.id_user}
                       className="user-item"
                       onClick={() => handleUserClick(user.user.id_user)}
-                      style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
+                      style={{ cursor: 'pointer'}}
                     >
                       {user.user.first_name} {user.user.last_name}
                     </li>
