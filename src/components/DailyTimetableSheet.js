@@ -9,7 +9,7 @@
   import ExpenseReports from "./ExpenseReport";
   import FeeCategory from "../services/FeeCategory";
     
-  const DailyTimetableSheet = ({ dailyTimetable }) => {
+  const DailyTimetableSheet = ({ dailyTimetable, onTimetableUpdate  }) => {
     const [timeSlots, setTimeSlots] = useState([]);
     const [expenseNotes, setExpenseNotes] = useState([]);
     const [newTimeSlots, setNewTimeSlots] = useState([]);
@@ -45,17 +45,29 @@
         setPlaceCategories(categories);
         setFeeCategories(feeCategories);
       };
-    
-      setTimeSlots([]);
-      setExpenseNotes([]);
-      setNewTimeSlots([]);
-      setNewExpenses([]);
+
       setTimeSlotsToDelete([]);
       setExpenseNotesToDelete([]);
       setStatus(dailyTimetable.status);
       setIsDutyCall(dailyTimetable.on_call_duty || false);
-    
+
       fetchData();
+    }, [dailyTimetable?.id_daily_timetable]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        const slots = await TimeSlot.getTimeSlotsByDailyTimetable(dailyTimetable.id_daily_timetable);
+        const expenses = await ExpenseReportService.getExpenseReportsByDailyTimetable(dailyTimetable.id_daily_timetable);
+        setTimeSlots(slots);
+        setInitialTimeSlots(slots); 
+        setExpenseNotes(expenses);
+        setInitialExpenseNotes(expenses);
+      }
+      fetchData();
+      setNewTimeSlots([]);
+      setNewExpenses([]);
+      setTimeSlotsToDelete([]);
+      setExpenseNotesToDelete([]);
     }, [dailyTimetable]);
     
   
@@ -122,6 +134,17 @@
         prev.map((expense) => (expense.tempId === tempId ? { ...expense, [key]: value } : expense))
       );
     };    
+
+    const handleCancel = () => {
+      setTimeSlots(initialTimeSlots);
+      setExpenseNotes(initialExpenseNotes);
+      setNewTimeSlots([]);
+      setNewExpenses([]);
+      setTimeSlotsToDelete([]);
+      setExpenseNotesToDelete([]);
+      setStatus(dailyTimetable.status);
+      setIsDutyCall(dailyTimetable.on_call_duty || false);
+    };
     
     const handleSave = async () => {
       try {
@@ -176,7 +199,7 @@
         if (typeof dailyTimetable.onUpdate === "function") {
           dailyTimetable.onUpdate(daily_timetable_modified);
         }
-    
+        onTimetableUpdate(daily_timetable_modified);
         showAlert("Enregistrement réussi !", "success");
       } catch (error) {
         console.error("Erreur lors de l'enregistrement :", error);
@@ -241,10 +264,15 @@
               onDeleteExpense={handleDeleteExpense}
               onDeleteNewExpense={handleDeleteNewExpense} /></>   
         )}
-  
-        <button className="save-button" onClick={handleSave}>
-          Enregistrer
-        </button>
+
+        <div className="button-container">
+          <button className="save-button" onClick={handleSave}>
+            Enregistrer
+          </button>
+          <button className="cancel-button" onClick={handleCancel}>
+            Annuler
+          </button>
+        </div>
       </div>
     );
   };

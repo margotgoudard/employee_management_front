@@ -21,6 +21,7 @@
 
 .date-container h2 {
   margin: 0;
+  padding: 0;
   font-size: 1em;
   font-weight: bold;
 }
@@ -108,33 +109,51 @@ input[type="checkbox"] {
   margin-left: 20px; 
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
 button.save-button {
-  background-color: var(--blue-color); 
-  color: #ffffff;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: var(--blue-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+  
+button.save-button:hover {
+  background-color: #0056b3;
+}
+
+button.cancel-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: var(--gray-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.cancel-button:hover {
+  background-color: var(--gray-hover-color);
+  color: black;
+}
+  
+button {
+  color: var(--blue-color);
+  background-color: #ffffff;
   border: none;
   cursor: pointer;
-  padding: 15px 30px;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
-  margin-top: 20px; 
+  padding: 10px 15px;
+  border-radius: 4px;
 }
-
-button.save-button:hover {
-  background-color: darkblue; 
-}
-
-  
-  button {
-    color: var(--blue-color);
-    background-color: #ffffff;
-    border: none;
-    cursor: pointer;
-    padding: 10px 15px;
-    border-radius: 4px;
-  }
   
 .time-slot-item, 
 .new-time-slot-item, 
@@ -195,13 +214,6 @@ button.save-button:hover {
   box-sizing: border-box;
 }
 
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px; 
-}
-
 button.add-expense-button {
   color: var(--blue-color);
   border: none;
@@ -211,12 +223,6 @@ button.add-expense-button {
   border-radius: 8px;
 }
 
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px; 
-}
 
 button.add-time-slot-button {
   color: var(--blue-color);

@@ -7,6 +7,7 @@ import MonthlyDetails from "../components/MonthlyDetails";
 import CalendarComponent from "../components/Calendar";
 import ExpenseReportDetails from "../components/ExpenseReportDetails";
 import DailyTimetableSheetService from "../services/DailyTimetableSheet";
+import ExpenseReport from "../services/ExpenseReport";
 import Alert from "../components/Alert";
 import {
   setSelectedTimetable,
@@ -19,6 +20,7 @@ const MensualTimetable = () => {
   const { id_timetable } = useParams();
   const [selectedDate, setSelectedDate] = useState(null);
   const [showExpenseDetails, setShowExpenseDetails] = useState(false);
+  const [expenseReports, setExpenseReports] = useState([]);
   const [showDailyDetails, setShowDailyDetails] = useState(false);
   const [selectedDailyTimetable, setSelectedDailyTimetable] = useState(null);
   const [alert, setAlert] = useState({ message: "", type: "" });
@@ -44,6 +46,33 @@ const MensualTimetable = () => {
       setShowDailyDetails(true);
     } else {
       console.warn("No daily timetable found for this day.");
+    }
+  };
+
+  const fetchExpenseReports = async () => {
+    try {
+      const data = await ExpenseReport.getExpenseReportsByMensualTimetable(
+        selectedTimetable.id_timetable
+      );
+
+      const reportsWithDetails = await Promise.all(
+        data.map(async (report) => {
+          const dailyTimetable =
+            await DailyTimetableSheetService.fetchDailyTimetableById(
+              report.id_daily_timetable
+            );
+
+          return {
+            ...report,
+            dailyTimetable,
+  
+          };
+        })
+      );
+ 
+      setExpenseReports(reportsWithDetails);
+    } catch (error) {
+      console.error("Error fetching expense reports:", error);
     }
   };
 
@@ -96,7 +125,15 @@ const MensualTimetable = () => {
     };
 
     fetchAndCalculateData();
+    fetchExpenseReports();
   }, [selectedTimetable?.id_timetable]);
+
+  useEffect(() => {
+    if(selectedTimetable) {
+      fetchExpenseReports();
+    }
+  }, [selectedDailyTimetable]);
+
 
   const handleMonthChange = (increment) => {
     const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + increment, 1);
@@ -145,7 +182,7 @@ const MensualTimetable = () => {
             : d
         )
       ));
-      setSelectedDailyTimetable(dailyTimetable);
+      fetchExpenseReports();
     } catch (error) {
       console.error("Erreur lors de la mise à jour des plannings quotidiens :", error);
     }
@@ -173,6 +210,7 @@ const MensualTimetable = () => {
             />
             <MonthlyDetails
               selectedTimetable={selectedTimetable}
+              expenseReports={expenseReports}
               setSelectedTimetable={(timetable) => dispatch(setSelectedTimetable(timetable))}
               onToggleExpenseDetails={() => (
                 setShowExpenseDetails(!showExpenseDetails),
@@ -187,6 +225,7 @@ const MensualTimetable = () => {
         {showExpenseDetails && (
           <div className="expense-details-section">
             <ExpenseReportDetails
+              expenseReports={expenseReports}
               mensualTimetableId={selectedTimetable?.id_timetable}
             />
           </div>
@@ -195,9 +234,9 @@ const MensualTimetable = () => {
         {showDailyDetails && selectedDailyTimetable && (
           <DailyTimetableSheet
             dailyTimetable={{
-              ...selectedDailyTimetable,
-              onUpdate: refreshDailyTimetable,
+              ...selectedDailyTimetable
             }}
+            onTimetableUpdate={refreshDailyTimetable}
           />
         )}
       </div>

@@ -124,6 +124,20 @@ class MensualTimetableSheet {
             }
         ];
     }
+
+    static async getMensualWorkedHours(id_timetable) {
+        try {
+            const endpoint = `/mensual-timetable-sheets/worked-hours/${id_timetable}`;
+            const response = await API.get(endpoint);
+            if (response) {
+                return response; 
+            }
+            return 0;
+        } catch (error) {
+            console.error("Erreur lors de la récupération des heures travaillées", error);
+            return 0;
+        }
+    }
 }
 
 export default MensualTimetableSheet;

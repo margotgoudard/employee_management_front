@@ -2,16 +2,58 @@ import React from "react";
 import "../assets/styles/MonthlyDetails.css";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 import { LiaSearchDollarSolid } from "react-icons/lia";
+import { useEffect, useState } from "react";
+import ExpenseReport from "../services/ExpenseReport";
+import DailyTimetableSheet from "../services/DailyTimetableSheet";
+import FeeCategory from "../services/FeeCategory";
 
-const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpenseDetails, onSubmitSuccess }) => {
+const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetable, onToggleExpenseDetails, onSubmitSuccess }) => {
+  //mettre à jour le nombre heureTotal lorsquon selectedTimetable change
+  const [totalHours, setTotalHours] = useState(0);
+  const [totalExpenses, setTotalExpenses] = useState(0);
+
+  useEffect(() => {
+    const fetchTotalHours = async () => {
+      if (!selectedTimetable?.id_timetable) return;
+      const response = await MensualTimetableSheet.getMensualWorkedHours(selectedTimetable.id_timetable);
+      setTotalHours(response.totalHours);
+    }
+    
+      fetchTotalHours();
+    
+  }, [selectedTimetable]);
+
+  useEffect(() => {
+    const fetchTotalExpenses = () => {
+      if(expenseReports?.length === 0) return;
+      const totalExpenses = expenseReports.reduce((total, report) => {
+        return total + report.amount;
+      }, 0);  
+      setTotalExpenses(totalExpenses);
+    }
+    if(expenseReports?.length > 0){
+      fetchTotalExpenses();
+    }
+    fetchTotalExpenses();
+  }, [expenseReports]);
+
+
   const handleChange = async (e) => {
     const { name, value } = e.target;
-    setSelectedTimetable((prevTimetable) => ({
-      ...prevTimetable,
+  
+    // Create the updated timetable using the current selectedTimetable state
+    const updatedTimetable = {
+      ...selectedTimetable,
       [name]: value,
-    }));
-    await MensualTimetableSheet.updateMensualTimetable(selectedTimetable);
+    };
+  
+    // Update state
+    setSelectedTimetable(updatedTimetable);
+  
+    // Call the API with the updated timetable
+    await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
   };
+  
 
   const handleSubmit = async () => {
     const updatedTimetable = {
@@ -54,7 +96,7 @@ const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpen
         <div className="input-container">
           <input
             name="totalHours"
-            value={selectedTimetable?.totalWorkedHours || 0}
+            value={totalHours || 0}
             readOnly
           />
           <span className="input-suffix">heures</span>
@@ -67,7 +109,7 @@ const MonthlyDetails = ({ selectedTimetable, setSelectedTimetable, onToggleExpen
           <input
             type="number"
             name="totalExpenses"
-            value={selectedTimetable?.totalExpenseNotes || 0}
+            value={totalExpenses || 0}
             readOnly
           />
           <span className="input-suffix">CHF</span>
