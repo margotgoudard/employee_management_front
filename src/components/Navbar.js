@@ -9,16 +9,24 @@ import MensualTimetableSheetService from '../services/MensualTimetableSheet';
 import DailyTimetableSheetService from '../services/DailyTimetableSheet';
 import { setSelectedTimetable, updateDailyTimetables } from '../redux/timetableSlice';
 import Notification from '../services/Notification'; 
+import { logout } from '../redux/authSlice'; 
+
 
 const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
-  const timetables = useSelector((state) => state.timetable.timetables); // Récupération des timetables depuis le store
+  const timetables = useSelector((state) => state.timetable.timetables); 
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [unreadCount, setUnreadCount] = useState(0); // État pour le nombre de notifications non vues
+  const [unreadCount, setUnreadCount] = useState(0); 
 
   const isActive = (path) => location.pathname.startsWith(path);
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/'); 
+    }
+  }, [user, navigate]);
 
   const fetchUnreadNotifications = async () => {
     try {
@@ -34,7 +42,7 @@ const Navbar = () => {
     fetchUnreadNotifications();
   }, []); 
 
-const handleFicheHoraireClick = async () => {
+  const handleFicheHoraireClick = async () => {
     try {
       const data = await MensualTimetableSheetService.fetchMensualTimetablesByUser(user.id_user);
 
@@ -83,6 +91,12 @@ const handleFicheHoraireClick = async () => {
     }
   };
 
+  // Fonction de déconnexion
+  const handleLogout = () => {
+    dispatch(logout()); 
+    navigate('/'); 
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -109,7 +123,7 @@ const handleFicheHoraireClick = async () => {
           <li>
             <button
               onClick={handleDocumentsClick}
-              className={`navbar-button ${isActive('/documents') ? 'active' : ''}`}>
+              className={`navbar-button ${isActive('/documents') ? 'active' : ''}`} >
                 Mes documents
             </button>
           </li>
@@ -128,6 +142,11 @@ const handleFicheHoraireClick = async () => {
           </button>
           <span className="profile-name">{user ? user.first_name : 'Guest'}</span>
         </div>
+        {user && (  // Afficher le bouton de déconnexion uniquement si l'utilisateur est connecté
+          <button onClick={handleLogout} className="navbar-logout">
+            Logout
+          </button>
+        )}
       </div>
     </nav>
   );
