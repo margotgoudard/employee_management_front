@@ -89,3 +89,49 @@
     background-color: #c82333;
   }
     
+
+  /* MEDIA QUERIES POUR LES ÉCRANS PETITS (MOBILE) */
+
+/* Mobile : Afficher les notifications en une seule colonne */
+@media (max-width: 768px) {
+  .notification-columns {
+    flex-direction: column; 
+    gap: 10px; 
+  }
+
+  .notification-column {
+    width: 100%; 
+    height: auto; 
+  }
+
+  .notification-item {
+    padding: 10px; 
+    font-size: 12px; 
+  }
+
+  .column-title {
+    font-size: 16px; 
+  }
+
+  .empty-message {
+    font-size: 12px;
+  }
+
+  .delete-btn {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}
+
+/* Optionnel : Mobile très petit, par exemple les très petits téléphones */
+@media (max-width: 480px) {
+  .notification-item {
+    font-size: 10px; 
+    padding: 8px; 
+  }
+
+  .delete-btn {
+    font-size: 9px; 
+    padding: 3px 6px; 
+  }
+}
