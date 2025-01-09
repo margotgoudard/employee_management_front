@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  front:
+    image: pss-rh-app-frontend:latest 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80" 
+    container_name: pss-rh-app-frontend
+    restart: always

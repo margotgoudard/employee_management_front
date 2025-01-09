@@ -32,6 +32,7 @@ const CalendarComponent = ({
     });
 
     if (matchedDay) {
+      console.log('matchedDay', matchedDay);
       if (!matchedDay.is_completed) {
         return 'bubble-blue';
       } else {
