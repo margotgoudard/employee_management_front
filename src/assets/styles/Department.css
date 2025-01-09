@@ -2,9 +2,6 @@
     padding: 20px;
     margin-top: 3%;
     font-family: 'Roboto', sans-serif;
-    background-color: #f8f9fa; 
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
   h2 {
@@ -66,10 +63,10 @@
   
 .department-hierarchy {
     margin: 2% 2% auto; 
-    background-color: #d9d9d9;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #f8f9fa; 
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
   .department-hierarchy ul li {

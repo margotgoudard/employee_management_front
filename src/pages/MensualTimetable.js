@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import MensualTimetableSheetService from "../services/MensualTimetableSheet";
 import DailyTimetableSheet from "../components/DailyTimetableSheet";
 import "../assets/styles/MensualTimetable.css";
 import MonthlyDetails from "../components/MonthlyDetails";
@@ -10,15 +9,14 @@ import ExpenseReportDetails from "../components/ExpenseReportDetails";
 import DailyTimetableSheetService from "../services/DailyTimetableSheet";
 import Alert from "../components/Alert";
 import {
-  setTimetables,
   setSelectedTimetable,
   updateDailyTimetables,
 } from "../redux/timetableSlice";
 
 const MensualTimetable = () => {
   const user = useSelector((state) => state.auth.user);
+  const timetables = useSelector((state) => state.timetable.timetables);
   const { id_timetable } = useParams();
-  const [timetableData, setTimetableData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [showExpenseDetails, setShowExpenseDetails] = useState(false);
   const [showDailyDetails, setShowDailyDetails] = useState(false);
@@ -58,15 +56,11 @@ const MensualTimetable = () => {
   useEffect(() => {
     const fetchTimetableData = async () => {
       try {
-        const data = await MensualTimetableSheetService.fetchMensualTimetablesByUser(
-          user.id_user
-        );
-        setTimetableData(data || []);
-  
+
         let selected;
   
         if (id_timetable) {
-          selected = data.find((t) => t.id_timetable === parseInt(id_timetable));
+          selected = timetables.find((t) => t.id_timetable === parseInt(id_timetable));
   
           if (selected) {
             dispatch(setSelectedTimetable(selected));
@@ -111,7 +105,7 @@ const MensualTimetable = () => {
     setShowDailyDetails(false);
     setShowExpenseDetails(false);
 
-    const newTimetable = timetableData.find(
+    const newTimetable = timetables.find(
       (t) => t.year === newDate.getFullYear() && t.month === newDate.getMonth() + 1
     );
   

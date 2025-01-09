@@ -5,63 +5,43 @@ import logo from '../assets/images/logo.png';
 import { HiBellAlert } from "react-icons/hi2";
 import { IoPerson } from "react-icons/io5";
 import { useSelector, useDispatch } from 'react-redux';
-import MensualTimetableSheetService from '../services/MensualTimetableSheet';
-import DailyTimetableSheetService from '../services/DailyTimetableSheet';
-import { setSelectedTimetable, updateDailyTimetables } from '../redux/timetableSlice';
+import { setSelectedTimetable } from '../redux/timetableSlice';
 
 const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
+  const timetables = useSelector((state) => state.timetable.timetables); // Récupération des timetables depuis le store
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const isActive = (path) => location.pathname.startsWith(path);
 
-  const handleTimetableClick = async () => {
-    try {
-      const data = await MensualTimetableSheetService.fetchMensualTimetablesByUser(user.id_user);
+  const handleTimetableClick = () => {
+    if (timetables && timetables.length > 0) {
+      const currentDate = new Date();
+      let selected = timetables.find(
+        (t) =>
+          t.year === currentDate.getFullYear() &&
+          t.month === currentDate.getMonth() + 1
+      );
 
-      if (data && data.length > 0) {
-        const currentDate = new Date();
-        let selected = data.find(
-          (t) =>
-            t.year === currentDate.getFullYear() &&
-            t.month === currentDate.getMonth() + 1
-        );
-
-        if (!selected) {
-          selected = data[data.length - 1]; 
-        }
-
-        dispatch(setSelectedTimetable(selected));
-
-        const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
-          selected.id_timetable
-        );
-
-        dispatch(updateDailyTimetables(dailyTimetables));
-
-        navigate(`/mensual_timetable/${selected.id_timetable}`);
+      if (!selected) {
+        selected = timetables[timetables.length - 1]; 
       }
-    } catch (err) {
-      console.error('Erreur lors de la navigation vers fiche horaire', err);
+
+      dispatch(setSelectedTimetable(selected)); 
+      navigate(`/mensual_timetable/${selected.id_timetable}`); 
+    } else {
+      console.warn('Aucune fiche mensuelle disponible.');
     }
   };
 
-  const handleDocumentsClick = async () => {
-    try {
-      navigate(`/documents`);
-    } catch (err) {
-      console.error('Erreur lors de la navigation vers documents', err);
-    }
+  const handleDocumentsClick = () => {
+    navigate(`/documents`);
   };
 
-  const handleDepartmentClick = async () => {
-    try {
-      navigate(`/departments`);
-    } catch (err) {
-      console.error('Erreur lors de la navigation vers departments', err);
-    }
+  const handleDepartmentClick = () => {
+    navigate(`/departments`);
   };
 
   return (

@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import '../assets/styles/Profile.css';
 import MensualTimetableSheet from '../services/MensualTimetableSheet';
 import MonthlyTimetables from '../components/MonthlyTimetables';
 import UserInfo from '../components/UserInfo';
+import { setTimetables } from '../redux/timetableSlice';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
-  const [fiches, setFiches] = useState([]);
+  const fiches = useSelector((state) => state.timetable.timetables); 
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchFiches = async () => {
       if (user?.id_user) {
         const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(user.id_user);
-        setFiches(fetchedFiches);
+        dispatch(setTimetables(fetchedFiches)); 
       }
     };
 
     fetchFiches();
-  }, [user]);
+  }, [user, dispatch]);
 
   return (
     <div className="user-dashboard">
