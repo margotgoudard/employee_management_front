@@ -55,8 +55,6 @@ const MensualTimetable = () => {
         selectedTimetable.id_timetable
       );
 
-      console.log("data!!", data);
-
       const reportsWithDetails = await Promise.all(
         data.map(async (report) => {
           const dailyTimetable =
@@ -71,7 +69,6 @@ const MensualTimetable = () => {
           };
         })
       );
-      console.log("reportsWithDetails", reportsWithDetails);
  
       setExpenseReports(reportsWithDetails);
     } catch (error) {

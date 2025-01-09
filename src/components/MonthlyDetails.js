@@ -16,7 +16,6 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
     const fetchTotalHours = async () => {
       if (!selectedTimetable?.id_timetable) return;
       const response = await MensualTimetableSheet.getMensualWorkedHours(selectedTimetable.id_timetable);
-      console.log("totalHours", response.totalHours);
       setTotalHours(response.totalHours);
     }
     
@@ -30,11 +29,9 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
       const totalExpenses = expenseReports.reduce((total, report) => {
         return total + report.amount;
       }, 0);  
-      console.log("totalExpenses", totalExpenses);
       setTotalExpenses(totalExpenses);
     }
     if(expenseReports?.length > 0){
-      console.log("expenseReports", expenseReports);
       fetchTotalExpenses();
     }
     fetchTotalExpenses();
@@ -43,7 +40,6 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
 
   const handleChange = async (e) => {
     const { name, value } = e.target;
-    console.log("name", name, "value", value);
   
     // Create the updated timetable using the current selectedTimetable state
     const updatedTimetable = {
@@ -66,7 +62,6 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
     };
 
     setSelectedTimetable(updatedTimetable);
-    console.log("updatedTimetable", updatedTimetable);
     
     try {
       await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);

@@ -6,7 +6,6 @@ import FeeCategory from "../services/FeeCategory";
 import ExpenseReportItem from "./ExpenseReportItem";
 
 const ExpenseReportDetails = ({ mensualTimetableId, expenseReports }) => {
- console.log("expenseReports!!!!", expenseReports);
   return (
     <div className="expense-report-container">
       <h3>Détails des notes de frais</h3>
