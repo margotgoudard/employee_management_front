@@ -5,13 +5,14 @@ import logo from '../assets/images/logo.png';
 import { HiBellAlert } from "react-icons/hi2";
 import { IoPerson } from "react-icons/io5";
 import { useSelector, useDispatch } from 'react-redux';
-import MensualTimetableSheet from '../services/MensualTimetableSheet';
-import DailyTimetableSheet from '../services/DailyTimetableSheet';
+import MensualTimetableSheetService from '../services/MensualTimetableSheet';
+import DailyTimetableSheetService from '../services/DailyTimetableSheet';
 import { setSelectedTimetable, updateDailyTimetables } from '../redux/timetableSlice';
 import Notification from '../services/Notification'; 
 
 const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
+  const timetables = useSelector((state) => state.timetable.timetables); // Récupération des timetables depuis le store
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,9 +33,10 @@ const Navbar = () => {
   useEffect(() => {
     fetchUnreadNotifications();
   }, []); 
-  const handleFicheHoraireClick = async () => {
+
+const handleFicheHoraireClick = async () => {
     try {
-      const data = await MensualTimetableSheet.fetchMensualTimetablesByUser(user.id_user);
+      const data = await MensualTimetableSheetService.fetchMensualTimetablesByUser(user.id_user);
 
       if (data && data.length > 0) {
         const currentDate = new Date();
@@ -50,7 +52,7 @@ const Navbar = () => {
 
         dispatch(setSelectedTimetable(selected));
 
-        const dailyTimetables = await DailyTimetableSheet.fetchDailyTimetableByMensualTimetable(
+        const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
           selected.id_timetable
         );
 
@@ -63,12 +65,12 @@ const Navbar = () => {
     }
   };
 
-  const handleDocumentsClick = async () => {
-    try {
-      navigate(`/documents`);
-    } catch (err) {
-      console.error('Erreur lors de la récupération de la fiche horaire :', err);
-    }
+  const handleDocumentsClick = () => {
+    navigate(`/documents`);
+  };
+
+  const handleDepartmentClick = () => {
+    navigate(`/departments`);
   };
 
   const handleNotificationsClick = async () => {
@@ -100,8 +102,10 @@ const Navbar = () => {
             </button>
           </li>
           <li>
-            <button className={`navbar-button ${isActive('/mon-equipe') ? 'active' : ''}`}>
-              Mon équipe
+            <button   
+              onClick={handleDepartmentClick}
+              className={`navbar-button ${isActive('/departments') ? 'active' : ''}`}>
+              Mes équipes
             </button>
           </li>
           <li>

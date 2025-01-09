@@ -19,10 +19,14 @@ class User {
     }
   }
 
-  static async ChangePassword(user, newPassword) {
+  static async ChangePassword(user, newPassword, confirmationPassword) {
     try {
-    const endpoint = `/users/${user.id_user}`;
-    await API.get(endpoint); 
+    const endpoint = `/users/${user.id_user}/password`;
+    const data = {
+      newPassword: newPassword,
+      confirmationPassword: confirmationPassword,
+    };
+    await API.put(endpoint, data);
   } catch (error) {
     console.error("Erreur lors de la modification du mot de passe :", error);
     throw error; 
