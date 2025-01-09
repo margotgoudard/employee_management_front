@@ -91,7 +91,7 @@ const Documents = () => {
 
       <div className="main-content">
         <div className="header">
-          <h2>Mes fiches de paie</h2>
+          <h2></h2>
           <div className="filters">
             <button onClick={() => setSortOrder('asc')} className={sortOrder === 'asc' ? 'active' : ''}>
               Par date croissante
