@@ -65,12 +65,12 @@ const handleFicheHoraireClick = async () => {
     }
   };
 
-  const handleDocumentsClick = () => {
-    navigate(`/documents`);
-  };
-
-  const handleDepartmentClick = () => {
-    navigate(`/departments`);
+  const handleDocumentsClick = async () => {
+    try {
+      navigate(`/documents`);
+    } catch (err) {
+      console.error('Erreur lors de la récupération de la fiche horaire :', err);
+    }
   };
 
   const handleNotificationsClick = async () => {
@@ -102,10 +102,8 @@ const handleFicheHoraireClick = async () => {
             </button>
           </li>
           <li>
-            <button   
-              onClick={handleDepartmentClick}
-              className={`navbar-button ${isActive('/departments') ? 'active' : ''}`}>
-              Mes équipes
+            <button className={`navbar-button ${isActive('/mon-equipe') ? 'active' : ''}`}>
+              Mon équipe
             </button>
           </li>
           <li>
