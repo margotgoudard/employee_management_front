@@ -54,6 +54,14 @@ class API {
     });
     return response.data;
   }
+
+  static async patch(endpoint, data) {
+    const headers = await this.getHeaders();
+    const response = await axios.patch(`${this.baseURL}${endpoint}`, data, {
+      headers: headers,
+    });
+    return response.data;
+  }
 }
 
 

@@ -1,0 +1,91 @@
+/* Conteneur principal */
+.notifications-page {
+  
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    margin-top: 70px; /* Correspond à la hauteur de la navbar */
+    
+    
+  }
+  
+  
+  
+  /* Colonnes */
+  .notification-columns {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+  }
+  
+  .notification-column {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 100px); 
+  }
+  
+  .column-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  /* Notifications */
+  .notification-item {
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-left: 5px solid;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+    display: flex;
+    align-items: center; /* Centrer le contenu verticalement */
+    justify-content: space-between; /* Espacer le texte et la croix */
+  }
+  
+  .notification-item p {
+    margin: 0;
+    color: #333;
+  }
+  
+  .success {
+    border-left-color: #28a745;
+    background-color: #eaf9e6;
+  }
+  
+  .information {
+    border-left-color: #007bff;
+    background-color: #eaf2ff;
+  }
+  
+  .warning {
+    border-left-color: #ffc107;
+    background-color: #fff7e6;
+  }
+  
+  /* Messages vides */
+  .empty-message {
+    font-size: 14px;
+    color: #888;
+    text-align: center;
+  }
+  .delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 5px;
+    align-self: flex-end;
+  }
+  
+  .delete-btn:hover {
+    background-color: #c82333;
+  }
+    

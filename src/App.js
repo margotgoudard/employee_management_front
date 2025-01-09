@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import './assets/styles/App.css'
 import MensualTimetable from './pages/MensualTimetable';
 import Documents from './pages/Documents';
+import Notifications from './pages/Notifications';
 
 const App = () => {
   const location = useLocation();
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/mensual_timetable/:id_timetable" element={<MensualTimetable />} />
         <Route path="/documents" element={<Documents />} />
+        <Route path="/notifications" element={<Notifications />} />
       </Routes>
     </div>
   );
