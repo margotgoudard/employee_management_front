@@ -4,13 +4,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Department from '../services/Department';
 import { setSelectedTimetable } from '../redux/timetableSlice';
+import User from '../services/User';
+import CreateUserForm from '../components/CreateUserForm';
+import { LuCirclePlus } from "react-icons/lu";
 
 const Departments = () => {
   const [departments, setDepartments] = useState([]);
   const [users, setUsers] = useState([]);
   const [expandedUsers, setExpandedUsers] = useState({});
+  const [showCreateUserModal, setShowCreateUserModal] = useState(false);
+
   const user = useSelector((state) => state.auth.user);
-  const timetables = useSelector((state) => state.timetable.timetables); // Récupération des timetables depuis le store
+  const timetables = useSelector((state) => state.timetable.timetables); 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -99,6 +104,18 @@ const Departments = () => {
     }
   };
 
+  const handleCreateUser = async (newUser) => {
+    try {
+      await User.CreateUser(newUser, user.id_user);
+      const updatedUsers = await Department.fetchAllSubordinatesByManager(user.id_user); 
+      setUsers(updatedUsers);
+      setShowCreateUserModal(false);
+    } catch (err) {
+      console.error('Erreur lors de la création de l’utilisateur :', err);
+      alert('Erreur lors de la création de l’utilisateur');
+    }
+  };
+  
   const renderDepartmentHierarchy = (parentId = null) => {
     const filteredDepartments = departments.filter((dept) => dept.id_sup_department === parentId);
 
@@ -147,8 +164,25 @@ const Departments = () => {
         <h2>Départements et utilisateurs sous votre responsabilité</h2>
         {renderDepartmentHierarchy()}
       </div>
+  
+      {!showCreateUserModal && (
+        <div className="create-user-button-container">
+          <button onClick={() => setShowCreateUserModal(true)}>
+            <LuCirclePlus /> Créer un utilisateur
+          </button>
+        </div>
+      )}
+  
+      {showCreateUserModal && (
+        <CreateUserForm
+          departments={departments}
+          onSubmit={handleCreateUser}
+          onCancel={() => setShowCreateUserModal(false)}
+        />
+      )}
     </div>
-  );
+  );  
+  
 };
 
 export default Departments;

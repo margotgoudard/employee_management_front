@@ -1,0 +1,103 @@
+.modal {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 92%;
+    margin-left: 3%;
+    position: relative;
+  }
+  
+  .form-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    width: 99%;
+  }
+  
+  h3 {
+    text-align: left;
+    color: #333;
+    margin: 0;
+    margin-bottom: 4%;
+  }
+  
+  .create-user-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  @media (min-width: 768px) {
+    .create-user-form {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #444;
+  }
+  
+  input,
+  select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  input:focus,
+  select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  .form-buttons {
+    position: absolute;
+    bottom: 2%;
+    right: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+  
+  button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button[type="submit"] {
+    background: var(--green-color);
+    color: white;
+  }
+  
+  

@@ -94,3 +94,18 @@
     color: #6c757d; 
   }
   
+  .create-user-button-container {
+    margin: 20px 4%; 
+  }
+  
+  .create-user-button-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: var(--blue-color);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  
+  
