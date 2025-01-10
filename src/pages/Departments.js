@@ -7,12 +7,14 @@ import { setSelectedTimetable } from '../redux/timetableSlice';
 import User from '../services/User';
 import CreateUserForm from '../components/CreateUserForm';
 import { LuCirclePlus } from "react-icons/lu";
+import CreateDepartmentForm from '../components/CreateDepartmentForm';
 
 const Departments = () => {
   const [departments, setDepartments] = useState([]);
   const [users, setUsers] = useState([]);
   const [expandedUsers, setExpandedUsers] = useState({});
   const [showCreateUserModal, setShowCreateUserModal] = useState(false);
+  const [showCreateDepartmentModal, setShowCreateDepartmentModal] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
   const timetables = useSelector((state) => state.timetable.timetables); 
@@ -115,6 +117,17 @@ const Departments = () => {
       alert('Erreur lors de la création de l’utilisateur');
     }
   };
+
+  const handleCreateDepartment = async (newDepartment) => {
+    try {
+      const createdDepartment = await Department.createDepartment(newDepartment); 
+      setDepartments((prevDepartments) => [...prevDepartments, createdDepartment]); 
+      setShowCreateDepartmentModal(false);
+    } catch (err) {
+      console.error('Erreur lors de la création du département :', err);
+      alert('Erreur lors de la création du département');
+    }
+  };
   
   const renderDepartmentHierarchy = (parentId = null) => {
     const filteredDepartments = departments.filter((dept) => dept.id_sup_department === parentId);
@@ -172,12 +185,28 @@ const Departments = () => {
           </button>
         </div>
       )}
+
+      {!showCreateDepartmentModal && (
+        <div className="create-department-button-container">
+          <button onClick={() => setShowCreateDepartmentModal(true)}>
+            <LuCirclePlus /> Créer un département
+          </button>
+        </div>
+      )}
   
       {showCreateUserModal && (
         <CreateUserForm
           departments={departments}
           onSubmit={handleCreateUser}
           onCancel={() => setShowCreateUserModal(false)}
+        />
+      )}
+
+      {showCreateDepartmentModal && (
+        <CreateDepartmentForm
+          departments={departments}
+          onSubmit={handleCreateDepartment}
+          onCancel={() => setShowCreateDepartmentModal(false)}
         />
       )}
     </div>

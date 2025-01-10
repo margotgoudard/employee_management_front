@@ -1,0 +1,23 @@
+.create-department-button-container {
+    margin-top: 20px;
+  }
+  
+  .create-department-modal {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+  }
+  
+  .create-department-form {
+    display: grid;
+    gap: 15px;
+  }
+  
+  .create-department-form .form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
