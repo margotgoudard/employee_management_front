@@ -33,7 +33,7 @@ class User {
   }
   }
 
-  static async CreateUser(user, id_manager) {
+  static async createUser(user, id_manager) {
     try {
         const endpoint = `/users/${id_manager}`;
         const response = await API.post(endpoint, user);

@@ -5,19 +5,37 @@ const CreateDepartmentForm = ({ departments, onSubmit, onCancel }) => {
   const [newDepartment, setNewDepartment] = useState({
     name: '',
     id_sup_department: '',
+    id_company: '',
   });
 
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    setNewDepartment({ ...newDepartment, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
 
-    if (e.target.value.trim() === '') {
-      setErrors({ ...errors, [e.target.name]: 'Ce champ est obligatoire' });
+    setNewDepartment((prev) => ({ ...prev, [name]: value }));
+
+    if (value.trim() === '') {
+      setErrors((prev) => ({ ...prev, [name]: 'Ce champ est obligatoire' }));
     } else {
-      const updatedErrors = { ...errors };
-      delete updatedErrors[e.target.name];
-      setErrors(updatedErrors);
+      setErrors((prev) => {
+        const updatedErrors = { ...prev };
+        delete updatedErrors[name];
+        return updatedErrors;
+      });
+    }
+    if (name === 'id_sup_department') {
+        const selectedDepartment = departments.find(
+            (dept) => dept.id_department === Number(value)
+          );          
+      if (selectedDepartment) {
+        setNewDepartment((prev) => ({
+          ...prev,
+          id_company: selectedDepartment.id_company,
+        }));
+      } else {
+        setNewDepartment((prev) => ({ ...prev, id_company: '' }));
+      }
     }
   };
 
@@ -26,12 +44,10 @@ const CreateDepartmentForm = ({ departments, onSubmit, onCancel }) => {
 
     const newErrors = {};
 
-    // Validation pour le champ "name"
     if (!newDepartment.name.trim()) {
       newErrors.name = 'Ce champ est obligatoire';
     }
 
-    // Validation pour le champ "id_sup_department"
     if (!newDepartment.id_sup_department) {
       newErrors.id_sup_department = 'Ce champ est obligatoire';
     }
@@ -39,6 +55,7 @@ const CreateDepartmentForm = ({ departments, onSubmit, onCancel }) => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
+
       onSubmit(newDepartment);
     }
   };

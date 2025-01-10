@@ -108,7 +108,7 @@ const Departments = () => {
 
   const handleCreateUser = async (newUser) => {
     try {
-      await User.CreateUser(newUser, user.id_user);
+      await User.createUser(newUser, user.id_user);
       const updatedUsers = await Department.fetchAllSubordinatesByManager(user.id_user); 
       setUsers(updatedUsers);
       setShowCreateUserModal(false);
@@ -120,6 +120,7 @@ const Departments = () => {
 
   const handleCreateDepartment = async (newDepartment) => {
     try {
+      console.log(newDepartment)
       const createdDepartment = await Department.createDepartment(newDepartment); 
       setDepartments((prevDepartments) => [...prevDepartments, createdDepartment]); 
       setShowCreateDepartmentModal(false);
