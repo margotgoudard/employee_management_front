@@ -118,17 +118,24 @@ const Departments = () => {
     }
   };
 
-  const handleCreateDepartment = async (newDepartment) => {
+  const handleCreateDepartment = async (newDepartment, selectedUsers) => {
     try {
-      console.log(newDepartment)
-      const createdDepartment = await Department.createDepartment(newDepartment); 
-      setDepartments((prevDepartments) => [...prevDepartments, createdDepartment]); 
+      const createdDepartment = await Department.createDepartment(newDepartment);
+  
+      for (const user of selectedUsers) {
+        await User.updateUserDepartment(user.id_user, createdDepartment.id_department);
+      }
+  
+      setDepartments((prevDepartments) => [...prevDepartments, createdDepartment]);
+      const updatedUsers = await Department.fetchAllSubordinatesByManager(user.id_user);
+      setUsers(updatedUsers);
+  
       setShowCreateDepartmentModal(false);
     } catch (err) {
       console.error('Erreur lors de la création du département :', err);
       alert('Erreur lors de la création du département');
     }
-  };
+  };  
   
   const renderDepartmentHierarchy = (parentId = null) => {
     const filteredDepartments = departments.filter((dept) => dept.id_sup_department === parentId);
@@ -203,6 +210,7 @@ const Departments = () => {
       {showCreateDepartmentModal && (
         <CreateDepartmentForm
           departments={departments}
+          users={users}
           onSubmit={handleCreateDepartment}
           onCancel={() => setShowCreateDepartmentModal(false)}
         />
