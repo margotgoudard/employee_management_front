@@ -99,7 +99,6 @@ const CreateUserForm = ({ departments, onSubmit, onCancel }) => {
               name="id_department"
               value={newUser.id_department}
               onChange={handleChange}
-              required
             >
               <option value="">Sélectionner un département</option>
               {departments.map((dept) => (

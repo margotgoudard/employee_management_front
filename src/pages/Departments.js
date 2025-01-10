@@ -178,22 +178,19 @@ const Departments = () => {
         {renderDepartmentHierarchy()}
       </div>
   
+      <div className="button-container">
       {!showCreateUserModal && (
-        <div className="create-user-button-container">
           <button onClick={() => setShowCreateUserModal(true)}>
             <LuCirclePlus /> Créer un utilisateur
           </button>
-        </div>
       )}
 
       {!showCreateDepartmentModal && (
-        <div className="create-department-button-container">
           <button onClick={() => setShowCreateDepartmentModal(true)}>
             <LuCirclePlus /> Créer un département
           </button>
-        </div>
       )}
-  
+    </div>
       {showCreateUserModal && (
         <CreateUserForm
           departments={departments}
