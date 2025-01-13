@@ -91,6 +91,14 @@ const Navbar = () => {
     }
   };
 
+  const handleDepartmentsClick = async () => {
+    try {
+      navigate(`/departments`);
+    } catch (err) {
+      console.error('Erreur lors de la récupération des départements :', err);
+    }
+  };
+
   // Fonction de déconnexion
   const handleLogout = () => {
     dispatch(logout()); 
@@ -116,8 +124,10 @@ const Navbar = () => {
             </button>
           </li>
           <li>
-            <button className={`navbar-button ${isActive('/mon-equipe') ? 'active' : ''}`}>
-              Mon équipe
+          <button
+              onClick={handleDepartmentsClick}
+              className={`navbar-button ${isActive('/departments') ? 'active' : ''}`} >
+                Mes équipes
             </button>
           </li>
           <li>
