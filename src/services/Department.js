@@ -21,6 +21,17 @@ class Department {
             console.error("Erreur lors de la récupération des subordinates", error);
         }
     }
+
+  static async createDepartment(department) {
+    try {
+        const endpoint = `/departments/`;
+        const response = await API.post(endpoint, department);
+        return response.department; 
+    } catch (error) {
+        console.error('Error adding department:', error);
+        throw error; 
+    }
+}
 }
 
 export default Department;
