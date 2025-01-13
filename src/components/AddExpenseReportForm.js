@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { LuUpload } from "react-icons/lu";
 import "../assets/styles/AddExpenseReportForm.css";
+import FeeCategory from "../services/FeeCategory";
 
-const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel, onCreateCategory }) => {
+const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel }) => {
   const [formState, setFormState] = useState({
     id_fee_category: "",
     client: "",
@@ -28,7 +29,7 @@ const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel, onCreateCategory
 
     if (isOtherCategory && newCategory) {
       try {
-        const createdCategory = await onCreateCategory(newCategory);
+        const createdCategory = await FeeCategory.createFeeCategory(newCategory);
         feeCategoryId = createdCategory.id_fee_category;
       } catch (error) {
         console.error("Erreur lors de la création de la catégorie :", error);

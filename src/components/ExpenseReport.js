@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
 import ExpenseReportItem from "./ExpenseReportItem";
 import AddExpenseReportForm from "./AddExpenseReportForm";
-import FeeCategory from "../services/FeeCategory";
-
 const ExpenseReports = ({
   expenseNotes,
   newExpenses,
@@ -18,11 +16,6 @@ const ExpenseReports = ({
     onAddNewExpense(newExpense);
     setShowAddForm(false); 
   };
-
-  const handleCreateCategory = async (name) => {
-    const response = await FeeCategory.createFeeCategory({ name });
-    return response;
-  };  
 
   return (
     <div className="expense-reports-container">
@@ -93,7 +86,6 @@ const ExpenseReports = ({
         feeCategories={feeCategories}
         onAdd={handleAddNewExpense}
         onCancel={() => setShowAddForm(false)}
-        onCreateCategory={handleCreateCategory}
       />      
       )}
     </div>
