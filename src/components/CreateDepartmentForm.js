@@ -17,6 +17,7 @@ const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
   const [errors, setErrors] = useState({});
   const [showCreateUserModal, setShowCreateUserModal] = useState(false);
   const [temporaryUsers, setTemporaryUsers] = useState([]);
+  const [usersToUpdate, setUsersToUpdate] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,14 +53,17 @@ const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
   };
 
   const handleUserSelect = (user) => {
-    if (!selectedUsers.some((u) => u.user.id_user === user.user.id_user)) {
+    if (!usersToUpdate.some((u) => u.user.id_user === user.user.id_user)) {
+      setUsersToUpdate([...usersToUpdate, user]);
       setSelectedUsers([...selectedUsers, user]);
     }
-  };
+  };  
 
   const handleUserRemove = (userId) => {
-    setSelectedUsers(selectedUsers?.filter((user) => user.user.id_user !== userId));
-  };
+    setUsersToUpdate((prev) => prev.filter((user) => user.user.id_user !== userId));
+    setTemporaryUsers((prev) => prev.filter((user) => user.user.id_user !== userId));
+    setSelectedUsers((prev) => prev.filter((user) => user.user.id_user !== userId));
+  };  
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -75,7 +79,7 @@ const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
     }
   
     try {
-      onSubmit(newDepartment, selectedUsers, temporaryUsers);
+      onSubmit(newDepartment, usersToUpdate, temporaryUsers);
     } catch (error) {
       console.error("Erreur lors de la création :", error);
       alert('Erreur lors de la création du département');
@@ -83,12 +87,11 @@ const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
   };
   
   const handleCreateUser = (newUser) => {
-    setTemporaryUsers((prev) => [...prev, { user: newUser }]);
-    setSelectedUsers((prev) => [...prev, { user: newUser }]);
+    const temporaryUser = { user: newUser };
+    setTemporaryUsers((prev) => [...prev, temporaryUser]);
+    setSelectedUsers((prev) => [...prev, temporaryUser]);
     setShowCreateUserModal(false);
   };
-  
-  
 
   const filteredUsers = users?.filter((user) =>
     `${user.user.first_name} ${user.user.last_name}`
