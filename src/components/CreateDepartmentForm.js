@@ -107,99 +107,101 @@ const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
       <h3>Créer un nouveau département</h3>
       <form onSubmit={handleFormSubmit} className="create-department-form">
         <div className="form-group">
-          <label>Nom du département</label>
-          <input
+            <label>Nom du département</label>
+            <input
             type="text"
             name="name"
             value={newDepartment.name}
             onChange={handleChange}
-          />
-          {errors.name && <span className="error">{errors.name}</span>}
+            />
+            {errors.name && <span className="error">{errors.name}</span>}
         </div>
 
         <div className="form-group">
-          <label>Département parent</label>
-          <select
+            <label>Département parent</label>
+            <select
             name="id_sup_department"
             value={newDepartment.id_sup_department}
             onChange={handleChange}
-          >
+            >
             <option value="">Sélectionner un département parent</option>
             {departments.map((dept) => (
-              <option key={dept.id_department} value={dept.id_department}>
+                <option key={dept.id_department} value={dept.id_department}>
                 {dept.name}
-              </option>
+                </option>
             ))}
-          </select>
+            </select>
         </div>
 
         <div className="form-group">
-          <label>Rechercher des utilisateurs à ajouter</label>
-          <input
+            <label>Rechercher des utilisateurs à ajouter</label>
+            <input
             type="text"
             placeholder="Rechercher par nom"
             value={searchQuery}
             onChange={handleSearchChange}
-          />
-          <ul className="user-search-results">
+            />
+            <ul className="user-search-results">
             {filteredUsers?.map((user) => (
-              <li key={user.user.id_user}>
+                <li key={user.user.id_user}>
                 {user.user.first_name} {user.user.last_name}{' '}
                 <button
-                  type="button"
-                  onClick={() => handleUserSelect(user)}
+                    type="button"
+                    onClick={() => handleUserSelect(user)}
                 >
-                  <LuCirclePlus />
+                    <LuCirclePlus />
                 </button>
-              </li>
+                </li>
             ))}
-          </ul>
-          {!showCreateUserModal && (
-            <button
-                type="button"
-                onClick={() => setShowCreateUserModal(true)}
-            >
-                Créer un nouvel utilisateur <LuCirclePlus />
-            </button>
-            )}
+            </ul>
         </div>
 
+        {showCreateUserModal && (
+            <div className="inline-create-user-form">
+            <h4>Créer un nouvel utilisateur</h4>
+            <CreateUserForm
+                idDepartment={newDepartment.id_department}
+                departments={departments}
+                onSubmit={handleCreateUser}
+                onCancel={() => setShowCreateUserModal(false)}
+                hideDepartmentSelection={true}
+                inline={true}  
+            />
+            </div>
+        )}
+
+        {!showCreateUserModal && (
+            <button
+            type="button"
+            onClick={() => setShowCreateUserModal(true)}
+            >
+            Créer un nouvel utilisateur <LuCirclePlus />
+            </button>
+        )}
+
         <div className="form-group">
-          <label>Utilisateurs sélectionnés</label>
-          <ul className="selected-users">
+            <label>Utilisateurs sélectionnés</label>
+            <ul className="selected-users">
             {selectedUsers.map((user) => (
-              <li key={user.user.id_user}>
+                <li key={user.user.id_user}>
                 {user.user.first_name} {user.user.last_name}{' '}
                 <button
-                  type="button"
-                  onClick={() => handleUserRemove(user.user.id_user)}
+                    type="button"
+                    onClick={() => handleUserRemove(user.user.id_user)}
                 >
-                  <LuCircleMinus />
+                    <LuCircleMinus />
                 </button>
-              </li>
+                </li>
             ))}
-          </ul>
-          {errors.users && <span className="error">{errors.users}</span>}
+            </ul>
+            {errors.users && <span className="error">{errors.users}</span>}
         </div>
 
         <div className="form-buttons">
-          <button type="submit">Créer</button>
+            <button type="submit">Créer</button>
         </div>
-      </form>
+        </form>
 
-      {showCreateUserModal && (
-        <div className="modal-overlay" onClick={() => setShowCreateUserModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <CreateUserForm
-            idDepartment={newDepartment.id_department}
-            departments={departments}
-            onSubmit={handleCreateUser}
-            onCancel={() => setShowCreateUserModal(false)}
-            hideDepartmentSelection={true}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
