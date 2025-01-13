@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { LuUpload } from "react-icons/lu";
 import "../assets/styles/AddExpenseReportForm.css";
+import FeeCategory from "../services/FeeCategory";
 
-const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel, onCreateCategory }) => {
+const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel }) => {
   const [formState, setFormState] = useState({
     id_fee_category: "",
     client: "",
@@ -17,19 +18,19 @@ const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel, onCreateCategory
 
   const handleAdd = async () => {
     const { id_fee_category, client, amount, motive, newCategory } = formState;
-
+  
     if (!client || !amount || (!motive && !isOtherCategory)) {
       alert("Veuillez remplir tous les champs.");
       return;
     }
-
+  
     let feeCategoryId = id_fee_category;
     let createdCategory = null;
-
+  
     if (isOtherCategory && newCategory) {
       try {
-        const createdCategory = await onCreateCategory(newCategory);
-        feeCategoryId = createdCategory.id_fee_category;
+        const created = await FeeCategory.createFeeCategory(newCategory);
+        feeCategoryId = created.id_fee_category;
       } catch (error) {
         console.error("Erreur lors de la création de la catégorie :", error);
         alert("Impossible de créer une nouvelle catégorie. Veuillez réessayer.");
@@ -40,7 +41,7 @@ const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel, onCreateCategory
         (category) => category.id_fee_category === Number(id_fee_category)
       );
     }
-
+  
     const newExpense = {
       ...formState,
       id_fee_category: feeCategoryId,
@@ -143,6 +144,7 @@ const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel, onCreateCategory
           <input
             type="file"
             id="file-upload"
+            name="document"
             style={{ display: "none" }}
             onChange={handleFileUpload}
           />

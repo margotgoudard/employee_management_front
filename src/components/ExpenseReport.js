@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
 import ExpenseReportItem from "./ExpenseReportItem";
 import AddExpenseReportForm from "./AddExpenseReportForm";
-import FeeCategory from "../services/FeeCategory";
-
 const ExpenseReports = ({
   expenseNotes,
   newExpenses,
@@ -20,11 +18,6 @@ const ExpenseReports = ({
     setShowAddForm(false); 
   };
 
-  const handleCreateCategory = async (name) => {
-    const response = await FeeCategory.createFeeCategory({ name });
-    return response;
-  };  
-
   return (
     <div className="expense-reports-container">
       <h3>Notes de frais :</h3>
@@ -40,7 +33,7 @@ const ExpenseReports = ({
                 feeCategory:
                   feeCategories.find(
                     (category) =>
-                      category.id_place_category === note.id_fee_category
+                      category.id_fee_category === note.id_fee_category
                   ) || { name: "N/A" },
                 amount: note.amount || "N/A",
                 client: note.client || "N/A",
@@ -99,7 +92,6 @@ const ExpenseReports = ({
         feeCategories={feeCategories}
         onAdd={handleAddNewExpense}
         onCancel={() => setShowAddForm(false)}
-        onCreateCategory={handleCreateCategory}
       />      
       )}
     </div>
