@@ -7,7 +7,7 @@ import ExpenseReport from "../services/ExpenseReport";
 import DailyTimetableSheet from "../services/DailyTimetableSheet";
 import FeeCategory from "../services/FeeCategory";
 
-const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetable, onToggleExpenseDetails, onSubmitSuccess }) => {
+const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetable, isDisabled, onToggleExpenseDetails, onSubmitSuccess }) => {
   //mettre à jour le nombre heureTotal lorsquon selectedTimetable change
   const [totalHours, setTotalHours] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
@@ -25,7 +25,9 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
 
   useEffect(() => {
     const fetchTotalExpenses = () => {
-      if(expenseReports?.length === 0) return;
+      if(expenseReports?.length === 0) {
+        setTotalExpenses(0);
+      };
       const totalExpenses = expenseReports.reduce((total, report) => {
         return total + report.amount;
       }, 0);  
@@ -86,6 +88,7 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
             name="commission"
             value={selectedTimetable?.commission || 0}
             onChange={handleChange}
+            disabled={isDisabled}
           />
           <span className="input-suffix">CHF</span>
         </div>
@@ -98,6 +101,7 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
             name="totalHours"
             value={totalHours || 0}
             readOnly
+            disabled={isDisabled}
           />
           <span className="input-suffix">heures</span>
         </div>
@@ -111,6 +115,7 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
             name="totalExpenses"
             value={totalExpenses || 0}
             readOnly
+            disabled={isDisabled}
           />
           <span className="input-suffix">CHF</span>
           <LiaSearchDollarSolid
@@ -127,13 +132,28 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
           name="comment"
           value={selectedTimetable?.comment || ""}
           onChange={handleChange}
+          disabled={isDisabled}
         />
       </div>
 
       <div className="submit-button-container">
-        <button className="submit-button" onClick={handleSubmit}>
-          Soumettre
-        </button>
+        {
+          isDisabled ? (
+            <button 
+              className="submit-button" 
+              disabled
+            >
+              {selectedTimetable.status}
+            </button>
+          ) : (
+            <button 
+              className="submit-button" 
+              onClick={handleSubmit}
+            >
+              Soumettre
+            </button>
+          )
+        }
       </div>
     </div>
   );

@@ -8,8 +8,9 @@
   import TimeSlots from "./TimeSlots";
   import ExpenseReports from "./ExpenseReport";
   import FeeCategory from "../services/FeeCategory";
+  import { GoAlertFill } from "react-icons/go";
     
-  const DailyTimetableSheet = ({ dailyTimetable, onTimetableUpdate  }) => {
+  const DailyTimetableSheet = ({ dailyTimetable, isDisabled, complianceCheckResult, onTimetableUpdate  }) => {
     const [timeSlots, setTimeSlots] = useState([]);
     const [expenseNotes, setExpenseNotes] = useState([]);
     const [newTimeSlots, setNewTimeSlots] = useState([]);
@@ -219,10 +220,23 @@
             })}
           </h2>
         </div>
+        
+        {complianceCheckResult && (
+          <div className="compliance-check-result">
+            <h3 className="compliance-check-result-title"><GoAlertFill /><span>Warining - Vérification de conformité</span> <GoAlertFill /></h3>
+            <div className="compliance-check-result-list">
+              {complianceCheckResult.map((element, index) => (
+                <div key={index} className="compliance-check-result-item">
+                  {element}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
   
         <div className="status-container">
           <label>Statut :</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <select value={status} onChange={(e) => setStatus(e.target.value)} disabled={isDisabled}>
             <option value="Travaillé">Travaillé</option>
             <option value="Week-end">Week-end</option>
             <option value="Férié">Férié</option>
@@ -238,6 +252,7 @@
               type="checkbox"
               checked={isDutyCall}
               onChange={(e) => setIsDutyCall(e.target.checked)}
+              disabled={isDisabled}
             />
           </label>
         </div>
@@ -248,6 +263,7 @@
             timeSlots={timeSlots}
             newTimeSlots={newTimeSlots}
             placeCategories={placeCategories}
+            isDisabled={isDisabled}
             onAddNewTimeSlot={handleAddNewTimeSlot}
             onUpdateTimeSlot={handleUpdateTimeSlot}
             onUpdateNewTimeSlot={handleUpdateNewTimeSlot}
@@ -258,6 +274,7 @@
               expenseNotes={expenseNotes}
               newExpenses={newExpenses}
               feeCategories={feeCategories}
+              isDisabled={isDisabled}
               onAddNewExpense={handleAddNewExpense}
               onUpdateExpense={handleUpdateExpense}
               onUpdateNewExpense={handleUpdateNewExpense}
@@ -265,14 +282,16 @@
               onDeleteNewExpense={handleDeleteNewExpense} /></>   
         )}
 
-        <div className="button-container">
-          <button className="save-button" onClick={handleSave}>
-            Enregistrer
-          </button>
-          <button className="cancel-button" onClick={handleCancel}>
-            Annuler
-          </button>
-        </div>
+        {!isDisabled && 
+          <div className="button-container">
+            <button className="save-button" onClick={handleSave}>
+              Enregistrer
+            </button>
+            <button className="cancel-button" onClick={handleCancel}>
+              Annuler
+            </button>
+          </div>
+        }
       </div>
     );
   };
