@@ -138,3 +138,11 @@
     transition: background-color 0.3s, box-shadow 0.3s;
   }
   
+.modal-overlay {
+  position: relative;
+  margin-right: 10%;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
