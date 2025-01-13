@@ -32,7 +32,7 @@ const ExpenseReports = ({
                 feeCategory:
                   feeCategories.find(
                     (category) =>
-                      category.id_place_category === note.id_fee_category
+                      category.id_fee_category === note.id_fee_category
                   ) || { name: "N/A" },
                 amount: note.amount || "N/A",
                 client: note.client || "N/A",

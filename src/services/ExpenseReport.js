@@ -28,11 +28,6 @@ class ExpenseReportService {
                 formData.append("document", expense_report.document);
                 formData.append("document_name", expense_report.document_name);
             }
-    
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
-        }
-
             const response = await API.post(endpoint, formData);
             return response.data;
         } catch (error) {
