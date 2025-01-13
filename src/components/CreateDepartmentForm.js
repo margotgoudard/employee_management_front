@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import '../assets/styles/CreateDepartmentForm.css';
+import CreateUserForm from './CreateUserForm';
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
+import User from '../services/User';
+import Department from '../services/Department';
 
 const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
   const [newDepartment, setNewDepartment] = useState({
@@ -12,6 +15,8 @@ const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [errors, setErrors] = useState({});
+  const [showCreateUserModal, setShowCreateUserModal] = useState(false);
+  const [temporaryUsers, setTemporaryUsers] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +31,19 @@ const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
         delete updatedErrors[name];
         return updatedErrors;
       });
+    }
+    if (name === 'id_sup_department') {
+      const selectedDepartment = departments.find(
+        (dept) => dept.id_department === Number(value)
+      );
+      if (selectedDepartment) {
+        setNewDepartment((prev) => ({
+          ...prev,
+          id_company: selectedDepartment.id_company,
+        }));
+      } else {
+        setNewDepartment((prev) => ({ ...prev, id_company: '' }));
+      }
     }
   };
 
@@ -43,23 +61,34 @@ const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
     setSelectedUsers(selectedUsers?.filter((user) => user.user.id_user !== userId));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-
+  
     const newErrors = {};
     if (!newDepartment.name.trim()) {
       newErrors.name = 'Ce champ est obligatoire';
     }
-    if (selectedUsers.length === 0) {
-      newErrors.users = 'Veuillez sélectionner au moins un utilisateur';
-    }
-
+  
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-    } else {
-      onSubmit(newDepartment, selectedUsers);
+      return;
+    }
+  
+    try {
+      onSubmit(newDepartment, selectedUsers, temporaryUsers);
+    } catch (error) {
+      console.error("Erreur lors de la création :", error);
+      alert('Erreur lors de la création du département');
     }
   };
+  
+  const handleCreateUser = (newUser) => {
+    setTemporaryUsers((prev) => [...prev, { user: newUser }]);
+    setSelectedUsers((prev) => [...prev, { user: newUser }]);
+    setShowCreateUserModal(false);
+  };
+  
+  
 
   const filteredUsers = users?.filter((user) =>
     `${user.user.first_name} ${user.user.last_name}`
@@ -111,30 +140,38 @@ const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
           />
           <ul className="user-search-results">
             {filteredUsers?.map((user) => (
-              <li key={user.id_user}>
+              <li key={user.user.id_user}>
                 {user.user.first_name} {user.user.last_name}{' '}
                 <button
                   type="button"
                   onClick={() => handleUserSelect(user)}
                 >
-                  <LuCirclePlus/>
+                  <LuCirclePlus />
                 </button>
               </li>
             ))}
           </ul>
+          {!showCreateUserModal && (
+            <button
+                type="button"
+                onClick={() => setShowCreateUserModal(true)}
+            >
+                Créer un nouvel utilisateur <LuCirclePlus />
+            </button>
+            )}
         </div>
 
         <div className="form-group">
           <label>Utilisateurs sélectionnés</label>
           <ul className="selected-users">
             {selectedUsers.map((user) => (
-              <li key={user.id_user}>
+              <li key={user.user.id_user}>
                 {user.user.first_name} {user.user.last_name}{' '}
                 <button
                   type="button"
-                  onClick={() => handleUserRemove(user.id_user)}
+                  onClick={() => handleUserRemove(user.user.id_user)}
                 >
-                  <LuCircleMinus/>
+                  <LuCircleMinus />
                 </button>
               </li>
             ))}
@@ -146,6 +183,20 @@ const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
           <button type="submit">Créer</button>
         </div>
       </form>
+
+      {showCreateUserModal && (
+        <div className="modal-overlay" onClick={() => setShowCreateUserModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <CreateUserForm
+            idDepartment={newDepartment.id_department}
+            departments={departments}
+            onSubmit={handleCreateUser}
+            onCancel={() => setShowCreateUserModal(false)}
+            hideDepartmentSelection={true}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

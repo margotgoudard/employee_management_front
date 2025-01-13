@@ -26,7 +26,7 @@ class Department {
     try {
         const endpoint = `/departments/`;
         const response = await API.post(endpoint, department);
-        return response.data; 
+        return response.department; 
     } catch (error) {
         console.error('Error adding department:', error);
         throw error; 
