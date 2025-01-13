@@ -232,3 +232,40 @@ button.add-time-slot-button {
   font-size: 1rem;
   border-radius: 8px;
 }
+
+.compliance-check-result {
+  background-color: #f9f9f9; 
+  border: 1px solid #ddd; 
+  border-radius: 8px;
+  padding: 20px; 
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.compliance-check-result-title {
+  font-weight: bold; 
+  color: #842029;
+  margin-top: 0;
+  margin-bottom: 10px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.compliance-check-result-title span{
+  margin: 0 10px;
+}
+
+.compliance-check-result-list {
+  display: flex;
+  flex-direction: column; 
+  gap: 10px; 
+}
+
+.compliance-check-result-item {
+  background-color: #f8d7da; 
+  color: #842029; 
+  border: 1px solid #f5c2c7; 
+  border-radius: 5px; 
+  padding: 10px; 
+  font-weight: 500;
+}

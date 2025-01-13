@@ -25,25 +25,22 @@
     margin-bottom: 10px;
   }
 
-  .react-calendar {
-    border: none !important
-    }
 
-.react-calendar__tile:hover {
-    transform: scale(1.1);
-}
-  
 .react-calendar__tile {
-    border-radius: 100%; 
-    height: 40px; 
-    max-width: 40px !important;
-    transition: transform 0.2s;
-    margin: 10px; 
+  border-radius: 100%; 
+  height: 40px; 
+  max-width: 40px !important;
+  transition: transform 0.2s;
+  margin: 10px; 
+  position: relative; 
+  overflow: visible !important;
 }
 
 .react-calendar__tile:hover {
-    background-color: var(--green-color) !important;
-    color: white
+  transform: scale(1.1);
+  background: none !important;
+    background-color: var(--green-hover-color) !important;
+    color: white !important
 }
 
 .react-calendar__month-view__days__day {
@@ -66,7 +63,7 @@
 
   .react-calendar {
     border: none
-    }
+  }
 
   .react-calendar__tile span {
     display: inline-block;
@@ -76,25 +73,46 @@
   
   .disabled-day, .bubble-gray, .bubble-red, .bubble-green, .bubble-orange {
     margin: 5px; 
-}
+  }
 
-.bubble-blue {
+  .bubble-blue {
     background-color: var(--blue-color) !important;
     color: white !important;
     cursor: pointer;
   }
-
   
+  .bubble-green {
+    background-color: var(--green-hover-color) !important;
+    color: white !important;
+    cursor: pointer;
+  }
+
   .bubble-gray {
     background-color: #f5f5f5 !important;
     border-radius: 50%;
-    color: #515151 !important;
+    color: white !important;
   }
 
   .bubble-dark-gray {
-    background-color: #d9d9d9 !important;
+    background-color: var(--gray-color) !important;
     border-radius: 50%;
-    color: #515151 !important;
+    color: white !important;
+  }
+
+  .bubble-dark-gray-circle{
+    background-color: var(--gray-color) !important;
+    border-radius: 50%;
+    color: white !important;
+    box-sizing: border-box;
+    border: solid 5px var(--blue-color) !important;
+  }
+
+  .bubble-dark-gray-circle abbr{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
   }
   
   .bubble-orange {
@@ -102,6 +120,13 @@
     border-radius: 50% !important;
     color: white;
   }
+
+  .bubble-half {
+    background: linear-gradient(to right, var(--blue-color) 50%, orange 50%) !important;
+    border-radius: 50% !important;
+    color: white !important;
+  }
+  
 
   .disabled-day {
     color: lightgray !important;
@@ -155,10 +180,5 @@
     text-align: right;
   }
 
-  .bubble-half {
-    background: linear-gradient(to right, var(--blue-color) 50%, orange 50%) !important;
-    border-radius: 50% !important;
-    color: white !important;
-  }
-  
+
   

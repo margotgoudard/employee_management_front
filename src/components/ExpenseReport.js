@@ -8,6 +8,7 @@ const ExpenseReports = ({
   expenseNotes,
   newExpenses,
   feeCategories,
+  isDisabled,
   onAddNewExpense,
   onDeleteExpense,
   onDeleteNewExpense,
@@ -49,9 +50,11 @@ const ExpenseReports = ({
                 dailyTimetable: { day: note.date || new Date() },
               }}
             />
+            {!isDisabled &&
             <button onClick={() => onDeleteExpense(note.id_expense_report)}>
               <LuCircleMinus />
             </button>
+            }
           </div>
         ))}
       </ul>
@@ -72,13 +75,15 @@ const ExpenseReports = ({
               dailyTimetable: { day: new Date() },
             }}
           />
-          <button onClick={() => onDeleteNewExpense(expense.tempId)}>
-            <LuCircleMinus />
-          </button>
+          {!isDisabled &&
+            <button onClick={() => onDeleteNewExpense(expense.tempId)}>
+              <LuCircleMinus />
+            </button>
+          }
         </div>
       );
     })}
-
+    {!isDisabled &&
       <div className="button-container">
         <button
           className="add-expense-button"
@@ -87,6 +92,7 @@ const ExpenseReports = ({
           Ajouter une note de frais <LuCirclePlus />
         </button>
       </div>
+    }
 
       {showAddForm && (
         <AddExpenseReportForm
