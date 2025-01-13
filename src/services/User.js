@@ -35,7 +35,6 @@ class User {
 
   static async createUser(user, id_manager) {
     try {
-      console.log(id_manager)
         const endpoint = `/users/${id_manager}`;
         const response = await API.post(endpoint, user);
         return response.data; 
