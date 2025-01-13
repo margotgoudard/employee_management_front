@@ -18,19 +18,19 @@ const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel }) => {
 
   const handleAdd = async () => {
     const { id_fee_category, client, amount, motive, newCategory } = formState;
-
+  
     if (!client || !amount || (!motive && !isOtherCategory)) {
       alert("Veuillez remplir tous les champs.");
       return;
     }
-
+  
     let feeCategoryId = id_fee_category;
     let createdCategory = null;
-
+  
     if (isOtherCategory && newCategory) {
       try {
-        const createdCategory = await FeeCategory.createFeeCategory(newCategory);
-        feeCategoryId = createdCategory.id_fee_category;
+        const created = await FeeCategory.createFeeCategory(newCategory);
+        feeCategoryId = created.id_fee_category;
       } catch (error) {
         console.error("Erreur lors de la création de la catégorie :", error);
         alert("Impossible de créer une nouvelle catégorie. Veuillez réessayer.");
@@ -41,7 +41,7 @@ const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel }) => {
         (category) => category.id_fee_category === Number(id_fee_category)
       );
     }
-
+  
     const newExpense = {
       ...formState,
       id_fee_category: feeCategoryId,
@@ -144,6 +144,7 @@ const AddExpenseReportForm = ({ feeCategories, onAdd, onCancel }) => {
           <input
             type="file"
             id="file-upload"
+            name="document"
             style={{ display: "none" }}
             onChange={handleFileUpload}
           />

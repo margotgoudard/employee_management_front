@@ -17,13 +17,29 @@ class ExpenseReportService {
     static async createExpenseReport(expense_report) {
         try {
             const endpoint = `/expense-reports`;
-            const response = await API.post(endpoint, expense_report);
-            return response.data; 
+            const formData = new FormData();
+            formData.append("id_daily_timetable", expense_report.id_daily_timetable);
+            formData.append("id_fee_category", expense_report.id_fee_category);
+            formData.append("amount", expense_report.amount);
+            formData.append("client", expense_report.client);
+            formData.append("motive", expense_report.motive);
+    
+            if (expense_report.document) {
+                formData.append("document", expense_report.document);
+                formData.append("document_name", expense_report.document_name);
+            }
+    
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+        }
+
+            const response = await API.post(endpoint, formData);
+            return response.data;
         } catch (error) {
             console.error('Error adding expense report:', error);
-            throw error; 
+            throw error;
         }
-    }
+    }    
 
     static async deleteExpenseReport(id_expense_report) {
         try {
