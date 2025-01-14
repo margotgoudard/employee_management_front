@@ -13,6 +13,7 @@ import {
   setSelectedTimetable,
   updateDailyTimetables,
 } from "../redux/timetableSlice";
+import ComplianceCheck from "../services/ComplianceCheck";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 
 
@@ -26,7 +27,9 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
   const [showDailyDetails, setShowDailyDetails] = useState(false);
   const [selectedDailyTimetable, setSelectedDailyTimetable] = useState(null);
   const [alert, setAlert] = useState({ message: "", type: "" });
-
+  const [complianceCheckResult, setComplianceCheckResult] = useState({});
+  const [complianceCheckResultForDailyTimetable, setComplianceCheckResultForDailyTimetable] = useState(null);
+  const [isDisabled, setIsDisabled] = useState(false);
   const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
   const dispatch = useDispatch();
 
@@ -44,6 +47,8 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
 
     if (selectedDailyTimetable) {
       setSelectedDailyTimetable(selectedDailyTimetable);
+      const complianceCheckResult = fetchComplianceCheckResultForDailyTimetable(selectedDailyTimetable);
+      setComplianceCheckResultForDailyTimetable(complianceCheckResult);
       setShowExpenseDetails(false);
       setShowDailyDetails(true);
     } else {
@@ -52,6 +57,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
   };
 
   const fetchExpenseReports = async () => {
+    console.log("Fetching expense reports...", selectedTimetable.id_timetable);
     try {
       const data = await ExpenseReport.getExpenseReportsByMensualTimetable(
         selectedTimetable.id_timetable
@@ -77,14 +83,24 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
     }
   };
 
-  // Réagir aux changements du selectedTimetable
-  useEffect(() => {
-    if (selectedTimetable && selectedTimetable.year && selectedTimetable.month) {
-      setSelectedDate(new Date(selectedTimetable.year, selectedTimetable.month - 1, 1));
-    }
-  }, [selectedTimetable]);
 
-  // Effet principal pour récupérer le timetable dès que l'ID change
+  const fetchComplianceCheckResult = async () => {
+    try {
+      const result = await ComplianceCheck.fetchComplianceCheckResult(selectedTimetable.id_timetable);
+      console.log("Compliance check result: ", result);
+      setComplianceCheckResult(result);
+    } catch (error) {   
+      console.error("Error fetching compliance check result:", error);
+    }
+  };
+
+
+  // useEffect(() => {
+  //   if (selectedTimetable && selectedTimetable.year && selectedTimetable.month) {
+  //     setSelectedDate(new Date(selectedTimetable.year, selectedTimetable.month - 1, 1));
+  //   }
+  // }, [selectedTimetable]);
+  
   useEffect(() => {
     const fetchTimetableData = async () => {
       try {
@@ -104,10 +120,13 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
 
         if (selected) {
           dispatch(setSelectedTimetable(selected));
+          setIsDisabled(selected.status !== "À compléter");
+          console.log("Selected timetable: ", selected);
           const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
             selected.id_timetable
           );
           dispatch(updateDailyTimetables(dailyTimetables));
+  
         }
       } catch (err) {
         console.error("Erreur lors de la récupération des données :", err);
@@ -115,12 +134,15 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
     };
 
     fetchTimetableData();
-  }, [user.id_user, id_timetable, user_id_timetable, dispatch]);
-
-  // Rafraîchir les données à chaque changement du selectedTimetable
+  }, [timetables,user_id, user_id_timetable]);
+  
   useEffect(() => {
     if (!selectedTimetable || !selectedTimetable?.id_timetable) {
       return;
+    }
+
+    if (selectedTimetable && selectedTimetable.year && selectedTimetable.month) {
+      setSelectedDate(new Date(selectedTimetable.year, selectedTimetable.month - 1, 1));
     }
 
     const fetchAndCalculateData = async () => {
@@ -136,19 +158,24 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
 
     fetchAndCalculateData();
     fetchExpenseReports();
+    if(selectedTimetable.status === "En attente d'approbation") {
+      console.log("Compliance check! ");
+      fetchComplianceCheckResult();
+    }
   }, [selectedTimetable?.id_timetable]);
 
   // Rafraîchir les rapports de dépenses à chaque sélection de tableau de bord quotidien
-  useEffect(() => {
-    if (selectedTimetable) {
-      fetchExpenseReports();
-    }
-  }, [selectedDailyTimetable]);
+  //useEffect(() => {
+  //  if (selectedTimetable) {
+  //    fetchExpenseReports();
+  //  }
+  //}, [selectedDailyTimetable]);
 
   const handleMonthChange = (increment) => {
     const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + increment, 1);
     setSelectedDate(newDate);
     setSelectedDailyTimetable(null);
+
     setShowDailyDetails(false);
     setShowExpenseDetails(false);
 
@@ -165,6 +192,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
             newTimetable.id_timetable
           );
           dispatch(updateDailyTimetables(dailyTimetables));
+          setIsDisabled(newTimetable.status !== "À compléter");
         } catch (error) {
           console.error("Erreur lors de la récupération des données journalières :", error);
         }
@@ -206,6 +234,20 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
     }, 3000);
   };
 
+  const onSubmitSuccess = () => {
+    showAlert("Votre fiche horaire a été soumise avec succès", "success")
+    fetchComplianceCheckResult();
+  }
+
+  const fetchComplianceCheckResultForDailyTimetable = (dailyTimetable) => {
+    if(complianceCheckResult) {
+      if(complianceCheckResult[dailyTimetable.day]) {
+         return complianceCheckResult[dailyTimetable.day];
+      }
+    } 
+    return null;
+  }
+
   return (
     <div className="mensual-timetable">
       <div className="content-layout">
@@ -214,6 +256,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
             <CalendarComponent
               selectedDate={selectedDate}
               selectedTimetable={selectedTimetable}
+              complianceCheckResult={complianceCheckResult}
               onDateChange={handleDateChange}
               onMonthChange={handleMonthChange}
               onDayClick={handleDayClick}
@@ -222,12 +265,14 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
               selectedTimetable={selectedTimetable}
               expenseReports={expenseReports}
               setSelectedTimetable={(timetable) => dispatch(setSelectedTimetable(timetable))}
+              isDisabled={isDisabled}
               onToggleExpenseDetails={() => (
                 setShowExpenseDetails(!showExpenseDetails),
                 setShowDailyDetails(false),
-                setSelectedDailyTimetable(null)
+                setSelectedDailyTimetable(null),
+                setComplianceCheckResultForDailyTimetable(null)
               )}
-              onSubmitSuccess={() => showAlert("Votre fiche horaire a été soumise avec succès", "success")}
+              onSubmitSuccess={onSubmitSuccess}
             />
           </div>
         </div>
@@ -246,6 +291,8 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
             dailyTimetable={{
               ...selectedDailyTimetable
             }}
+            complianceCheckResult={complianceCheckResultForDailyTimetable}
+            isDisabled={isDisabled}
             onTimetableUpdate={refreshDailyTimetable}
           />
         )}

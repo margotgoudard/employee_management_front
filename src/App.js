@@ -25,6 +25,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/employee-profile/:id_user" element={<Profile />}/>
         <Route path="/mensual_timetable/:id_timetable" element={<MensualTimetable />} />
         <Route path="/documents" element={<Documents />} />
         <Route path="/notifications" element={<Notifications />} />

@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
 import ExpenseReportItem from "./ExpenseReportItem";
 import AddExpenseReportForm from "./AddExpenseReportForm";
-import FeeCategory from "../services/FeeCategory";
-
 const ExpenseReports = ({
   expenseNotes,
   newExpenses,
   feeCategories,
+  isDisabled,
   onAddNewExpense,
   onDeleteExpense,
   onDeleteNewExpense,
@@ -18,11 +17,6 @@ const ExpenseReports = ({
     onAddNewExpense(newExpense);
     setShowAddForm(false); 
   };
-
-  const handleCreateCategory = async (name) => {
-    const response = await FeeCategory.createFeeCategory({ name });
-    return response;
-  };  
 
   return (
     <div className="expense-reports-container">
@@ -39,7 +33,7 @@ const ExpenseReports = ({
                 feeCategory:
                   feeCategories.find(
                     (category) =>
-                      category.id_place_category === note.id_fee_category
+                      category.id_fee_category === note.id_fee_category
                   ) || { name: "N/A" },
                 amount: note.amount || "N/A",
                 client: note.client || "N/A",
@@ -49,9 +43,11 @@ const ExpenseReports = ({
                 dailyTimetable: { day: note.date || new Date() },
               }}
             />
+            {!isDisabled &&
             <button onClick={() => onDeleteExpense(note.id_expense_report)}>
               <LuCircleMinus />
             </button>
+            }
           </div>
         ))}
       </ul>
@@ -72,13 +68,15 @@ const ExpenseReports = ({
               dailyTimetable: { day: new Date() },
             }}
           />
-          <button onClick={() => onDeleteNewExpense(expense.tempId)}>
-            <LuCircleMinus />
-          </button>
+          {!isDisabled &&
+            <button onClick={() => onDeleteNewExpense(expense.tempId)}>
+              <LuCircleMinus />
+            </button>
+          }
         </div>
       );
     })}
-
+    {!isDisabled &&
       <div className="button-container">
         <button
           className="add-expense-button"
@@ -87,13 +85,13 @@ const ExpenseReports = ({
           Ajouter une note de frais <LuCirclePlus />
         </button>
       </div>
+    }
 
       {showAddForm && (
         <AddExpenseReportForm
         feeCategories={feeCategories}
         onAdd={handleAddNewExpense}
         onCancel={() => setShowAddForm(false)}
-        onCreateCategory={handleCreateCategory}
       />      
       )}
     </div>

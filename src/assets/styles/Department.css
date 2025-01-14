@@ -2,6 +2,7 @@
     padding: 20px;
     margin-top: 3%;
     font-family: 'Roboto', sans-serif;
+    width: 90%;
   }
   
   h2 {
@@ -94,3 +95,55 @@
     color: #6c757d; 
   }
   
+  .create-user-button-container {
+    margin: 20px 4%; 
+  }
+  
+  .create-user-button-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: var(--blue-color);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .create-department-button-container {
+    margin: 20px 4%; 
+  }
+  
+  .create-department-button-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: var(--blue-color);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 4%;
+  }
+  
+  .button-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: var(--blue-color);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  
+.modal-overlay {
+  position: relative;
+  margin-right: 10%;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

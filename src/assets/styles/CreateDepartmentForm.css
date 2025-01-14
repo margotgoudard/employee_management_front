@@ -1,0 +1,62 @@
+.create-department-button-container {
+    margin-top: 20px;
+  }
+  
+  .create-department-modal {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 91%;
+    margin-left: 4%;
+    position: relative;
+    border: 1px solid #ccc;
+  }
+  
+  .create-department-form {
+    display: grid;
+    gap: 15px;
+  }
+  
+  .create-department-form .form-buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  h3 {
+    text-align: left;
+    color: #333;
+    margin: 0;
+    margin-bottom: 4%;
+  }
+
+.create-department-form input,
+.create-department-form select {
+    width: 96%;
+    max-width: 98%;
+    box-sizing: border-box;
+    margin-left: 0;
+}
+
+.create-department-form {
+    display: grid;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1%;
+}
+
+@media (min-width: 768px) {
+  .form-row {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .form-row .form-group {
+    flex: 1;
+  }
+}
+

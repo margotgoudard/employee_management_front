@@ -31,7 +31,6 @@ class User {
     console.error("Erreur lors de la modification du mot de passe :", error);
     throw error; 
   }
-
   }
 
   static async fetchUser(id_user) {
@@ -44,6 +43,16 @@ class User {
       throw error; 
     }
   }
+  static async createUser(user, id_manager) {
+    try {
+        const endpoint = `/users/${id_manager}`;
+        const response = await API.post(endpoint, user);
+        return response.data; 
+    } catch (error) {
+        console.error('Error adding user:', error);
+        throw error; 
+    }
+}
 }
 
 export default User;

@@ -5,9 +5,7 @@ class API {
   static baseURL = process.env.REACT_APP_API_BASE_URL;
 
   static async getHeaders() {
-    const headers = {
-      'Content-Type': 'application/json',
-    };
+    const headers = {};
     const state = store.getState();
     const token = state.auth.token;
     

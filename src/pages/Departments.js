@@ -4,13 +4,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Department from '../services/Department';
 import { setSelectedTimetable } from '../redux/timetableSlice';
+import User from '../services/User';
+import CreateUserForm from '../components/CreateUserForm';
+import { LuCirclePlus } from "react-icons/lu";
+import CreateDepartmentForm from '../components/CreateDepartmentForm';
 
 const Departments = () => {
   const [departments, setDepartments] = useState([]);
   const [users, setUsers] = useState([]);
   const [expandedUsers, setExpandedUsers] = useState({});
+  const [activeForm, setActiveForm] = useState(null); 
+
   const user = useSelector((state) => state.auth.user);
-  const timetables = useSelector((state) => state.timetable.timetables); // Récupération des timetables depuis le store
+  const timetables = useSelector((state) => state.timetable.timetables); 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -99,6 +105,50 @@ const Departments = () => {
     }
   };
 
+  const handleCreateUser = async (newUser) => {
+    try {
+      await User.createUser(newUser, user.id_user);
+      const updatedUsers = await Department.fetchAllSubordinatesByManager(user.id_user); 
+      setUsers(updatedUsers);
+      setActiveForm(null); 
+    } catch (err) {
+      console.error('Erreur lors de la création de l’utilisateur :', err);
+      alert('Erreur lors de la création de l’utilisateur');
+    }
+  };
+
+  const handleCreateDepartment = async (newDepartment, selectedUsers, temporaryUsers) => {
+    try {
+      const createdDepartment = await Department.createDepartment(newDepartment);
+  
+      const departmentId = createdDepartment.id_department;
+  
+      for (const temporaryUser of temporaryUsers) {
+        const userToCreate = { ...temporaryUser.user, id_department: departmentId };
+        await User.createUser(userToCreate, user.id_user); 
+      }
+  
+      for (const user of selectedUsers) {
+        const updatedUser = { ...user.user, id_department: departmentId };
+        await User.update(updatedUser);
+      }
+  
+      setDepartments((prevDepartments) => [...prevDepartments, createdDepartment]);
+      const updatedUsers = await Department.fetchAllSubordinatesByManager(user.id_user);
+      setUsers(updatedUsers);
+  
+      setActiveForm(null);
+    } catch (err) {
+      console.error('Erreur lors de la création du département :', err);
+      alert('Erreur lors de la création du département');
+    }
+  };
+  
+
+  const toggleForm = (formName) => {
+    setActiveForm((prevForm) => (prevForm === formName ? null : formName));
+  };
+
   const renderDepartmentHierarchy = (parentId = null) => {
     const filteredDepartments = departments.filter((dept) => dept.id_sup_department === parentId);
 
@@ -127,7 +177,7 @@ const Departments = () => {
                       key={user.user.id_user}
                       className="user-item"
                       onClick={() => handleUserClick(user.user.id_user)}
-                      style={{ cursor: 'pointer'}}
+                      style={{ cursor: 'pointer' }}
                     >
                       {user.user.first_name} {user.user.last_name}
                     </li>
@@ -147,8 +197,35 @@ const Departments = () => {
         <h2>Départements et utilisateurs sous votre responsabilité</h2>
         {renderDepartmentHierarchy()}
       </div>
+  
+      <div className="button-container">
+        <button onClick={() => toggleForm('user')}>
+          <LuCirclePlus /> Créer un utilisateur dans un département existant
+        </button>
+        <button onClick={() => toggleForm('department')}>
+          <LuCirclePlus /> Créer un département et de nouveaux utilisateurs
+        </button>
+      </div>
+
+      {activeForm === 'user' && (      
+        <CreateUserForm
+          departments={departments}
+          onSubmit={handleCreateUser}
+          onCancel={() => setActiveForm(null)}
+          hideDepartmentSelection={false}
+        />
+      )}
+
+      {activeForm === 'department' && (
+        <CreateDepartmentForm
+          departments={departments}
+          users={users}
+          onSubmit={handleCreateDepartment}
+          onCancel={() => setActiveForm(null)}
+        />
+      )}
     </div>
-  );
+  );  
 };
 
 export default Departments;

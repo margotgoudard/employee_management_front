@@ -3,25 +3,39 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import '../assets/styles/Calendar.css';
+import { getISOWeek } from 'date-fns'; 
 
 const CalendarComponent = ({
   selectedDate,
+  complianceCheckResult,
   onDateChange,
   onMonthChange,
   selectedTimetable,
   onDayClick
 }) => {
   const [activeStartDate, setActiveStartDate] = useState(selectedDate);
+  const [activatedDate, setActivatedDate] = useState(null);
 
   useEffect(() => {
     setActiveStartDate(selectedDate);
   }, [selectedDate]);
 
   const getTileClassName = ({ date, view }) => {
+    // Vérifie si la date est la date activée
+    if (
+      activatedDate &&
+      date.getUTCDate() === activatedDate.getUTCDate() &&
+      date.getUTCMonth() === activatedDate.getUTCMonth() &&
+      date.getUTCFullYear() === activatedDate.getUTCFullYear()
+    ) {
+      return 'bubble-green';
+    }
+  
+    // Logique existante pour les autres classes
     if (!selectedTimetable?.daily_timetable_sheets || !Array.isArray(selectedTimetable?.daily_timetable_sheets)) {
       return 'disabled-day';
     }
-
+  
     const matchedDay = selectedTimetable?.daily_timetable_sheets.find((d) => {
       const dayDate = new Date(d.day);
       return (
@@ -30,16 +44,16 @@ const CalendarComponent = ({
         dayDate.getUTCFullYear() === date.getUTCFullYear()
       );
     });
-
+  
     if (matchedDay) {
       if (!matchedDay.is_completed) {
-        return 'bubble-blue';
+        return 'bubble-dark-gray';
       } else {
         if (matchedDay.status === 'Travaillé') {
-          return 'bubble-gray';
+          return 'bubble-blue';
         } else {
           if (matchedDay.status === 'Week-end' || matchedDay.status === 'Férié') {
-            return 'bubble-dark-gray';
+            return 'bubble-dark-gray-circle';
           } else {
             if (matchedDay.status === 'Demi-journée') {
               return 'bubble-half';
@@ -52,6 +66,47 @@ const CalendarComponent = ({
     return 'disabled-day';
   };
 
+  const tileContent = ({ date, view }) => {
+    // Affiche le numéro de semaine uniquement dans la vue "month"
+    if (view === 'month') {
+      if(date.getDay() === 1){
+        const weekNumber = getISOWeek(date); 
+        return (
+          <div
+          style={{
+            position: 'absolute',
+            left: '-200%', 
+            top: '50%', 
+            transform: 'translateY(-50%)', 
+            color: '#555',
+            fontWeight: 'bold',
+            whiteSpace: 'nowrap !important', 
+          }}
+          >
+            {`Semaine ${weekNumber}`}
+          </div>
+        );
+      }else if(date.getDay() === 0){
+        return (
+          <div
+          style={{
+            position: 'absolute',
+            left: '150%', 
+            top: '50%', 
+            transform: 'translateY(-50%)', 
+            color: '#555',
+            fontWeight: 'bold'
+          }}
+          >
+            5H
+          </div>
+        );
+    }
+    return null; // Pas de contenu pour les autres jours
+  };
+}
+  
+  
   return (
     <div className="calendar-wrapper">
       <div className="calendar-section">
@@ -74,7 +129,9 @@ const CalendarComponent = ({
           showNavigation={false}
           onClickDay={(value) => {
             onDayClick(value);
+            setActivatedDate(value); 
           }}
+          tileContent={tileContent}
         />
       </div>
     </div>
