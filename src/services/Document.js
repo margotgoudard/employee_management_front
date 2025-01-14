@@ -11,6 +11,18 @@ class Document {
             console.error("Erreur lors de la récupération des documents", error);
         }
     }
+
+    
+    static async createDocument(document) {
+        try {
+            const endpoint = `/documents`;
+            const response = await API.post(endpoint, document);
+            return response.data;
+        } catch (error) {
+            console.error('Error adding document:', error);
+            throw error;
+        }
+    }  
 }
 
 export default Document;

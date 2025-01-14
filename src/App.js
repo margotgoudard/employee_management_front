@@ -1,9 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
-import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { store, persistor } from '../src/redux/store';
+import { persistor } from '../src/redux/store';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Navbar from './components/Navbar';
@@ -26,7 +25,7 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/mensual_timetable/:id_timetable" element={<MensualTimetable />} />
-        <Route path="/documents" element={<Documents />} />
+        <Route path="/documents/:id_user" element={<Documents />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/departments" element={<Departments />} />
       </Routes>

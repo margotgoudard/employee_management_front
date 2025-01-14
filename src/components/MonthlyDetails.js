@@ -3,12 +3,8 @@ import "../assets/styles/MonthlyDetails.css";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 import { LiaSearchDollarSolid } from "react-icons/lia";
 import { useEffect, useState } from "react";
-import ExpenseReport from "../services/ExpenseReport";
-import DailyTimetableSheet from "../services/DailyTimetableSheet";
-import FeeCategory from "../services/FeeCategory";
 
 const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetable, isDisabled, onToggleExpenseDetails, onSubmitSuccess }) => {
-  //mettre à jour le nombre heureTotal lorsquon selectedTimetable change
   const [totalHours, setTotalHours] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
 
@@ -43,16 +39,13 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
   const handleChange = async (e) => {
     const { name, value } = e.target;
   
-    // Create the updated timetable using the current selectedTimetable state
     const updatedTimetable = {
       ...selectedTimetable,
       [name]: value,
     };
   
-    // Update state
     setSelectedTimetable(updatedTimetable);
   
-    // Call the API with the updated timetable
     await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
   };
   

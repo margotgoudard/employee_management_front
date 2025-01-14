@@ -61,7 +61,7 @@ const Navbar = () => {
 
   const handleDocumentsClick = async () => {
     try {
-      navigate(`/documents`);
+      navigate(`/documents/${user.id_user}`);
     } catch (err) {
       console.error('Erreur lors de la récupération de la fiche horaire :', err);
     }
