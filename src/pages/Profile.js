@@ -42,7 +42,6 @@ const Profile = () => {
           setDisplayedUser(fetchedUser);
           const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(fetchedUser.id_user);
           setDisplayedFiches(fetchedFiches);
-          dispatch(setTimetables(fetchedFiches)); 
         } else {
           throw new Error("Utilisateur introuvable.");
         }
