@@ -14,9 +14,13 @@ import {
   updateDailyTimetables,
 } from "../redux/timetableSlice";
 import ComplianceCheck from "../services/ComplianceCheck";
+import { saveAs } from 'file-saver'; 
+import { getISOWeek } from "date-fns";
+import TimeSlot from "../services/TimeSlot";
+import ExpenseReportService from "../services/ExpenseReport";
+import { AiOutlineExport } from "react-icons/ai";
 
 const MensualTimetable = () => {
-  const user = useSelector((state) => state.auth.user);
   const timetables = useSelector((state) => state.timetable.timetables);
   const { id_timetable } = useParams();
   const [selectedDate, setSelectedDate] = useState(null);
@@ -91,13 +95,6 @@ const MensualTimetable = () => {
     }
   };
 
-
-  // useEffect(() => {
-  //   if (selectedTimetable && selectedTimetable.year && selectedTimetable.month) {
-  //     setSelectedDate(new Date(selectedTimetable.year, selectedTimetable.month - 1, 1));
-  //   }
-  // }, [selectedTimetable]);
-  
   useEffect(() => {
     const fetchTimetableData = async () => {
       try {
@@ -229,11 +226,76 @@ const MensualTimetable = () => {
     return null;
   }
 
+  const exportToCSV = async () => {
+    if (!selectedTimetable || !selectedTimetable.daily_timetable_sheets) return;
+  
+    const csvRows = [];
+    csvRows.push(`Mois;${selectedTimetable.month}/${selectedTimetable.year}\n`);
+    csvRows.push("Jour;Début;Fin;Total heures jour;Total heures semaine;Total heures mois;Total notes de frais journée;Total commissions;Total notes de frais mensuel\n");
+  
+    let totalMonthlyHours = 0;
+    let totalMonthlyExpenses = 0;
+    let totalMonthlyCommissions = selectedTimetable.commission || 0;
+    let weeklyHours = 0;
+    let currentWeek = null;
+  
+    const sortedDailyTimetables = [...selectedTimetable.daily_timetable_sheets].sort((a, b) => {
+      return new Date(a.day) - new Date(b.day);
+    });
+  
+    for (const daySheet of sortedDailyTimetables) {
+      const date = new Date(daySheet.day);
+      const day = date.toLocaleDateString("fr-FR");
+      const timeSlots = await TimeSlot.getTimeSlotsByDailyTimetable(daySheet.id_daily_timetable) || [];
+      const expenses = await ExpenseReportService.getExpenseReportsByDailyTimetable(daySheet.id_daily_timetable) || [];
+  
+      const dayTotalHours = timeSlots.reduce((total, slot) => {
+        const [startHour, startMinute, startSecond] = slot.start.split(":").map(Number);
+        const [endHour, endMinute, endSecond] = slot.end.split(":").map(Number);
+  
+        const start = new Date();
+        start.setHours(startHour, startMinute, startSecond, 0);
+  
+        const end = new Date();
+        end.setHours(endHour, endMinute, endSecond, 0);
+  
+        const hours = (end - start) / (1000 * 60 * 60);
+        return total + hours;
+      }, 0);
+  
+      totalMonthlyHours += dayTotalHours;
+      const weekNumber = getISOWeek(date);
+      if (currentWeek !== weekNumber) {
+        currentWeek = weekNumber;
+        weeklyHours = 0;
+      }
+      weeklyHours += dayTotalHours;
+  
+      const expenseTotal = expenses.reduce((sum, expense) => sum + expense.amount, 0) || 0;
+      totalMonthlyExpenses += expenseTotal;
+  
+      if (timeSlots.length > 0) {
+        timeSlots.forEach((slot) => {
+          csvRows.push(`${day};${slot.start};${slot.end};${dayTotalHours.toFixed(2)};${weeklyHours.toFixed(2)};${totalMonthlyHours.toFixed(2)};${expenseTotal.toFixed(2)};${totalMonthlyCommissions.toFixed(2)};${totalMonthlyExpenses.toFixed(2)}\n`);
+        });
+      } else {
+        csvRows.push(`${day};;;0.00;${weeklyHours.toFixed(2)};${totalMonthlyHours.toFixed(2)};${expenseTotal.toFixed(2)};${totalMonthlyCommissions.toFixed(2)};${totalMonthlyExpenses.toFixed(2)}\n`);
+      }
+    }
+  
+    const csvContent = csvRows.join("");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, `Mensual_Timetable_${selectedTimetable.month}_${selectedTimetable.year}.csv`);
+  };  
+
   return (
     <div className="mensual-timetable">
       <div className="content-layout">
         <div className="timetable-layout">
           <div className="main-section">
+          <button onClick={exportToCSV} className="export-button">
+            <AiOutlineExport />
+          </button>
             <CalendarComponent
               selectedDate={selectedDate}
               selectedTimetable={selectedTimetable}

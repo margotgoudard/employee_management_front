@@ -56,4 +56,11 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
+  .export-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    border: none;
+    cursor: pointer;
+  }
   
