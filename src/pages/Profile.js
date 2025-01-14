@@ -29,13 +29,15 @@ const Profile = () => {
         setLoading(true); 
         let fetchedUser = null;
 
+        if (connectedUser?.id_user) {
+          const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(connectedUser.id_user);
+          dispatch(setTimetables(fetchedFiches)); 
+          fetchedUser = connectedUser;
+        }
+
         if (id_user) {
-          console.log(id_user)
           // Si un id_user est dans l'URL, charger cet utilisateur
           fetchedUser = await User.fetchUser(id_user);
-        } else if (connectedUser?.id_user) {
-          // Sinon, charger l'utilisateur connecté
-          fetchedUser = connectedUser;
         }
 
         if (fetchedUser) {
