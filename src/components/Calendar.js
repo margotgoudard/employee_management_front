@@ -21,7 +21,6 @@ const CalendarComponent = ({
   }, [selectedDate]);
 
   const getTileClassName = ({ date, view }) => {
-    // Vérifie si la date est la date activée
     if (
       activatedDate &&
       date.getUTCDate() === activatedDate.getUTCDate() &&
@@ -31,7 +30,6 @@ const CalendarComponent = ({
       return 'bubble-green';
     }
   
-    // Logique existante pour les autres classes
     if (!selectedTimetable?.daily_timetable_sheets || !Array.isArray(selectedTimetable?.daily_timetable_sheets)) {
       return 'disabled-day';
     }
@@ -67,7 +65,6 @@ const CalendarComponent = ({
   };
 
   const tileContent = ({ date, view }) => {
-    // Affiche le numéro de semaine uniquement dans la vue "month"
     if (view === 'month') {
       if(date.getDay() === 1){
         const weekNumber = getISOWeek(date); 
@@ -102,7 +99,7 @@ const CalendarComponent = ({
           </div>
         );
     }
-    return null; // Pas de contenu pour les autres jours
+    return null; 
   };
 }
   
