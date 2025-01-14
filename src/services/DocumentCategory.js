@@ -11,6 +11,17 @@ class DocumentCategory {
             console.error("Erreur lors de la récupération des catégories", error);
         }
     }
+
+    static async createDocumentCategory(category) {
+        try {
+            const endpoint = `/document-categories`;
+            const response = await API.post(endpoint, category);
+            return response.documentCategory;
+        } catch (error) {
+            console.error('Error adding document category:', error);
+            throw error;
+        }
+    }  
 }
 
 export default DocumentCategory;

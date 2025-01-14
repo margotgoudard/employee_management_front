@@ -3,15 +3,25 @@ import DocumentCategoryService from '../services/DocumentCategory';
 import DocumentService from '../services/Document';
 import '../assets/styles/Document.css';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { LuCirclePlus } from 'react-icons/lu';
 
 const Documents = () => {
   const [categories, setCategories] = useState([{ id_category: 'all', name: 'Tout' }]);
   const [selectedCategory, setSelectedCategory] = useState('all'); 
+  const [selectedUploadCategory, setSelectedUploadCategory] = useState(null);
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [isUploadFormOpen, setIsUploadFormOpen] = useState(false); 
+  const [fileError, setFileError] = useState(false);
+  const [categoryError, setCategoryError] = useState(false);
+
   const user = useSelector((state) => state.auth.user);
+  const { id_user } = useParams();
 
   useEffect(() => {
     const fetchDocumentsAndCategories = async () => {
@@ -20,7 +30,7 @@ const Documents = () => {
         setDocuments(allDocuments);
         setFilteredDocuments(allDocuments);
   
-        const uniqueCategoryIds = [...new Set(allDocuments.map((doc) => doc.id_document_category))];
+        const uniqueCategoryIds = [...new Set(allDocuments.map((doc) => doc?.id_document_category))];
         
         const categoriesData = [];
         for (const id of uniqueCategoryIds) {
@@ -49,7 +59,7 @@ const Documents = () => {
     if (selectedCategory === 'all') {
       setFilteredDocuments(documents); 
     } else {
-      const filtered = documents?.filter((doc) => doc.id_document_category === selectedCategory);
+      const filtered = documents?.filter((doc) => doc?.id_document_category === selectedCategory);
       setFilteredDocuments(filtered);
     }
   }, [selectedCategory, documents]);
@@ -57,10 +67,10 @@ const Documents = () => {
   useEffect(() => {
     const categoryFiltered = selectedCategory === 'all'
       ? documents
-      : documents.filter((doc) => doc.id_document_category === selectedCategory);
+      : documents.filter((doc) => doc?.id_document_category === selectedCategory);
   
     const filtered = categoryFiltered.filter((doc) =>
-      doc.name.toLowerCase().includes(searchTerm.toLowerCase())
+      doc?.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   
     setFilteredDocuments(filtered);
@@ -73,6 +83,77 @@ const Documents = () => {
     return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
   });
 
+  const handleUploadDocument = async () => {
+    setFileError(false);  
+    setCategoryError(false); 
+
+    if (!selectedFile) {
+      setFileError(true);
+      return;
+    }
+
+    if (selectedUploadCategory === 'new' && !newCategoryName.trim()) {
+      setCategoryError(true);
+      return;
+    }
+
+    if (selectedFile.type !== 'application/pdf') {
+      alert('Veuillez sélectionner uniquement un document PDF');
+      return;
+    }
+
+    try {
+      let categoryId = selectedUploadCategory;
+      if (newCategoryName) {
+        const newCategory = await DocumentCategoryService.createDocumentCategory({
+          name: newCategoryName,
+        });
+        categoryId = newCategory.id_category;
+        
+        setCategories((prevCategories) => [...prevCategories, newCategory]); 
+        setSelectedUploadCategory(newCategory.id_category);
+      }
+      
+
+      const formData = new FormData();
+      formData.append('document', selectedFile);
+      formData.append('document_name', selectedFile?.name);
+      formData.append('id_document_category', categoryId);
+      formData.append('id_user', id_user);
+
+      const newDocument = await DocumentService.createDocument(formData);
+
+      setDocuments((prevDocuments) => [...prevDocuments, newDocument]);
+      setFilteredDocuments((prevDocuments) => [...prevDocuments, newDocument]);
+
+      setSelectedFile(null);
+      setNewCategoryName('');
+      setSelectedUploadCategory(null);
+      setIsUploadFormOpen(false);
+
+    } catch (err) {
+      console.error('Erreur lors du téléchargement du document :', err);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type !== 'application/pdf') {
+      alert('Seuls les fichiers PDF sont autorisés');
+      setSelectedFile(null);
+    } else {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleCategoryChange = (e) => {
+    setSelectedUploadCategory(e.target.value);
+  };
+
+  const handleNewCategoryChange = (e) => {
+    setNewCategoryName(e.target.value);
+  };
+
   return (
     <div className="documents-page">
       <div className="sidebar">
@@ -83,7 +164,7 @@ const Documents = () => {
               className={selectedCategory === category.id_category ? 'active' : ''}
               onClick={() => setSelectedCategory(category.id_category)}
             >
-              {category.name}
+              {category?.name}
             </li>
           ))}
         </ul>
@@ -108,53 +189,81 @@ const Documents = () => {
           </div>
         </div>
 
-        <div className="documents-grid">
-        {sortedDocuments.map((doc) => {
-            const fileExtension = doc.name.split('.').pop().toLowerCase();
+        {Number(id_user) !== user.id_user && !isUploadFormOpen && (
+          <button
+            type="button"
+            onClick={() => setIsUploadFormOpen(true)}
+            className="add-document-button"
+          >
+            Ajouter un document <LuCirclePlus />
+          </button>
+        )}
 
-            const isImage = ['png', 'jpg', 'jpeg'].includes(fileExtension);
+        {isUploadFormOpen && (
+          <div className="upload-section">
+            <h3>Ajouter un document</h3>
+            <input type="file" onChange={handleFileChange} accept="application/pdf" />
+            <select value={selectedUploadCategory} onChange={handleCategoryChange}>
+              <option value="new">Créer une nouvelle catégorie</option>
+              {categories
+                .filter((category) => category.id_category !== 'all')
+                .map((category) => (
+                  <option key={category.id_category} value={category.id_category}>
+                    {category?.name}
+                  </option>
+                ))}
+            </select>
+
+            {fileError && <p className="error-message">Veuillez sélectionner un fichier PDF</p>}
+            {selectedUploadCategory === 'new' && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Nom de la nouvelle catégorie"
+                  value={newCategoryName}
+                  onChange={handleNewCategoryChange}
+                />
+                {categoryError && <p className="error-message">Veuillez entrer un nom de catégorie</p>}
+              </>
+            )}
+            <div className="upload-buttons">
+              <button onClick={handleUploadDocument}>Télécharger</button>
+              <button onClick={() => setIsUploadFormOpen(false)}>Annuler</button>
+            </div>
+          </div>
+        )}
+
+        <div className="documents-grid">
+          {sortedDocuments.map((doc) => {
+            const fileExtension = doc?.name?.split('.').pop().toLowerCase() || '';
+
             const isPdf = fileExtension === 'pdf';
-            const isHtml = fileExtension === 'html';
             
-            const downloadUrl = `data:application/octet-stream;base64,${doc.document}`;
+            const downloadUrl = `data:application/octet-stream;base64,${doc?.document}`;
 
             return (
-            <div key={doc.id_document} className="document-card">
-                <a href={downloadUrl} download={doc.name} className="document-link">
-                {isImage && (
-                    <img
-                    src={`data:image/${fileExtension};base64,${doc.document}`}
-                    alt={doc.name}
-                    className="document-preview"
-                    />
-                )}
-                {isPdf && (
+              <div key={doc?.id_document} className="document-card">
+                <a href={downloadUrl} download={doc?.name} className="document-link">
+                  {isPdf && (
                     <iframe
-                    src={`data:application/pdf;base64,${doc.document}`}
-                    title={doc.name}
-                    className="document-preview"
+                      src={`data:application/pdf;base64,${doc?.document}`}
+                      title={doc?.name}
+                      className="document-preview"
                     ></iframe>
-                )}
-                {isHtml && (
-                    <iframe
-                    srcDoc={atob(doc.document)}
-                    title={doc.name}
-                    className="document-preview"
-                    ></iframe>
-                )}
-                {!isImage && !isPdf && !isHtml && (
+                  )}
+                  {!isPdf && (
                     <div className="document-unavailable">
-                    <p>Aperçu non disponible pour ce type de fichier</p>
+                      <p>Aperçu non disponible pour ce type de fichier</p>
                     </div>
-                )}
+                  )}
                 </a>
                 <div className="document-info">
-                <h4>{doc.name}</h4>
-                <p>Mis à jour : {new Date(doc.updatedAt).toLocaleDateString()}</p>
+                  <h4>{doc?.name}</h4>
+                  <p>Mis à jour : {new Date(doc?.updatedAt).toLocaleDateString()}</p>
                 </div>
-            </div>
+              </div>
             );
-        })}
+          })}
         </div>
       </div>
     </div>

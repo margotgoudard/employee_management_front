@@ -55,7 +55,6 @@ const MensualTimetable = () => {
   };
 
   const fetchExpenseReports = async () => {
-    console.log("Fetching expense reports...", selectedTimetable.id_timetable);
     try {
       const data = await ExpenseReport.getExpenseReportsByMensualTimetable(
         selectedTimetable.id_timetable
@@ -86,7 +85,6 @@ const MensualTimetable = () => {
   const fetchComplianceCheckResult = async () => {
     try {
       const result = await ComplianceCheck.fetchComplianceCheckResult(selectedTimetable.id_timetable);
-      console.log("Compliance check result: ", result);
       setComplianceCheckResult(result);
     } catch (error) {   
       console.error("Error fetching compliance check result:", error);
@@ -112,7 +110,6 @@ const MensualTimetable = () => {
           if (selected) {
             dispatch(setSelectedTimetable(selected));
             setIsDisabled(selected.status !== "À compléter");
-            console.log("Selected timetable: ", selected);
             const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
               selected.id_timetable
             );
@@ -150,7 +147,6 @@ const MensualTimetable = () => {
     fetchAndCalculateData();
     fetchExpenseReports();
     if(selectedTimetable.status === "En attente d'approbation") {
-      console.log("Compliance check! ");
       fetchComplianceCheckResult();
     }
   }, [selectedTimetable?.id_timetable]);

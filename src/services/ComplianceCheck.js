@@ -6,13 +6,10 @@ class ComplianceCheck {
         try {
             const endpoint = `/compliance-checks/mensual/${id_timetable}`;
             const response = await API.get(endpoint);
-            if (response) {
-                return response; 
-            }
-            return this.mockData();
+            return response; 
+            
         } catch (error) {
             console.error("Erreur lors de la compliance check", error);
-            return this.mockData();
         }
     }
 
