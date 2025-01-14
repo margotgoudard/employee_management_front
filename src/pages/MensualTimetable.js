@@ -13,8 +13,10 @@ import {
   setSelectedTimetable,
   updateDailyTimetables,
 } from "../redux/timetableSlice";
+import MensualTimetableSheet from "../services/MensualTimetableSheet";
 
-const MensualTimetable = () => {
+
+const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
   const user = useSelector((state) => state.auth.user);
   const timetables = useSelector((state) => state.timetable.timetables);
   const { id_timetable } = useParams();
@@ -65,49 +67,57 @@ const MensualTimetable = () => {
           return {
             ...report,
             dailyTimetable,
-  
           };
         })
       );
- 
+
       setExpenseReports(reportsWithDetails);
     } catch (error) {
       console.error("Error fetching expense reports:", error);
     }
   };
 
+  // Réagir aux changements du selectedTimetable
   useEffect(() => {
     if (selectedTimetable && selectedTimetable.year && selectedTimetable.month) {
       setSelectedDate(new Date(selectedTimetable.year, selectedTimetable.month - 1, 1));
     }
   }, [selectedTimetable]);
-  
+
+  // Effet principal pour récupérer le timetable dès que l'ID change
   useEffect(() => {
     const fetchTimetableData = async () => {
       try {
-
         let selected;
-  
+
         if (id_timetable) {
+          // Get timetable by id_timetable (from URL params)
           selected = timetables.find((t) => t.id_timetable === parseInt(id_timetable));
-  
-          if (selected) {
-            dispatch(setSelectedTimetable(selected));
-  
-            const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
-              selected.id_timetable
-            );
-            dispatch(updateDailyTimetables(dailyTimetables));
-          }
+        }
+
+        if (user_id_timetable) {
+          // Fetch timetable for the user
+          const timetablesUser = await MensualTimetableSheet.fetchMensualTimetablesByUser(user_id);
+          // Fetch les timetables du user selectionné
+          selected = timetablesUser.find((t) => t.id_timetable === user_id_timetable);
+        }
+
+        if (selected) {
+          dispatch(setSelectedTimetable(selected));
+          const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
+            selected.id_timetable
+          );
+          dispatch(updateDailyTimetables(dailyTimetables));
         }
       } catch (err) {
-        console.error('Erreur lors de la récupération des données :', err);
+        console.error("Erreur lors de la récupération des données :", err);
       }
     };
-  
+
     fetchTimetableData();
-  }, [user.id_user, id_timetable, dispatch]);
-  
+  }, [user.id_user, id_timetable, user_id_timetable, dispatch]);
+
+  // Rafraîchir les données à chaque changement du selectedTimetable
   useEffect(() => {
     if (!selectedTimetable || !selectedTimetable?.id_timetable) {
       return;
@@ -128,12 +138,12 @@ const MensualTimetable = () => {
     fetchExpenseReports();
   }, [selectedTimetable?.id_timetable]);
 
+  // Rafraîchir les rapports de dépenses à chaque sélection de tableau de bord quotidien
   useEffect(() => {
-    if(selectedTimetable) {
+    if (selectedTimetable) {
       fetchExpenseReports();
     }
   }, [selectedDailyTimetable]);
-
 
   const handleMonthChange = (increment) => {
     const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + increment, 1);
@@ -145,10 +155,10 @@ const MensualTimetable = () => {
     const newTimetable = timetables.find(
       (t) => t.year === newDate.getFullYear() && t.month === newDate.getMonth() + 1
     );
-  
+
     if (newTimetable) {
       dispatch(setSelectedTimetable(newTimetable));
-  
+
       const fetchDailyTimetables = async () => {
         try {
           const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
@@ -159,7 +169,7 @@ const MensualTimetable = () => {
           console.error("Erreur lors de la récupération des données journalières :", error);
         }
       };
-  
+
       fetchDailyTimetables();
     }
   };

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Profile.css';
+import MensualTimetable from '../pages/MensualTimetable';
 
-const MonthlyTimetables = ({ fiches }) => {
+const MonthlyTimetables = ({ fiches, admin = null }) => {
+  const [selectedFiche, setSelectedFiche] = useState(null);
   const navigate = useNavigate();
 
   const months = [
@@ -31,6 +33,11 @@ const MonthlyTimetables = ({ fiches }) => {
     navigate(`/mensual_timetable/${id_timetable}`);
   };
 
+  const handleViewFicheAdmin = (fiche) => {
+    setSelectedFiche(fiche);
+  };
+
+
   return (
     <div className="fiches-horaires">
       <h2>Fiches horaires mensuelles</h2>
@@ -48,13 +55,22 @@ const MonthlyTimetables = ({ fiches }) => {
             </div>
             <button
               className="view-button"
-              onClick={() => handleViewFiche(fiche.id_timetable)} 
+              onClick={() =>
+                admin ? handleViewFicheAdmin(fiche) : handleViewFiche(fiche.id_timetable)
+              }
             >
-              Voir la fiche
+              {admin ? 'Gérer la fiche' : 'Voir la fiche'}
             </button>
           </div>
         ))}
       </div>
+      {/* Affichage des détails de la fiche si une fiche est sélectionnée */}
+      {selectedFiche && (
+        <MensualTimetable 
+          user_id={selectedFiche.id_user} 
+          user_id_timetable={selectedFiche.id_timetable} 
+        />
+      )}
     </div>
   );
 };
