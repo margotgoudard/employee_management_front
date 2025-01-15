@@ -151,12 +151,12 @@
       try {
         const modifiedTimeSlots = timeSlots.filter((slot) => {
           const initialSlot = initialTimeSlots.find((s) => s.id_time_slot === slot.id_time_slot);
-          return initialSlot && JSON.stringify(initialSlot) !== JSON.stringify(slot); // Compare les modifications
+          return initialSlot && JSON.stringify(initialSlot) !== JSON.stringify(slot); 
         });
     
         const modifiedExpenseNotes = expenseNotes.filter((note) => {
           const initialNote = initialExpenseNotes.find((n) => n.id_expense_report === note.id_expense_report);
-          return initialNote && JSON.stringify(initialNote) !== JSON.stringify(note); // Compare les modifications
+          return initialNote && JSON.stringify(initialNote) !== JSON.stringify(note); 
         });
     
         for (let id_time_slot of timeSlotsToDelete) {
