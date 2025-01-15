@@ -1,52 +1,101 @@
 .dashboard-page {
     padding: 20px;
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-  }
-  
-  h2 {
+    background-color: #f0f2f5;
+    min-height: 100vh;
+}
+
+h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .dashboard-table {
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 15px;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filters input,
+.filters select {
+    width: 32%;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.filters input:focus,
+.filters select:focus {
+    border-color: #4CAF50;
+}
+
+.dashboard-table {
     width: 100%;
     border-collapse: collapse;
     margin: 0 auto;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
     border-radius: 8px;
     overflow: hidden;
-  }
-  
-  .dashboard-table th,
-  .dashboard-table td {
-    padding: 12px 15px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-table th,
+.dashboard-table td {
+    padding: 15px 20px;
     text-align: center;
-    border: 1px solid #ddd;
-  }
-  
-  .dashboard-table th {
-    background-color: #4CAF50;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.dashboard-table th {
+    background-color: var(--blue-color);
     color: white;
     font-weight: bold;
-  }
-  
-  .dashboard-table tr:nth-child(even) {
+    text-transform: uppercase;
+}
+
+.dashboard-table tr:nth-child(even) {
     background-color: #f9f9f9;
-  }
-  
-  .dashboard-table tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .dashboard-table td {
-    color: #333;
-  }
-  
-  .dashboard-table td:first-child {
-    font-weight: bold;
-  }
-  
-  
+}
+
+.dashboard-table tr:hover {
+    background-color: #e8f5e9;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-table td {
+    color: #555;
+}
+
+.dashboard-table td:first-child {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.dashboard-table tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .filters {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filters input,
+    .filters select {
+        width: 100%;
+    }
+}

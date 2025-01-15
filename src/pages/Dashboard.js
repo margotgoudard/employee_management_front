@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'; 
 import Department from '../services/Department';
-import TimeSlot from '../services/TimeSlot';
 import ExpenseReport from '../services/ExpenseReport';
 import '../assets/styles/Dashboard.css';
 import MensualTimetableSheet from '../services/MensualTimetableSheet';
 
 const Dashboard = () => {
-  const [data, setData] = useState([]); 
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchName, setSearchName] = useState('');
+  const [searchDepartment, setSearchDepartment] = useState('');
+  const [searchStatus, setSearchStatus] = useState('');
+  const [departments, setDepartments] = useState([]);
+  
   const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchSubordinates = async () => {
@@ -17,7 +24,7 @@ const Dashboard = () => {
         const enrichedData = await Promise.all(
           fetchedSubordinates.map(async (sub) => {
             const lastTimetable = await MensualTimetableSheet.getLastMensualTimetable(sub.user.id_user);
-
+  
             if (!lastTimetable) {
               return {
                 ...sub,
@@ -26,34 +33,101 @@ const Dashboard = () => {
                 timetableStatus: 'Non disponible',
               };
             }
-
+  
             const totalHours = await MensualTimetableSheet.getMensualWorkedHours(lastTimetable.id_timetable);
-            console.log(totalHours)
             const expenseReports = await ExpenseReport.getExpenseReportsByMensualTimetable(lastTimetable.id_timetable);
             const totalExpenses = expenseReports.reduce((sum, report) => sum + report.amount, 0);
-
+  
             return {
               ...sub,
               totalHours: totalHours.toFixed(2),
               totalExpenses: totalExpenses.toFixed(2),
               timetableStatus: lastTimetable.status,
-              commission: lastTimetable.commission
+              commission: lastTimetable.commission,
             };
           })
         );
-
+  
         setData(enrichedData);
+        setFilteredData(enrichedData);
+  
+        const uniqueDepartments = [
+          ...new Set(enrichedData.map((sub) => sub.user.department.name))
+        ];
+        setDepartments(uniqueDepartments);
       } catch (err) {
         console.error('Erreur lors de la récupération des subordonnés :', err);
       }
     };
-
+  
     fetchSubordinates();
   }, [user.id_user]);
+  
+  useEffect(() => {
+    const applyFilters = () => {
+      const lowerSearchName = searchName.toLowerCase();
+
+      const filtered = data.filter((sub) => {
+        const matchesName = `${sub.user.first_name} ${sub.user.last_name}`
+          .toLowerCase()
+          .includes(lowerSearchName);
+        
+        const matchesDepartment = searchDepartment
+          ? sub.user.department.name === searchDepartment
+          : true;
+        
+        const matchesStatus = searchStatus
+          ? sub.timetableStatus === searchStatus
+          : true;
+        
+        return matchesName && matchesDepartment && matchesStatus;
+      });
+
+      setFilteredData(filtered);
+    };
+
+    applyFilters();
+  }, [searchName, searchDepartment, searchStatus, data]);
+
+  const handleRowClick = (id_user) => {
+    navigate(`/profile/${id_user}`);
+  };
 
   return (
     <div className="dashboard-page">
       <h2>Tableau des subordonnés</h2>
+
+      <div className="filters">
+        <input
+          type="text"
+          placeholder="Rechercher par nom..."
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+        />
+
+        <select
+        value={searchDepartment}
+        onChange={(e) => setSearchDepartment(e.target.value)}
+        >
+        <option value="">Tous les départements</option>
+        {departments.map((dept, index) => (
+            <option key={index} value={dept}>
+            {dept}
+            </option>
+        ))}
+        </select>
+
+        <select
+          value={searchStatus}
+          onChange={(e) => setSearchStatus(e.target.value)}
+        >
+          <option value="">Tous les statuts</option>
+          <option value="Acceptée">Acceptée</option>
+          <option value="En attente d'approbation">En attente</option>
+          <option value="À compléter">À compléter</option>
+        </select>
+      </div>
+
       <table className="dashboard-table">
         <thead>
           <tr>
@@ -66,13 +140,17 @@ const Dashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((sub) => (
-            <tr key={sub.user.id_user}>
+          {filteredData.map((sub) => (
+            <tr
+              key={sub.user.id_user}
+              onClick={() => handleRowClick(sub.user.id_user)} 
+              style={{ cursor: 'pointer' }} 
+            >
               <td>{`${sub.user.first_name} ${sub.user.last_name}`}</td>
               <td>{sub.totalHours}</td>
               <td>{sub.user.department.name}</td>
               <td>{sub.totalExpenses}</td>
-              <td>{sub.commission != null ? sub.commission : 0}</td>
+              <td>{sub.commission != null ? sub.commission : 0.00}</td>
               <td>{sub.timetableStatus}</td>
             </tr>
           ))}
