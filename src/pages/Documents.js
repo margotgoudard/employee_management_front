@@ -274,35 +274,41 @@ const Documents = () => {
           </div>
         )}
 
+      {currentDocuments.length === 0 ? (
+          <p style={{ color: 'gray', textAlign: 'center', marginTop: '20px' }}>
+            Vous n'avez pas de document
+          </p>
+        ) : (
         <div className="documents-grid">
-          {currentDocuments.map((doc) => {
-            const fileExtension = doc?.name?.split('.').pop().toLowerCase() || '';
-            const isPdf = fileExtension === 'pdf';
-            const downloadUrl = `data:application/octet-stream;base64,${doc?.document}`;
+            {currentDocuments.map((doc) => {
+              const fileExtension = doc?.name?.split('.').pop().toLowerCase() || '';
+              const isPdf = fileExtension === 'pdf';
+              const downloadUrl = `data:application/octet-stream;base64,${doc?.document}`;
 
-            return (
-              <div key={doc?.id_document} className="document-card">
-                <a href={downloadUrl} download={doc?.name} className="document-link">
-                  {isPdf ? (
-                    <iframe
-                      src={`data:application/pdf;base64,${doc?.document}`}
-                      title={doc?.name}
-                      className="document-preview"
-                    ></iframe>
-                  ) : (
-                    <div className="document-unavailable">
-                      <p>Aperçu non disponible pour ce type de fichier</p>
-                    </div>
-                  )}
-                </a>
-                <div className="document-info">
-                  <h4>{doc?.name}</h4>
-                  <p>Mis à jour : {new Date(doc?.updatedAt).toLocaleDateString()}</p>
+              return (
+                <div key={doc?.id_document} className="document-card">
+                  <a href={downloadUrl} download={doc?.name} className="document-link">
+                    {isPdf ? (
+                      <iframe
+                        src={`data:application/pdf;base64,${doc?.document}`}
+                        title={doc?.name}
+                        className="document-preview"
+                      ></iframe>
+                    ) : (
+                      <div className="document-unavailable">
+                        <p>Aperçu non disponible pour ce type de fichier</p>
+                      </div>
+                    )}
+                  </a>
+                  <div className="document-info">
+                    <h4>{doc?.name}</h4>
+                    <p>Mis à jour : {new Date(doc?.updatedAt).toLocaleDateString()}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+               );
+              })}
+            </div>
+          )}
 
         <div className="pagination-buttons">
           <button onClick={handlePrevPage} disabled={currentPage === 1}>
