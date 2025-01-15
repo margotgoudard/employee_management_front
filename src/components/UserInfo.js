@@ -48,9 +48,6 @@ const UserInfo = ({ user, admin }) => {
       const response = User.update(editedUser);
       if(response){
         setIsEditMode(false); 
-        if(currentUser.id_user === editedUser.id_user){
-          dispatch(updateUser(editedUser));
-        }
       }
     } catch (error) {
       console.error('Failed to update user profile:', error);
@@ -111,10 +108,14 @@ const UserInfo = ({ user, admin }) => {
         />
       </div>
 
-      {admin && <button className="view-documents-button" onClick={() => handleViewDoc()}>
-        <FaFileAlt className="file-icon" />
-        Voir tous les documents
-      </button>}
+      {admin && 
+        <div className="button-container">
+          <button className="view-documents-button" onClick={() => handleViewDoc()}>
+            <FaFileAlt className="file-icon" />
+            Voir tous les documents
+          </button>
+        </div>
+      }
 
       { !isDisabled &&
         <div className="button-container">

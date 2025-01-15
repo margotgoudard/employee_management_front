@@ -19,7 +19,7 @@ const App = () => {
   const isLoginPage = location.pathname === '/';
 
   return (
-    <div>
+    <>
       {!isLoginPage && <Navbar />}
 
       <Routes>
@@ -32,7 +32,7 @@ const App = () => {
         <Route path="/departments" element={<Departments />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
-    </div>
+    </>
   );
 };
 
