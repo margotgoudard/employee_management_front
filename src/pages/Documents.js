@@ -181,7 +181,7 @@ const Documents = () => {
   const indexOfFirstDocument = indexOfLastDocument - documentsPerPage;
   const currentDocuments = sortedDocuments.slice(indexOfFirstDocument, indexOfLastDocument);
 
-  const totalPages = Math.ceil(sortedDocuments.length / documentsPerPage);
+  const totalPages = Math.max(1, Math.ceil(sortedDocuments.length / documentsPerPage));
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
