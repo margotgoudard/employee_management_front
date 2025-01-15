@@ -23,12 +23,11 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import JSZip from "jszip";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
-
 import { TbFileExport } from "react-icons/tb";
+import User from "../services/User";
 
 const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }) => {
   const managerView = user_id !== null;
-  const user = useSelector((state) => state.auth.user);
   const timetables = useSelector((state) => state.timetable.timetables);
   const { id_timetable } = useParams();
   const [selectedDate, setSelectedDate] = useState(null);
@@ -40,11 +39,10 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   const [complianceCheckResult, setComplianceCheckResult] = useState({});
   const [complianceCheckResultForDailyTimetable, setComplianceCheckResultForDailyTimetable] = useState(null);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   const [weeklyHours, setWeeklyHours] = useState([]);
   const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
   const dispatch = useDispatch();
-
-  
 
   const handleDayClick = (day) => {
     const selectedDailyTimetable = selectedTimetable.daily_timetable_sheets.find(
@@ -99,6 +97,16 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
     onUpdate()
 
   }
+
+  const fetchUserInfo = async (id_user) => {
+    try {
+      const user = await User.fetchUser(id_user); 
+      console.log(user)
+      setUserInfo(user);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des informations de l'utilisateur :", error);
+    }
+  };
  
   const fetchWeeklyHours = async () => {
     if (selectedTimetable.id_timetable) {
@@ -119,26 +127,24 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   };
   
   useEffect(() => {
+    fetchUserInfo(selectedTimetable.id_user);
+
     const fetchTimetableData = async () => {
       try {
         let selected;
 
         if (id_timetable) {
-          // Get timetable by id_timetable (from URL params)
           selected = timetables.find((t) => t.id_timetable === parseInt(id_timetable));
         }
 
         if (user_id_timetable) {
-          // Fetch timetable for the user
           const timetablesUser = await MensualTimetableSheet.fetchMensualTimetablesByUser(user_id);
-          // Fetch les timetables du user selectionné
           selected = timetablesUser.find((t) => t.id_timetable === user_id_timetable);
         }
 
         if (selected) {
           dispatch(setSelectedTimetable(selected));
           setIsDisabled(selected.status !== "À compléter");
-          console.log("Selected timetable: ", selected);
           const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
             selected.id_timetable
           );
@@ -180,13 +186,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
       fetchComplianceCheckResult();
     }
   }, [selectedTimetable?.id_timetable]);
-
-  // Rafraîchir les rapports de dépenses à chaque sélection de tableau de bord quotidien
-  //useEffect(() => {
-  //  if (selectedTimetable) {
-  //    fetchExpenseReports();
-  //  }
-  //}, [selectedDailyTimetable]);
 
   const handleMonthChange = (increment) => {
     const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + increment, 1);
@@ -255,7 +254,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   };
 
   const onSubmitSuccess = (updatedTimetable) => {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     showAlert("Votre fiche horaire a été soumise avec succès", "success")
     dispatch(setSelectedTimetable(updatedTimetable));
     setIsDisabled(updatedTimetable.status !== "À compléter");
@@ -275,6 +273,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
     if (!selectedTimetable || !selectedTimetable.daily_timetable_sheets) return;
   
     const csvRows = [];
+    csvRows.push(`Employé : ${userInfo.first_name} ${userInfo.last_name}\n`);
     csvRows.push(`Mois;${selectedTimetable.month}/${selectedTimetable.year}\n`);
     csvRows.push("Jour;Début;Fin;Total heures jour;Total heures semaine;Total heures mois;Total notes de frais journée;Total commissions;Total notes de frais mensuel\n");
   
@@ -336,7 +335,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
     if (!selectedTimetable || !selectedTimetable.daily_timetable_sheets) return;
   
     const doc = new jsPDF();
-    const title = `${selectedTimetable.month}/${selectedTimetable.year}`;
+    const title = `Employé : ${userInfo.first_name} ${userInfo.last_name} - ${selectedTimetable.month}/${selectedTimetable.year}`;
     doc.text(title, 14, 10);
   
     let totalMonthlyHours = 0;
@@ -459,14 +458,14 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   
     const csvPromise = new Promise((resolve) => {
       exportToCSV((csvContent) => {
-        zip.file(`Mensual_Timetable_${selectedTimetable.month}_${selectedTimetable.year}.csv`, csvContent);
+        zip.file(`Mensual_Timetable_${userInfo.first_name}_${userInfo.last_name}_${selectedTimetable.month}_${selectedTimetable.year}.csv`, csvContent);
         resolve();
       });
     });
   
     const pdfPromise = new Promise((resolve) => {
       exportToPDF((pdfBlob) => {
-        zip.file(`Mensual_Timetable_${selectedTimetable.month}_${selectedTimetable.year}.pdf`, pdfBlob);
+        zip.file(`Mensual_Timetable_${userInfo.first_name}_${userInfo.last_name}_${selectedTimetable.month}_${selectedTimetable.year}.pdf`, pdfBlob);
         resolve();
       });
     });

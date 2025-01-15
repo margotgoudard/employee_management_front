@@ -21,10 +21,12 @@ const Departments = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user?.id_user) return;
+
     const fetchDepartmentsRecursively = async (departmentId, collectedDepartments) => {
       try {
         const dept = await Department.fetchDepartmentById(departmentId);
-        if (dept && !collectedDepartments.some((d) => d.id_department === dept.id_department)) {
+        if (dept && !collectedDepartments.some((d) => d?.id_department === dept?.id_department)) {
           collectedDepartments.push(dept);
 
           if (dept.id_sup_department) {
@@ -38,8 +40,8 @@ const Departments = () => {
 
     const fetchData = async () => {
       try {
-        const fetchedDepartment = await Department.fetchDepartmentById(user.id_department);
-        const fetchedUsers = await Department.fetchAllSubordinatesByManager(user.id_user);
+        const fetchedDepartment = await Department.fetchDepartmentById(user?.id_department);
+        const fetchedUsers = await Department.fetchAllSubordinatesByManager(user?.id_user);
 
         const currentUser = {
           user: {
@@ -73,7 +75,7 @@ const Departments = () => {
     };
 
     fetchData();
-  }, [user.id_user]);
+  }, [user?.id_user]);
 
   const toggleUsers = (departmentId) => {
     setExpandedUsers((prev) => ({

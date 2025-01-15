@@ -12,8 +12,9 @@ const Notifications = () => {
   });
 
   useEffect(() => {
+    if (!user?.id_user) return;
+
     const fetchNotifications = async () => {
-      if (user?.id_user) {
         try {
           const fetchedNotifications = await Notification.fetchNotificationsByUser();
           const success = fetchedNotifications.filter((notif) => notif.type === 'success');
@@ -23,11 +24,10 @@ const Notifications = () => {
         } catch (error) {
           console.error('Error fetching notifications:', error);
         }
-      }
     };
 
     fetchNotifications();
-  }, [user]);
+  }, [user?.id_user]);
 
   const handleDelete = async (notificationId) => {
       try {

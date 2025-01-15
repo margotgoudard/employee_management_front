@@ -12,7 +12,7 @@ const Profile = () => {
   const { id_user } = useParams(); 
 
   const [displayedUser, setDisplayedUser] = useState(null); 
-  const [displayedFiches, setDisplayedFiches] = useState([]); // Assure-toi que l'état initial est un tableau vide
+  const [displayedFiches, setDisplayedFiches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); 
   const fetchDataExecuted = useRef(false);
@@ -24,19 +24,18 @@ const Profile = () => {
 
       if (connectedUser?.id_user) {
         const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(connectedUser.id_user);
-        setDisplayedFiches(fetchedFiches); // Met à jour directement l'état des fiches
+        setDisplayedFiches(fetchedFiches); 
         fetchedUser = connectedUser;
       }
 
       if (id_user) {
-        // Si un id_user est dans l'URL, charger cet utilisateur
         fetchedUser = await User.fetchUser(id_user);
       }
 
       if (fetchedUser) {
         setDisplayedUser(fetchedUser);
         const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(fetchedUser.id_user);
-        setDisplayedFiches(fetchedFiches); // Met à jour l'état des fiches
+        setDisplayedFiches(fetchedFiches); 
       } else {
         throw new Error("Utilisateur introuvable.");
       }
@@ -53,11 +52,12 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    //if (fetchDataExecuted.current) return; // Empêche de refaire le fetch plusieurs fois
+    if (!connectedUser?.id_user) return;
+
     fetchDataExecuted.current = true;
 
-    fetchData(); // Appelle la fonction pour récupérer les données au premier rendu
-  }, [id_user, connectedUser]);
+    fetchData();
+  }, [id_user, connectedUser?.id_user]);
 
   if (loading) {
     return <p>Chargement des informations utilisateur...</p>;
