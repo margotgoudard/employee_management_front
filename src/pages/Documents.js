@@ -29,9 +29,11 @@ const Documents = () => {
   const { id_user } = useParams();
 
   useEffect(() => {
+    if (!user?.id_user) return;
+
     const fetchDocumentsAndCategories = async () => {
       try {
-        const allDocuments = await DocumentService.fetchDocumentsByIdUser(user.id_user);
+        const allDocuments = await DocumentService.fetchDocumentsByIdUser(user?.id_user);
         setDocuments(allDocuments);
         setFilteredDocuments(allDocuments);
   
@@ -58,9 +60,11 @@ const Documents = () => {
     };
   
     fetchDocumentsAndCategories();
-  }, [user.id_user]);
+  }, [user?.id_user]);
   
   useEffect(() => {
+    if (!user?.id_user) return;
+
     if (selectedCategory === 'all') {
       setFilteredDocuments(documents); 
     } else {
@@ -70,6 +74,8 @@ const Documents = () => {
   }, [selectedCategory, documents]);
 
   useEffect(() => {
+    if (!user?.id_user) return;
+
     const categoryFiltered = selectedCategory === 'all'
       ? documents
       : documents.filter((doc) => doc?.id_document_category === selectedCategory);
@@ -82,6 +88,8 @@ const Documents = () => {
   }, [searchTerm, selectedCategory, documents]);
   
   useEffect(() => {
+    if (!user?.id_user) return;
+
     calculateDocumentsPerRow(); 
     window.addEventListener('resize', calculateDocumentsPerRow);
     return () => window.removeEventListener('resize', calculateDocumentsPerRow);
@@ -136,11 +144,10 @@ const Documents = () => {
       formData.append('document', selectedFile);
       formData.append('document_name', selectedFile?.name);
       formData.append('id_document_category', categoryId);
-      formData.append('id_user', id_user);
+      id_user && formData.append('id_user', id_user);
 
       const newDocument = await DocumentService.createDocument(formData);
       setDocuments((prevDocuments) => [...prevDocuments, newDocument]);
-      console.log("new",newDocument)
       setFilteredDocuments((prevDocuments) => {
         if (selectedCategory === 'all' || selectedCategory === categoryId) {
           return [...prevDocuments, newDocument];
@@ -181,7 +188,7 @@ const Documents = () => {
   const indexOfFirstDocument = indexOfLastDocument - documentsPerPage;
   const currentDocuments = sortedDocuments.slice(indexOfFirstDocument, indexOfLastDocument);
 
-  const totalPages = Math.ceil(sortedDocuments.length / documentsPerPage);
+  const totalPages = Math.max(1, Math.ceil(sortedDocuments.length / documentsPerPage));
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -230,7 +237,7 @@ const Documents = () => {
           </div>
         </div>
 
-        {Number(id_user) !== user.id_user && !isUploadFormOpen && (
+        {id_user && Number(id_user) !== user?.id_user && !isUploadFormOpen && (
           <button
             type="button"
             onClick={() => setIsUploadFormOpen(true)}
@@ -274,35 +281,41 @@ const Documents = () => {
           </div>
         )}
 
+      {currentDocuments.length === 0 ? (
+          <p style={{ color: 'gray', textAlign: 'center', marginTop: '20px' }}>
+            Vous n'avez pas de document
+          </p>
+        ) : (
         <div className="documents-grid">
-          {currentDocuments.map((doc) => {
-            const fileExtension = doc?.name?.split('.').pop().toLowerCase() || '';
-            const isPdf = fileExtension === 'pdf';
-            const downloadUrl = `data:application/octet-stream;base64,${doc?.document}`;
+            {currentDocuments.map((doc) => {
+              const fileExtension = doc?.name?.split('.').pop().toLowerCase() || '';
+              const isPdf = fileExtension === 'pdf';
+              const downloadUrl = `data:application/octet-stream;base64,${doc?.document}`;
 
-            return (
-              <div key={doc?.id_document} className="document-card">
-                <a href={downloadUrl} download={doc?.name} className="document-link">
-                  {isPdf ? (
-                    <iframe
-                      src={`data:application/pdf;base64,${doc?.document}`}
-                      title={doc?.name}
-                      className="document-preview"
-                    ></iframe>
-                  ) : (
-                    <div className="document-unavailable">
-                      <p>Aperçu non disponible pour ce type de fichier</p>
-                    </div>
-                  )}
-                </a>
-                <div className="document-info">
-                  <h4>{doc?.name}</h4>
-                  <p>Mis à jour : {new Date(doc?.updatedAt).toLocaleDateString()}</p>
+              return (
+                <div key={doc?.id_document} className="document-card">
+                  <a href={downloadUrl} download={doc?.name} className="document-link">
+                    {isPdf ? (
+                      <iframe
+                        src={`data:application/pdf;base64,${doc?.document}`}
+                        title={doc?.name}
+                        className="document-preview"
+                      ></iframe>
+                    ) : (
+                      <div className="document-unavailable">
+                        <p>Aperçu non disponible pour ce type de fichier</p>
+                      </div>
+                    )}
+                  </a>
+                  <div className="document-info">
+                    <h4>{doc?.name}</h4>
+                    <p>Mis à jour : {new Date(doc?.updatedAt).toLocaleDateString()}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+               );
+              })}
+            </div>
+          )}
 
         <div className="pagination-buttons">
           <button onClick={handlePrevPage} disabled={currentPage === 1}>
