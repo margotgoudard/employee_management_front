@@ -104,11 +104,6 @@ const Navbar = () => {
             </button>
           </li>
           <li>
-            <button className={`navbar-button ${isActive('/dashboard') ? 'active' : ''}`}>
-              Dashboard
-            </button>
-          </li>
-          <li>
           <button
               onClick={handleDepartmentsClick}
               className={`navbar-button ${isActive('/departments') ? 'active' : ''}`} >
