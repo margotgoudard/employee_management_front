@@ -21,7 +21,7 @@ const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
 
   const getStatusClass = (status) => {
     switch (status) {
-      case 'Validée':
+      case 'Acceptée':
         return 'status-green';
       case 'En attente d\'approbation':
         return 'status-orange';
