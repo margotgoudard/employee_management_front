@@ -11,6 +11,7 @@ import ExpenseReport from "../services/ExpenseReport";
 import Alert from "../components/Alert";
 import {
   setSelectedTimetable,
+  setTimetables,
   updateDailyTimetables,
 } from "../redux/timetableSlice";
 import ComplianceCheck from "../services/ComplianceCheck";
@@ -212,13 +213,24 @@ const MensualTimetable = () => {
 
     setTimeout(() => {
       setAlert({ message: "", type: "" });
-    }, 3000);
+    }, 999);
   };
 
-  const onSubmitSuccess = () => {
-    showAlert("Votre fiche horaire a été soumise avec succès", "success")
-    fetchComplianceCheckResult();
-  }
+  const onSubmitSuccess = (updatedTimetable) => {
+    dispatch(setSelectedTimetable(updatedTimetable));
+  
+    dispatch(
+      setTimetables(
+        timetables.map((t) =>
+          t.id_timetable === updatedTimetable.id_timetable ? updatedTimetable : t
+        )
+      )
+    );
+  
+    showAlert("Votre fiche horaire a été soumise avec succès", "success");
+    fetchComplianceCheckResult();  
+  };
+  
 
   const fetchComplianceCheckResultForDailyTimetable = (dailyTimetable) => {
     if(complianceCheckResult) {

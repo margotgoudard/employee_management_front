@@ -62,7 +62,7 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
       await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
       
       if (onSubmitSuccess) {
-        onSubmitSuccess();
+        onSubmitSuccess(updatedTimetable);
       }
     } catch (error) {
       console.error("Erreur lors de la soumission :", error);
