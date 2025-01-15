@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaFileAlt } from 'react-icons/fa'; // Import de l'icône
+import { FaFileAlt } from 'react-icons/fa'; 
 import '../assets/styles/Profile.css';
 import { useSelector } from 'react-redux';
 import User from '../services/User';
