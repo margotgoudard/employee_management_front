@@ -10,17 +10,15 @@ import { useNavigate } from 'react-router-dom';
 
 const UserInfo = ({ user, admin }) => {
   const navigate = useNavigate();
-
-
-  const handleViewDoc = () => {
-    navigate(`/documents/${user.id_user}`)
-  }
-
   const [isEditMode, setIsEditMode] = useState(false); 
   const [editedUser, setEditedUser] = useState({}); 
   const [isDisabled, setIsDisabled] = useState(true);
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.user);
+
+  const handleViewDoc = () => {
+    navigate(`/documents/${user.id_user}`)
+  }
 
   useEffect(() => {
     if (currentUser?.is_admin || currentUser?.is_sup_admin) {

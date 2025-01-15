@@ -19,12 +19,12 @@ import { saveAs } from 'file-saver';
 import { getISOWeek } from "date-fns";
 import TimeSlot from "../services/TimeSlot";
 import ExpenseReportService from "../services/ExpenseReport";
-import { AiOutlineExport } from "react-icons/ai";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import JSZip from "jszip";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 
+import { TbFileExport } from "react-icons/tb";
 
 const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }) => {
   const managerView = user_id !== null;
@@ -453,6 +453,8 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   const exportToZip = async () => {
     if (!selectedTimetable || !selectedTimetable.daily_timetable_sheets) return;
   
+    showAlert("Exportation en cours...", "warning");
+  
     const zip = new JSZip();
   
     const csvPromise = new Promise((resolve) => {
@@ -473,17 +475,20 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   
     zip.generateAsync({ type: "blob" }).then((content) => {
       saveAs(content, `Mensual_Timetable_${selectedTimetable.month}_${selectedTimetable.year}.zip`);
+      
+      showAlert("Exportation terminée avec succès", "success");
+    }).catch(() => {
+      showAlert("Erreur lors de l'exportation", "error");
     });
-  };
+  }; 
   
-
   return (
     <div className="mensual-timetable">
       <div className="content-layout">
         <div className="timetable-layout">
           <div className="main-section">
-          <button onClick={exportToZip} className="export-button">
-            <AiOutlineExport />
+          <button onClick={exportToZip} className="export-button" title="Exporter en pdf/csv">
+            <TbFileExport size={20}/>
             </button>
             <CalendarComponent
               selectedDate={selectedDate}

@@ -1,6 +1,5 @@
 .documents-page {
     display: flex;
-    height: 100vh;
     margin-top: 3%;
   }
   
@@ -9,7 +8,6 @@
     background-color:var(--blue-color);
     color: white;
     padding: 20px;
-    min-height: 110%;
   }
   
   .sidebar h3 {
@@ -225,5 +223,36 @@
     font-size: 12px;
     margin-top: -10px;
     margin-bottom: 10px;
+  }
+  
+  .pagination-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 10%;  
+  }
+
+  .pagination-buttons button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination-buttons button:disabled {
+    opacity: 0.5;
+  }
+  
+  .pagination-buttons span {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  
+  @media (max-width: 768px) {
+    .documents-page {
+      margin-top: 10%;
+    }
   }
   

@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../assets/styles/Profile.css';
+import '../assets/styles/MonthlyTimetables.css';
 import MensualTimetable from '../pages/MensualTimetable';
+import { HiOutlineArrowCircleLeft } from "react-icons/hi";
+import { HiOutlineArrowCircleRight } from "react-icons/hi";
 
 const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
   const [selectedFiche, setSelectedFiche] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(1); 
+  const [startIndex, setStartIndex] = useState(0); 
+  const fichesRef = useRef(null);
   const navigate = useNavigate();
 
   const months = [
@@ -12,9 +17,7 @@ const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
     'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
   ];
 
-  const getMonthName = (monthNumber) => {
-    return months[monthNumber - 1] || '';
-  };
+  const getMonthName = (monthNumber) => months[monthNumber - 1] || '';
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -42,22 +45,52 @@ const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
   }
 
 
+  const handleResize = () => {
+    if (fichesRef.current) {
+      const containerWidth = fichesRef.current.offsetWidth;
+      const ficheWidth = 250; 
+      const count = Math.min(Math.floor(containerWidth / ficheWidth), 4); 
+      setVisibleCount(count > 0 ? count : 1);
+    }
+  };
+  
+
+  const handleNext = () => {
+    setStartIndex((prevIndex) => (prevIndex + visibleCount) % fiches.length);
+  };
+
+  const handlePrev = () => {
+    setStartIndex((prevIndex) =>
+      (prevIndex - visibleCount + fiches.length) % fiches.length
+    );
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const visibleFiches = [
+    ...fiches.slice(startIndex, startIndex + visibleCount),
+    ...fiches.slice(0, Math.max(0, startIndex + visibleCount - fiches.length))
+  ];
+
   return (
     <div className="fiches-horaires">
       <h2>Fiches horaires mensuelles</h2>
-      <div className="fiches-list">
-        {fiches.map((fiche) => (
-          <div className="fiche-card" key={fiche.id_timetable}>
-            <div className="fiche-content">
-              <div className="fiche-icon">
-                <div className="icon-placeholder"></div>
+      <div className="fiches-container">
+        <button className="arrow left" onClick={handlePrev}><HiOutlineArrowCircleLeft/></button>
+        <div className="fiches-list" ref={fichesRef}>
+          {visibleFiches.map((fiche) => (
+            <div className="fiche-card" key={fiche.id_timetable}>
+              <div className="fiche-content">
+                <div className="fiche-details">
+                  <h3>{`${getMonthName(fiche.month)} ${fiche.year}`}</h3>
+                  <p className={`${getStatusClass(fiche.status)}`}>{fiche.status}</p>
+                </div>
               </div>
-              <div className="fiche-details">
-                <h3>{`${getMonthName(fiche.month)} ${fiche.year}`}</h3>
-                <p className={`${getStatusClass(fiche.status)}`}>{fiche.status}</p>
-              </div>
-            </div>
-            <button
+              <button
               className="view-button"
               onClick={() =>
                 admin ? handleViewFicheAdmin(fiche) : handleViewFiche(fiche.id_timetable)
@@ -65,10 +98,12 @@ const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
             >
               {admin ? 'Gérer la fiche' : 'Voir la fiche'}
             </button>
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
+        <button className="arrow right" onClick={handleNext}><HiOutlineArrowCircleRight/></button>
       </div>
-      {/* Affichage des détails de la fiche si une fiche est sélectionnée */}
+      
       {selectedFiche && (
         <MensualTimetable 
           user_id={selectedFiche.id_user} 

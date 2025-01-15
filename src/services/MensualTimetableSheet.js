@@ -70,7 +70,6 @@ class MensualTimetableSheet {
         try {
             const endpoint = `/mensual-timetable-sheets/last/${id_user}`;
             const response = await API.get(endpoint);
-            console.log(response)
             return response; 
         } catch (error) {
             console.error("Erreur lors de la récupération de la dernière timetable", error);
