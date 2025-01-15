@@ -18,6 +18,7 @@ import MensualTimetableSheet from "../services/MensualTimetableSheet";
 
 
 const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
+  const managerView = user_id !== null;
   const user = useSelector((state) => state.auth.user);
   const timetables = useSelector((state) => state.timetable.timetables);
   const { id_timetable } = useParams();
@@ -260,6 +261,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
               onDateChange={handleDateChange}
               onMonthChange={handleMonthChange}
               onDayClick={handleDayClick}
+              managerView={managerView} 
             />
             <MonthlyDetails
               selectedTimetable={selectedTimetable}

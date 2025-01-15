@@ -11,7 +11,8 @@ const CalendarComponent = ({
   onDateChange,
   onMonthChange,
   selectedTimetable,
-  onDayClick
+  onDayClick,
+  managerView,
 }) => {
   const [activeStartDate, setActiveStartDate] = useState(selectedDate);
   const [activatedDate, setActivatedDate] = useState(null);
@@ -67,7 +68,6 @@ const CalendarComponent = ({
   };
 
   const tileContent = ({ date, view }) => {
-    // Affiche le numéro de semaine uniquement dans la vue "month"
     if (view === 'month') {
       if(date.getDay() === 1){
         const weekNumber = getISOWeek(date); 
@@ -102,7 +102,7 @@ const CalendarComponent = ({
           </div>
         );
     }
-    return null; // Pas de contenu pour les autres jours
+    return null; 
   };
 }
   
@@ -110,15 +110,15 @@ const CalendarComponent = ({
   return (
     <div className="calendar-wrapper">
       <div className="calendar-section">
-        <div className="calendar-header">
-          <BsArrowLeft
-            onClick={() => onMonthChange(-1)}
-          />
-          <h2>{activeStartDate?.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}</h2>
-          <BsArrowRight
-            onClick={() => onMonthChange(1)}
-          />
-        </div>
+      <div className="calendar-header">
+        {!managerView && ( 
+          <BsArrowLeft onClick={() => onMonthChange(-1)} />
+        )}
+        <h2>{activeStartDate?.toLocaleString("fr-FR", { month: "long", year: "numeric" })}</h2>
+        {!managerView && ( 
+          <BsArrowRight onClick={() => onMonthChange(1)} />
+        )}
+      </div>
         <Calendar
           value={selectedDate}
           activeStartDate={activeStartDate} 
