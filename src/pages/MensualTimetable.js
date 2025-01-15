@@ -19,10 +19,10 @@ import { saveAs } from 'file-saver';
 import { getISOWeek } from "date-fns";
 import TimeSlot from "../services/TimeSlot";
 import ExpenseReportService from "../services/ExpenseReport";
-import { AiOutlineExport } from "react-icons/ai";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import JSZip from "jszip";
+import { TbFileExport } from "react-icons/tb";
 
 const MensualTimetable = () => {
   const timetables = useSelector((state) => state.timetable.timetables);
@@ -453,7 +453,7 @@ const MensualTimetable = () => {
         <div className="timetable-layout">
           <div className="main-section">
           <button onClick={exportToZip} className="export-button">
-            <AiOutlineExport />
+            <TbFileExport size={20}/>
             </button>
             <CalendarComponent
               selectedDate={selectedDate}
