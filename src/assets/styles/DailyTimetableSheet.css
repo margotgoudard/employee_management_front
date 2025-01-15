@@ -109,7 +109,7 @@ input[type="checkbox"] {
   margin-left: 20px; 
 }
 
-.daily-timetable-sheet .button-container {
+.button-container {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -117,7 +117,7 @@ input[type="checkbox"] {
   margin-top: 20px;
 }
 
-.daily-timetable-sheet button.save-button {
+button.save-button {
   padding: 10px 20px;
   font-size: 16px;
   color: #fff;
@@ -126,12 +126,12 @@ input[type="checkbox"] {
   border-radius: 5px;
   cursor: pointer;
 }
-  
-.daily-timetable-sheet button.save-button:hover {
+
+button.save-button:hover {
   background-color: #0056b3;
 }
 
-.daily-timetable-sheet button.cancel-button {
+button.cancel-button {
   padding: 10px 20px;
   font-size: 16px;
   color: #fff;
@@ -141,12 +141,12 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-.daily-timetable-sheet button.cancel-button:hover {
+button.cancel-button:hover {
   background-color: var(--gray-hover-color);
   color: black;
 }
   
-.daily-timetable-sheet button {
+button {
   color: var(--blue-color);
   background-color: #ffffff;
   border: none;

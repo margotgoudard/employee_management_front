@@ -123,13 +123,13 @@
     transition: background-color 0.3s, box-shadow 0.3s;
   }
 
-  .button-container {
+  .department-page .button-container {
     display: flex;
     justify-content: space-between;
     margin: 20px 4%;
   }
   
-  .button-container button {
+  .department-page .button-container button {
     padding: 10px 20px;
     font-size: 16px;
     color: var(--blue-color);
