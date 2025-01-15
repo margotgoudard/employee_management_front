@@ -11,6 +11,7 @@ import MensualTimetable from './pages/MensualTimetable';
 import Documents from './pages/Documents';
 import Notifications from './pages/Notifications';
 import Departments from './pages/Departments';
+import Dashboard from './pages/Dashboard';
 
 const App = () => {
   const location = useLocation();
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/documents/:id_user" element={<Documents />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/departments" element={<Departments />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </div>
   );

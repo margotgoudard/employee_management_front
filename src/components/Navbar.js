@@ -85,6 +85,14 @@ const Navbar = () => {
     }
   };
 
+  const handleDashboardClick = async () => {
+    try {
+      navigate(`/dashboard`);
+    } catch (err) {
+      console.error('Erreur lors de la récupération des dashboard :', err);
+    }
+  };
+
   const handleLogout = () => {
     dispatch(logout()); 
     navigate('/'); 
@@ -101,6 +109,13 @@ const Navbar = () => {
               className={`navbar-button ${isActive('/mensual_timetable') ? 'active' : ''}`}
             >
               Fiche horaire
+            </button>
+          </li>
+          <li>
+          <button
+              onClick={handleDashboardClick}
+              className={`navbar-button ${isActive('/dashboard') ? 'active' : ''}`} >
+                Dashboard
             </button>
           </li>
           <li>

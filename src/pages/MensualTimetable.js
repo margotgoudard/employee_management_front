@@ -343,7 +343,6 @@ const MensualTimetable = () => {
       "Total heures semaine",
       "Total heures mois",
       "Total notes de frais journée",
-      "Total commissions",
       "Total notes de frais mensuel"
     ];
   
@@ -396,7 +395,6 @@ const MensualTimetable = () => {
         weeklyHours.toFixed(2),
         totalMonthlyHours.toFixed(2),
         expenseTotal.toFixed(2),
-        totalMonthlyCommissions.toFixed(2),
         totalMonthlyExpenses.toFixed(2)
       ];
       tableRows.push(row);
