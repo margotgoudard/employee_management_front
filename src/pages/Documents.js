@@ -11,7 +11,7 @@ import { HiOutlineArrowCircleRight } from "react-icons/hi";
 const Documents = () => {
   const [categories, setCategories] = useState([{ id_category: 'all', name: 'Tout' }]);
   const [selectedCategory, setSelectedCategory] = useState('all'); 
-  const [selectedUploadCategory, setSelectedUploadCategory] = useState(null);
+  const [selectedUploadCategory, setSelectedUploadCategory] = useState('new');
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -139,9 +139,14 @@ const Documents = () => {
       formData.append('id_user', id_user);
 
       const newDocument = await DocumentService.createDocument(formData);
-
       setDocuments((prevDocuments) => [...prevDocuments, newDocument]);
-      setFilteredDocuments((prevDocuments) => [...prevDocuments, newDocument]);
+      console.log("new",newDocument)
+      setFilteredDocuments((prevDocuments) => {
+        if (selectedCategory === 'all' || selectedCategory === categoryId) {
+          return [...prevDocuments, newDocument];
+        }
+        return prevDocuments;
+      });
 
       setSelectedFile(null);
       setNewCategoryName('');
@@ -240,7 +245,7 @@ const Documents = () => {
             <h3>Ajouter un document</h3>
             <input type="file" onChange={handleFileChange} accept="application/pdf" />
             <select value={selectedUploadCategory} onChange={handleCategoryChange}>
-              <option value="new">Créer une nouvelle catégorie</option>
+              <option key="new-category" value="new">Créer une nouvelle catégorie</option>
               {categories
                 .filter((category) => category.id_category !== 'all')
                 .map((category) => (

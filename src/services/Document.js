@@ -17,7 +17,8 @@ class Document {
         try {
             const endpoint = `/documents`;
             const response = await API.post(endpoint, document);
-            return response.data;
+            console.log("response", response.document)
+            return response.document;
         } catch (error) {
             console.error('Error adding document:', error);
             throw error;
