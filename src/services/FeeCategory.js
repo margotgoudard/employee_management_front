@@ -9,7 +9,6 @@ class FeeCategory {
             return response; 
         } catch (error) {
             console.error("Erreur lors de la récupération de la categorie de frais", error);
-            return this.mockData();
         }
     }
 
@@ -31,7 +30,6 @@ class FeeCategory {
             return response; 
         } catch (error) {
             console.error("Erreur lors de la récupération des catégories de frais", error);
-            return this.mockData();
         }
     }
     

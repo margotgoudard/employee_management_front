@@ -61,7 +61,7 @@ const Navbar = () => {
 
   const handleDocumentsClick = async () => {
     try {
-      navigate(`/documents`);
+      navigate(`/documents/${user.id_user}`);
     } catch (err) {
       console.error('Erreur lors de la récupération de la fiche horaire :', err);
     }
@@ -85,6 +85,14 @@ const Navbar = () => {
     }
   };
 
+  const handleDashboardClick = async () => {
+    try {
+      navigate(`/dashboard`);
+    } catch (err) {
+      console.error('Erreur lors de la récupération des dashboard :', err);
+    }
+  };
+
   const handleLogout = () => {
     dispatch(logout()); 
     navigate('/'); 
@@ -104,8 +112,10 @@ const Navbar = () => {
             </button>
           </li>
           <li>
-            <button className={`navbar-button ${isActive('/dashboard') ? 'active' : ''}`}>
-              Dashboard
+          <button
+              onClick={handleDashboardClick}
+              className={`navbar-button ${isActive('/dashboard') ? 'active' : ''}`} >
+                Dashboard
             </button>
           </li>
           <li>

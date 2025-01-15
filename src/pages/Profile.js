@@ -53,7 +53,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    if (fetchDataExecuted.current) return; // Empêche de refaire le fetch plusieurs fois
+    //if (fetchDataExecuted.current) return; // Empêche de refaire le fetch plusieurs fois
     fetchDataExecuted.current = true;
 
     fetchData(); // Appelle la fonction pour récupérer les données au premier rendu
@@ -74,7 +74,7 @@ const Profile = () => {
   return (
     <div className="user-dashboard">
       <UserInfo user={displayedUser} admin={!!id_user} /> 
-      <MonthlyTimetables key={Math.random()} fiches={displayedFiches} admin={!!id_user} onUpdateTimetables={handleUpdateTimetables} />
+      <MonthlyTimetables fiches={displayedFiches} admin={!!id_user} onUpdateTimetables={handleUpdateTimetables} />
     </div>
   );
 };

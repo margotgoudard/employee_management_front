@@ -4,10 +4,12 @@ import 'react-calendar/dist/Calendar.css';
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import '../assets/styles/Calendar.css';
 import { getISOWeek } from 'date-fns'; 
+import ComplianceCheck from '../services/ComplianceCheck';
 
 const CalendarComponent = ({
   selectedDate,
   complianceCheckResult,
+  weeklyHours,
   onDateChange,
   onMonthChange,
   selectedTimetable,
@@ -21,8 +23,8 @@ const CalendarComponent = ({
     setActiveStartDate(selectedDate);
   }, [selectedDate]);
 
+
   const getTileClassName = ({ date, view }) => {
-    // Vérifie si la date est la date activée
     if (
       activatedDate &&
       date.getUTCDate() === activatedDate.getUTCDate() &&
@@ -32,7 +34,6 @@ const CalendarComponent = ({
       return 'bubble-green';
     }
   
-    // Logique existante pour les autres classes
     if (!selectedTimetable?.daily_timetable_sheets || !Array.isArray(selectedTimetable?.daily_timetable_sheets)) {
       return 'disabled-day';
     }
@@ -87,18 +88,20 @@ const CalendarComponent = ({
           </div>
         );
       }else if(date.getDay() === 0){
+        const hours = weeklyHours[date];
+  
         return (
           <div
-          style={{
-            position: 'absolute',
-            left: '150%', 
-            top: '50%', 
-            transform: 'translateY(-50%)', 
-            color: '#555',
-            fontWeight: 'bold'
-          }}
+            style={{
+              position: 'absolute',
+              left: '150%', 
+              top: '50%', 
+              transform: 'translateY(-50%)', 
+              color: '#555',
+              fontWeight: 'bold',
+            }}
           >
-            5H
+            {hours ? `${hours}H` : null}
           </div>
         );
     }
@@ -131,7 +134,7 @@ const CalendarComponent = ({
             onDayClick(value);
             setActivatedDate(value); 
           }}
-          tileContent={tileContent}
+          tileContent={weeklyHours && tileContent}
         />
       </div>
     </div>

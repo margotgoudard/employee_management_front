@@ -9,7 +9,7 @@ const UserInfo = ({ user, admin }) => {
 
 
   const handleViewDoc = () => {
-    navigate(`/documents`)
+    navigate(`/documents/${user.id_user}`)
   }
 
   return (

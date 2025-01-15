@@ -1,9 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
-import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { store, persistor } from '../src/redux/store';
+import { persistor } from '../src/redux/store';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Navbar from './components/Navbar';
@@ -12,6 +11,7 @@ import MensualTimetable from './pages/MensualTimetable';
 import Documents from './pages/Documents';
 import Notifications from './pages/Notifications';
 import Departments from './pages/Departments';
+import Dashboard from './pages/Dashboard';
 
 const App = () => {
   const location = useLocation();
@@ -27,9 +27,10 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/employee-profile/:id_user" element={<Profile />}/>
         <Route path="/mensual_timetable/:id_timetable" element={<MensualTimetable />} />
-        <Route path="/documents" element={<Documents />} />
+        <Route path="/documents/:id_user" element={<Documents />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/departments" element={<Departments />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </div>
   );

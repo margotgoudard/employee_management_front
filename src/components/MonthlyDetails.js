@@ -42,7 +42,12 @@ const MonthlyDetails = ({
 
   const handleChange = async (e) => {
     const { name, value } = e.target;
-    const updatedTimetable = { ...selectedTimetable, [name]: value };
+  
+    const updatedTimetable = {
+      ...selectedTimetable,
+      [name]: value,
+    };
+  
     setSelectedTimetable(updatedTimetable);
     await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
   };
@@ -56,8 +61,10 @@ const MonthlyDetails = ({
     setSelectedTimetable(updatedTimetable);
 
     try {
-      await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
-      if (onSubmitSuccess) onSubmitSuccess();
+      const resp = await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
+      if(resp) {
+        onSubmitSuccess(updatedTimetable);
+      }
     } catch (error) {
       console.error("Erreur lors de la soumission :", error);
     }
