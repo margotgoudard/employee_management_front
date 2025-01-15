@@ -14,6 +14,7 @@ import {
   updateDailyTimetables,
 } from "../redux/timetableSlice";
 import ComplianceCheck from "../services/ComplianceCheck";
+import { set } from "date-fns";
 
 const MensualTimetable = () => {
   const user = useSelector((state) => state.auth.user);
@@ -28,6 +29,7 @@ const MensualTimetable = () => {
   const [complianceCheckResult, setComplianceCheckResult] = useState({});
   const [complianceCheckResultForDailyTimetable, setComplianceCheckResultForDailyTimetable] = useState(null);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [weeklyHours, setWeeklyHours] = useState([]);
   const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
   const dispatch = useDispatch();
 
@@ -81,6 +83,14 @@ const MensualTimetable = () => {
     }
   };
 
+  const fetchWeeklyHours = async () => {
+    if (selectedTimetable.id_timetable) {
+      const data = await ComplianceCheck.fetchWeeklyHours(selectedTimetable.id_timetable);
+      if (data) {
+        setWeeklyHours(data);
+      }
+    }
+  }
 
   const fetchComplianceCheckResult = async () => {
     try {
@@ -90,13 +100,6 @@ const MensualTimetable = () => {
       console.error("Error fetching compliance check result:", error);
     }
   };
-
-
-  // useEffect(() => {
-  //   if (selectedTimetable && selectedTimetable.year && selectedTimetable.month) {
-  //     setSelectedDate(new Date(selectedTimetable.year, selectedTimetable.month - 1, 1));
-  //   }
-  // }, [selectedTimetable]);
   
   useEffect(() => {
     const fetchTimetableData = async () => {
@@ -146,6 +149,7 @@ const MensualTimetable = () => {
 
     fetchAndCalculateData();
     fetchExpenseReports();
+    fetchWeeklyHours()
     if(selectedTimetable.status === "En attente d'approbation") {
       fetchComplianceCheckResult();
     }
@@ -166,7 +170,6 @@ const MensualTimetable = () => {
   
     if (newTimetable) {
       dispatch(setSelectedTimetable(newTimetable));
-  
       const fetchDailyTimetables = async () => {
         try {
           const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
@@ -178,8 +181,9 @@ const MensualTimetable = () => {
           console.error("Erreur lors de la récupération des données journalières :", error);
         }
       };
-  
+      
       fetchDailyTimetables();
+      fetchWeeklyHours()
     }
   };
 
@@ -202,6 +206,7 @@ const MensualTimetable = () => {
         )
       ));
       fetchExpenseReports();
+      fetchWeeklyHours()
     } catch (error) {
       console.error("Erreur lors de la mise à jour des plannings quotidiens :", error);
     }
@@ -215,8 +220,11 @@ const MensualTimetable = () => {
     }, 3000);
   };
 
-  const onSubmitSuccess = () => {
+  const onSubmitSuccess = (updatedTimetable) => {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     showAlert("Votre fiche horaire a été soumise avec succès", "success")
+    dispatch(setSelectedTimetable(updatedTimetable));
+    setIsDisabled(updatedTimetable.status !== "À compléter");
     fetchComplianceCheckResult();
   }
 
@@ -238,6 +246,7 @@ const MensualTimetable = () => {
               selectedDate={selectedDate}
               selectedTimetable={selectedTimetable}
               complianceCheckResult={complianceCheckResult}
+              weeklyHours={weeklyHours}
               onDateChange={handleDateChange}
               onMonthChange={handleMonthChange}
               onDayClick={handleDayClick}

@@ -4,13 +4,15 @@ import 'react-calendar/dist/Calendar.css';
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import '../assets/styles/Calendar.css';
 import { getISOWeek } from 'date-fns'; 
+import ComplianceCheck from '../services/ComplianceCheck';
 
 const CalendarComponent = ({
   selectedDate,
+  selectedTimetable,
   complianceCheckResult,
+  weeklyHours,
   onDateChange,
   onMonthChange,
-  selectedTimetable,
   onDayClick
 }) => {
   const [activeStartDate, setActiveStartDate] = useState(selectedDate);
@@ -19,6 +21,7 @@ const CalendarComponent = ({
   useEffect(() => {
     setActiveStartDate(selectedDate);
   }, [selectedDate]);
+
 
   const getTileClassName = ({ date, view }) => {
     // Vérifie si la date est la date activée
@@ -87,22 +90,24 @@ const CalendarComponent = ({
           </div>
         );
       }else if(date.getDay() === 0){
+        const hours = weeklyHours[date];
+  
         return (
           <div
-          style={{
-            position: 'absolute',
-            left: '150%', 
-            top: '50%', 
-            transform: 'translateY(-50%)', 
-            color: '#555',
-            fontWeight: 'bold'
-          }}
+            style={{
+              position: 'absolute',
+              left: '150%', 
+              top: '50%', 
+              transform: 'translateY(-50%)', 
+              color: '#555',
+              fontWeight: 'bold',
+            }}
           >
-            5H
+            {hours ? `${hours}H` : null}
           </div>
         );
     }
-    return null; // Pas de contenu pour les autres jours
+    return null;
   };
 }
   
@@ -112,10 +117,12 @@ const CalendarComponent = ({
       <div className="calendar-section">
         <div className="calendar-header">
           <BsArrowLeft
+            style={{ cursor: 'pointer' }}
             onClick={() => onMonthChange(-1)}
           />
           <h2>{activeStartDate?.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}</h2>
           <BsArrowRight
+            style={{ cursor: 'pointer' }}
             onClick={() => onMonthChange(1)}
           />
         </div>
@@ -131,7 +138,7 @@ const CalendarComponent = ({
             onDayClick(value);
             setActivatedDate(value); 
           }}
-          tileContent={tileContent}
+          tileContent={weeklyHours && tileContent}
         />
       </div>
     </div>
