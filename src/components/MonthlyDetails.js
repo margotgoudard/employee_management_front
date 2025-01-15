@@ -59,9 +59,8 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
     setSelectedTimetable(updatedTimetable);
     
     try {
-      await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
-      
-      if (onSubmitSuccess) {
+      const resp = await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
+      if(resp) {
         onSubmitSuccess(updatedTimetable);
       }
     } catch (error) {
