@@ -5,6 +5,8 @@ import '../assets/styles/Document.css';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { LuCirclePlus } from 'react-icons/lu';
+import { HiOutlineArrowCircleLeft } from "react-icons/hi";
+import { HiOutlineArrowCircleRight } from "react-icons/hi";
 
 const Documents = () => {
   const [categories, setCategories] = useState([{ id_category: 'all', name: 'Tout' }]);
@@ -19,6 +21,9 @@ const Documents = () => {
   const [isUploadFormOpen, setIsUploadFormOpen] = useState(false); 
   const [fileError, setFileError] = useState(false);
   const [categoryError, setCategoryError] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [documentsPerRow, setDocumentsPerRow] = useState(1); 
+  const rowsPerPage = 6;
 
   const user = useSelector((state) => state.auth.user);
   const { id_user } = useParams();
@@ -76,7 +81,19 @@ const Documents = () => {
     setFilteredDocuments(filtered);
   }, [searchTerm, selectedCategory, documents]);
   
-
+  useEffect(() => {
+    calculateDocumentsPerRow(); 
+    window.addEventListener('resize', calculateDocumentsPerRow);
+    return () => window.removeEventListener('resize', calculateDocumentsPerRow);
+  }, []);
+  
+  const calculateDocumentsPerRow = () => {
+    const containerWidth = document.querySelector('.documents-grid')?.offsetWidth || 0;
+    const documentCardWidth = 220; 
+    const perRow = Math.floor(containerWidth / documentCardWidth);
+    setDocumentsPerRow(perRow > 0 ? perRow : 1);
+  };
+  
   const sortedDocuments = [...filteredDocuments].sort((a, b) => {
     const dateA = new Date(a.updatedAt);
     const dateB = new Date(b.updatedAt);
@@ -152,6 +169,25 @@ const Documents = () => {
 
   const handleNewCategoryChange = (e) => {
     setNewCategoryName(e.target.value);
+  };
+
+  const documentsPerPage = documentsPerRow * rowsPerPage;
+  const indexOfLastDocument = currentPage * documentsPerPage;
+  const indexOfFirstDocument = indexOfLastDocument - documentsPerPage;
+  const currentDocuments = sortedDocuments.slice(indexOfFirstDocument, indexOfLastDocument);
+
+  const totalPages = Math.ceil(sortedDocuments.length / documentsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
   };
 
   return (
@@ -234,24 +270,21 @@ const Documents = () => {
         )}
 
         <div className="documents-grid">
-          {sortedDocuments.map((doc) => {
+          {currentDocuments.map((doc) => {
             const fileExtension = doc?.name?.split('.').pop().toLowerCase() || '';
-
             const isPdf = fileExtension === 'pdf';
-            
             const downloadUrl = `data:application/octet-stream;base64,${doc?.document}`;
 
             return (
               <div key={doc?.id_document} className="document-card">
                 <a href={downloadUrl} download={doc?.name} className="document-link">
-                  {isPdf && (
+                  {isPdf ? (
                     <iframe
                       src={`data:application/pdf;base64,${doc?.document}`}
                       title={doc?.name}
                       className="document-preview"
                     ></iframe>
-                  )}
-                  {!isPdf && (
+                  ) : (
                     <div className="document-unavailable">
                       <p>Aperçu non disponible pour ce type de fichier</p>
                     </div>
@@ -264,6 +297,18 @@ const Documents = () => {
               </div>
             );
           })}
+        </div>
+
+        <div className="pagination-buttons">
+          <button onClick={handlePrevPage} disabled={currentPage === 1}>
+            <HiOutlineArrowCircleLeft size={30}/>
+          </button>
+          <span>
+            {currentPage}/{totalPages}
+          </span>
+          <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+            <HiOutlineArrowCircleRight size={30}/>
+          </button>
         </div>
       </div>
     </div>
