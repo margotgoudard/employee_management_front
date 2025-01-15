@@ -47,7 +47,7 @@ const MonthlyTimetables = ({ fiches }) => {
               </div>
             </div>
             <button
-              className="view-button"
+              className="save-button"
               onClick={() => handleViewFiche(fiche.id_timetable)} 
             >
               Voir la fiche
