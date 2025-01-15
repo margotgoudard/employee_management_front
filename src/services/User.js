@@ -3,9 +3,9 @@ import { updateUser } from "../redux/authSlice";
 import { store } from "../redux/store";
 
 class User {
+
   static async update(user) {
     const endpoint = `/users/${user.id_user}`;
-
     try {
       await API.put(endpoint, user); 
       const response = await API.get(endpoint); 
@@ -33,6 +33,16 @@ class User {
   }
   }
 
+  static async fetchUser(id_user) {
+    const endpoint = `/users/${id_user}`;
+    try {
+      const response = await API.get(endpoint);
+      return response; 
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'utilisateur :", error);
+      throw error; 
+    }
+  }
   static async createUser(user, id_manager) {
     try {
         const endpoint = `/users/${id_manager}`;

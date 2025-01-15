@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { FaFileAlt } from 'react-icons/fa'; // Import de l'icône
 import '../assets/styles/Profile.css';
 import { useSelector } from 'react-redux';
 import User from '../services/User';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../redux/authSlice';
 
-const UserInfo = ({ user }) => {
+import { useNavigate } from 'react-router-dom';
+
+const UserInfo = ({ user, admin }) => {
+  const navigate = useNavigate();
   const [isEditMode, setIsEditMode] = useState(false); 
   const [editedUser, setEditedUser] = useState({}); 
   const [isDisabled, setIsDisabled] = useState(true);
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.user);
+
+  const handleViewDoc = () => {
+    navigate(`/documents/${user.id_user}`)
+  }
 
   useEffect(() => {
     if (currentUser?.is_admin || currentUser?.is_sup_admin) {
@@ -102,6 +110,11 @@ const UserInfo = ({ user }) => {
           onChange={handleChange}
         />
       </div>
+
+      {admin && <button className="view-documents-button" onClick={() => handleViewDoc()}>
+        <FaFileAlt className="file-icon" />
+        Voir tous les documents
+      </button>}
 
       { !isDisabled &&
         <div className="button-container">

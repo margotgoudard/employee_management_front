@@ -223,7 +223,7 @@
         
         {complianceCheckResult && (
           <div className="compliance-check-result">
-            <h3 className="compliance-check-result-title"><GoAlertFill /><span>Warining - Vérification de conformité</span> <GoAlertFill /></h3>
+            <h3 className="compliance-check-result-title"><GoAlertFill /><span>Warning - Vérification de conformité</span> <GoAlertFill /></h3>
             <div className="compliance-check-result-list">
               {complianceCheckResult.map((element, index) => (
                 <div key={index} className="compliance-check-result-item">

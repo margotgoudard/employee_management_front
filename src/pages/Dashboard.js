@@ -90,7 +90,7 @@ const Dashboard = () => {
   }, [searchName, searchDepartment, searchStatus, data]);
 
   const handleRowClick = (id_user) => {
-    navigate(`/profile/${id_user}`);
+    navigate(`/employee-profile/${id_user}`);
   };
 
   return (

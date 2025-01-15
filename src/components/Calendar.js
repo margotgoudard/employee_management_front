@@ -8,12 +8,13 @@ import ComplianceCheck from '../services/ComplianceCheck';
 
 const CalendarComponent = ({
   selectedDate,
-  selectedTimetable,
   complianceCheckResult,
   weeklyHours,
   onDateChange,
   onMonthChange,
-  onDayClick
+  selectedTimetable,
+  onDayClick,
+  managerView,
 }) => {
   const [activeStartDate, setActiveStartDate] = useState(selectedDate);
   const [activatedDate, setActivatedDate] = useState(null);
@@ -104,7 +105,7 @@ const CalendarComponent = ({
           </div>
         );
     }
-    return null;
+    return null; 
   };
 }
   
@@ -112,17 +113,15 @@ const CalendarComponent = ({
   return (
     <div className="calendar-wrapper">
       <div className="calendar-section">
-        <div className="calendar-header">
-          <BsArrowLeft
-            style={{ cursor: 'pointer' }}
-            onClick={() => onMonthChange(-1)}
-          />
-          <h2>{activeStartDate?.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}</h2>
-          <BsArrowRight
-            style={{ cursor: 'pointer' }}
-            onClick={() => onMonthChange(1)}
-          />
-        </div>
+      <div className="calendar-header">
+        {!managerView && ( 
+          <BsArrowLeft onClick={() => onMonthChange(-1)} />
+        )}
+        <h2>{activeStartDate?.toLocaleString("fr-FR", { month: "long", year: "numeric" })}</h2>
+        {!managerView && ( 
+          <BsArrowRight onClick={() => onMonthChange(1)} />
+        )}
+      </div>
         <Calendar
           value={selectedDate}
           activeStartDate={activeStartDate} 

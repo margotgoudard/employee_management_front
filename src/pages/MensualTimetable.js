@@ -22,9 +22,13 @@ import ExpenseReportService from "../services/ExpenseReport";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import JSZip from "jszip";
+import MensualTimetableSheet from "../services/MensualTimetableSheet";
+
 import { TbFileExport } from "react-icons/tb";
 
-const MensualTimetable = () => {
+const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }) => {
+  const managerView = user_id !== null;
+  const user = useSelector((state) => state.auth.user);
   const timetables = useSelector((state) => state.timetable.timetables);
   const { id_timetable } = useParams();
   const [selectedDate, setSelectedDate] = useState(null);
@@ -39,6 +43,8 @@ const MensualTimetable = () => {
   const [weeklyHours, setWeeklyHours] = useState([]);
   const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
   const dispatch = useDispatch();
+
+  
 
   const handleDayClick = (day) => {
     const selectedDailyTimetable = selectedTimetable.daily_timetable_sheets.find(
@@ -79,17 +85,21 @@ const MensualTimetable = () => {
           return {
             ...report,
             dailyTimetable,
-  
           };
         })
       );
- 
+
       setExpenseReports(reportsWithDetails);
     } catch (error) {
       console.error("Error fetching expense reports:", error);
     }
   };
 
+  const handleTimetableUpdate = async () => {
+    onUpdate()
+
+  }
+ 
   const fetchWeeklyHours = async () => {
     if (selectedTimetable.id_timetable) {
       const data = await ComplianceCheck.fetchWeeklyHours(selectedTimetable.id_timetable);
@@ -111,28 +121,37 @@ const MensualTimetable = () => {
   useEffect(() => {
     const fetchTimetableData = async () => {
       try {
-
         let selected;
-  
+
         if (id_timetable) {
+          // Get timetable by id_timetable (from URL params)
           selected = timetables.find((t) => t.id_timetable === parseInt(id_timetable));
+        }
+
+        if (user_id_timetable) {
+          // Fetch timetable for the user
+          const timetablesUser = await MensualTimetableSheet.fetchMensualTimetablesByUser(user_id);
+          // Fetch les timetables du user selectionné
+          selected = timetablesUser.find((t) => t.id_timetable === user_id_timetable);
+        }
+
+        if (selected) {
+          dispatch(setSelectedTimetable(selected));
+          setIsDisabled(selected.status !== "À compléter");
+          console.log("Selected timetable: ", selected);
+          const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
+            selected.id_timetable
+          );
+          dispatch(updateDailyTimetables(dailyTimetables));
   
-          if (selected) {
-            dispatch(setSelectedTimetable(selected));
-            setIsDisabled(selected.status !== "À compléter");
-            const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
-              selected.id_timetable
-            );
-            dispatch(updateDailyTimetables(dailyTimetables));
-          }
         }
       } catch (err) {
-        console.error('Erreur lors de la récupération des données :', err);
+        console.error("Erreur lors de la récupération des données :", err);
       }
     };
-  
+
     fetchTimetableData();
-  }, [timetables]);
+  }, [timetables,user_id, user_id_timetable]);
   
   useEffect(() => {
     if (!selectedTimetable || !selectedTimetable?.id_timetable) {
@@ -162,6 +181,12 @@ const MensualTimetable = () => {
     }
   }, [selectedTimetable?.id_timetable]);
 
+  // Rafraîchir les rapports de dépenses à chaque sélection de tableau de bord quotidien
+  //useEffect(() => {
+  //  if (selectedTimetable) {
+  //    fetchExpenseReports();
+  //  }
+  //}, [selectedDailyTimetable]);
 
   const handleMonthChange = (increment) => {
     const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + increment, 1);
@@ -174,9 +199,10 @@ const MensualTimetable = () => {
     const newTimetable = timetables.find(
       (t) => t.year === newDate.getFullYear() && t.month === newDate.getMonth() + 1
     );
-  
+
     if (newTimetable) {
       dispatch(setSelectedTimetable(newTimetable));
+
       const fetchDailyTimetables = async () => {
         try {
           const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
@@ -188,6 +214,7 @@ const MensualTimetable = () => {
           console.error("Erreur lors de la récupération des données journalières :", error);
         }
       };
+
       
       fetchDailyTimetables();
       fetchWeeklyHours()
@@ -471,6 +498,7 @@ const MensualTimetable = () => {
               onDateChange={handleDateChange}
               onMonthChange={handleMonthChange}
               onDayClick={handleDayClick}
+              managerView={managerView} 
             />
             <MonthlyDetails
               selectedTimetable={selectedTimetable}
@@ -484,10 +512,13 @@ const MensualTimetable = () => {
                 setComplianceCheckResultForDailyTimetable(null)
               )}
               onSubmitSuccess={onSubmitSuccess}
+              managerView={managerView} 
+              onTimetableUpdate={handleTimetableUpdate}
             />
+            
           </div>
         </div>
-
+              
         {showExpenseDetails && (
           <div className="expense-details-section">
             <ExpenseReportDetails
@@ -507,7 +538,10 @@ const MensualTimetable = () => {
             onTimetableUpdate={refreshDailyTimetable}
           />
         )}
+        
       </div>
+      
+      
 
       {alert.message && (
         <Alert message={alert.message} type={alert.type} />

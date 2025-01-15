@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/MonthlyTimetables.css';
+import MensualTimetable from '../pages/MensualTimetable';
 import { HiOutlineArrowCircleLeft } from "react-icons/hi";
 import { HiOutlineArrowCircleRight } from "react-icons/hi";
 
-const MonthlyTimetables = ({ fiches }) => {
+const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
+  const [selectedFiche, setSelectedFiche] = useState(null);
   const [visibleCount, setVisibleCount] = useState(1); 
   const [startIndex, setStartIndex] = useState(0); 
   const fichesRef = useRef(null);
@@ -33,6 +35,15 @@ const MonthlyTimetables = ({ fiches }) => {
   const handleViewFiche = (id_timetable) => {
     navigate(`/mensual_timetable/${id_timetable}`);
   };
+
+  const handleViewFicheAdmin = (fiche) => {
+    setSelectedFiche(fiche);
+  };
+
+  const handleOnUpdate = () => {
+    onUpdateTimetables()
+  }
+
 
   const handleResize = () => {
     if (fichesRef.current) {
@@ -80,16 +91,26 @@ const MonthlyTimetables = ({ fiches }) => {
                 </div>
               </div>
               <button
-                className="view-button"
-                onClick={() => handleViewFiche(fiche.id_timetable)}
-              >
-                Voir la fiche
-              </button>
+              className="view-button"
+              onClick={() =>
+                admin ? handleViewFicheAdmin(fiche) : handleViewFiche(fiche.id_timetable)
+              }
+            >
+              {admin ? 'Gérer la fiche' : 'Voir la fiche'}
+            </button>
             </div>
           ))}
         </div>
         <button className="arrow right" onClick={handleNext}><HiOutlineArrowCircleRight/></button>
       </div>
+      
+      {selectedFiche && (
+        <MensualTimetable 
+          user_id={selectedFiche.id_user} 
+          user_id_timetable={selectedFiche.id_timetable} 
+          onUpdate={handleOnUpdate}
+        />
+      )}
     </div>
   );
 };

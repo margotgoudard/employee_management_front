@@ -5,13 +5,20 @@ const ExpenseReportItem = ({ report }) => {
 
   useEffect(() => {
     const loadDocumentPreview = async () => {
+      if (!report.document) {
+        setDocumentPreview(
+          <div className="document-preview-container">
+            <p className="document-name">Aucun document disponible</p>
+          </div>
+        );
+        return;
+      }
       const convertToBase64 = (file) => {
         return new Promise((resolve, reject) => {
           if (typeof file === "string") {
             resolve(file);
             return;
           }
-
           const reader = new FileReader();
           reader.onload = () => resolve(reader.result.split(",")[1]);
           reader.onerror = (error) => reject(error);
