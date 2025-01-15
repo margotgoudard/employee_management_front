@@ -213,7 +213,7 @@ const MensualTimetable = () => {
 
     setTimeout(() => {
       setAlert({ message: "", type: "" });
-    }, 3000);
+    }, 999);
   };
 
   const onSubmitSuccess = (updatedTimetable) => {
