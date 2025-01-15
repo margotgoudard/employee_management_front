@@ -28,7 +28,6 @@ import { TbFileExport } from "react-icons/tb";
 
 const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }) => {
   const managerView = user_id !== null;
-  const user = useSelector((state) => state.auth.user);
   const timetables = useSelector((state) => state.timetable.timetables);
   const { id_timetable } = useParams();
   const [selectedDate, setSelectedDate] = useState(null);
@@ -43,8 +42,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   const [weeklyHours, setWeeklyHours] = useState([]);
   const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
   const dispatch = useDispatch();
-
-  
 
   const handleDayClick = (day) => {
     const selectedDailyTimetable = selectedTimetable.daily_timetable_sheets.find(
@@ -124,21 +121,17 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
         let selected;
 
         if (id_timetable) {
-          // Get timetable by id_timetable (from URL params)
           selected = timetables.find((t) => t.id_timetable === parseInt(id_timetable));
         }
 
         if (user_id_timetable) {
-          // Fetch timetable for the user
           const timetablesUser = await MensualTimetableSheet.fetchMensualTimetablesByUser(user_id);
-          // Fetch les timetables du user selectionné
           selected = timetablesUser.find((t) => t.id_timetable === user_id_timetable);
         }
 
         if (selected) {
           dispatch(setSelectedTimetable(selected));
           setIsDisabled(selected.status !== "À compléter");
-          console.log("Selected timetable: ", selected);
           const dailyTimetables = await DailyTimetableSheetService.fetchDailyTimetableByMensualTimetable(
             selected.id_timetable
           );
@@ -180,13 +173,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
       fetchComplianceCheckResult();
     }
   }, [selectedTimetable?.id_timetable]);
-
-  // Rafraîchir les rapports de dépenses à chaque sélection de tableau de bord quotidien
-  //useEffect(() => {
-  //  if (selectedTimetable) {
-  //    fetchExpenseReports();
-  //  }
-  //}, [selectedDailyTimetable]);
 
   const handleMonthChange = (increment) => {
     const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + increment, 1);
@@ -255,7 +241,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   };
 
   const onSubmitSuccess = (updatedTimetable) => {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     showAlert("Votre fiche horaire a été soumise avec succès", "success")
     dispatch(setSelectedTimetable(updatedTimetable));
     setIsDisabled(updatedTimetable.status !== "À compléter");
