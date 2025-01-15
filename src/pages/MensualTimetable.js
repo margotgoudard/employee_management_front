@@ -17,7 +17,7 @@ import ComplianceCheck from "../services/ComplianceCheck";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 
 
-const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
+const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }) => {
   const managerView = user_id !== null;
   const user = useSelector((state) => state.auth.user);
   const timetables = useSelector((state) => state.timetable.timetables);
@@ -33,6 +33,8 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
   const dispatch = useDispatch();
+
+  
 
   const handleDayClick = (day) => {
     const selectedDailyTimetable = selectedTimetable.daily_timetable_sheets.find(
@@ -84,6 +86,11 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
     }
   };
 
+  const handleTimetableUpdate = async () => {
+    onUpdate()
+
+  }
+ 
 
   const fetchComplianceCheckResult = async () => {
     try {
@@ -275,10 +282,13 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
                 setComplianceCheckResultForDailyTimetable(null)
               )}
               onSubmitSuccess={onSubmitSuccess}
+              managerView={managerView} 
+              onTimetableUpdate={handleTimetableUpdate}
             />
+            
           </div>
         </div>
-
+              
         {showExpenseDetails && (
           <div className="expense-details-section">
             <ExpenseReportDetails
@@ -298,7 +308,10 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
             onTimetableUpdate={refreshDailyTimetable}
           />
         )}
+        
       </div>
+      
+      
 
       {alert.message && (
         <Alert message={alert.message} type={alert.type} />

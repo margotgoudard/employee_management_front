@@ -3,59 +3,49 @@ import "../assets/styles/MonthlyDetails.css";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 import { LiaSearchDollarSolid } from "react-icons/lia";
 import { useEffect, useState } from "react";
-import ExpenseReport from "../services/ExpenseReport";
-import DailyTimetableSheet from "../services/DailyTimetableSheet";
-import FeeCategory from "../services/FeeCategory";
 
-const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetable, isDisabled, onToggleExpenseDetails, onSubmitSuccess }) => {
-  //mettre à jour le nombre heureTotal lorsquon selectedTimetable change
+const MonthlyDetails = ({ 
+  selectedTimetable, 
+  expenseReports, 
+  setSelectedTimetable, 
+  isDisabled, 
+  onToggleExpenseDetails, 
+  onSubmitSuccess, 
+  onTimetableUpdate,
+  managerView
+}) => {
   const [totalHours, setTotalHours] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
 
+  // Calcul des heures totales
   useEffect(() => {
     const fetchTotalHours = async () => {
       if (!selectedTimetable?.id_timetable) return;
       const response = await MensualTimetableSheet.getMensualWorkedHours(selectedTimetable.id_timetable);
       setTotalHours(response.totalHours);
-    }
-    
-      fetchTotalHours();
-    
+    };
+    fetchTotalHours();
   }, [selectedTimetable]);
 
+  // Calcul des dépenses totales
   useEffect(() => {
     const fetchTotalExpenses = () => {
-      if(expenseReports?.length === 0) {
+      if (expenseReports?.length === 0) {
         setTotalExpenses(0);
-      };
-      const totalExpenses = expenseReports.reduce((total, report) => {
-        return total + report.amount;
-      }, 0);  
-      setTotalExpenses(totalExpenses);
-    }
-    if(expenseReports?.length > 0){
-      fetchTotalExpenses();
-    }
+      } else {
+        const totalExpenses = expenseReports.reduce((total, report) => total + report.amount, 0);
+        setTotalExpenses(totalExpenses);
+      }
+    };
     fetchTotalExpenses();
   }, [expenseReports]);
 
-
   const handleChange = async (e) => {
     const { name, value } = e.target;
-  
-    // Create the updated timetable using the current selectedTimetable state
-    const updatedTimetable = {
-      ...selectedTimetable,
-      [name]: value,
-    };
-  
-    // Update state
+    const updatedTimetable = { ...selectedTimetable, [name]: value };
     setSelectedTimetable(updatedTimetable);
-  
-    // Call the API with the updated timetable
     await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
   };
-  
 
   const handleSubmit = async () => {
     const updatedTimetable = {
@@ -64,17 +54,29 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
     };
 
     setSelectedTimetable(updatedTimetable);
-    
+
     try {
       await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
-      
-      if (onSubmitSuccess) {
-        onSubmitSuccess();
-      }
+      if (onSubmitSuccess) onSubmitSuccess();
     } catch (error) {
       console.error("Erreur lors de la soumission :", error);
     }
   };
+
+  const handleUpdateStatus = async (newStatus) => {
+    try {
+      const updatedTimetable = {
+        ...selectedTimetable,
+        status: newStatus,
+      };
+      await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
+      setSelectedTimetable(updatedTimetable); 
+
+    } catch (error) {
+      console.error(`Erreur lors de la mise à jour du statut (${newStatus}) :`, error);
+    }
+  };
+  
 
   return (
     <div className="monthly-details">
@@ -137,24 +139,35 @@ const MonthlyDetails = ({ selectedTimetable, expenseReports, setSelectedTimetabl
       </div>
 
       <div className="submit-button-container">
-        {
-          isDisabled ? (
+        {managerView && selectedTimetable?.status === "En attente d'approbation" ? (
+          // Affiche les boutons "Valider" et "Refuser" pour le manager
+          <div className="approval-buttons">
             <button 
-              className="submit-button" 
-              disabled
+              className="approve-button" 
+              onClick={() => handleUpdateStatus("Acceptée")}
             >
-              {selectedTimetable.status}
+              Valider
             </button>
-          ) : (
             <button 
-              className="submit-button" 
-              onClick={handleSubmit}
+              className="reject-button" 
+              onClick={() => handleUpdateStatus("À compléter")}
             >
-              Soumettre
+              Refuser
             </button>
-          )
-        }
+          </div>
+        ) : isDisabled ? (
+          // Affiche le bouton désactivé avec le statut actuel
+          <button className="submit-button" disabled>
+            {selectedTimetable?.status || "Statut inconnu"}
+          </button>
+        ) : (
+          // Affiche le bouton "Soumettre" pour les utilisateurs standard
+          <button className="submit-button" onClick={handleSubmit}>
+            Soumettre
+          </button>
+        )}
       </div>
+
     </div>
   );
 };

@@ -6,57 +6,58 @@ import MensualTimetableSheet from '../services/MensualTimetableSheet';
 import User from '../services/User';
 import MonthlyTimetables from '../components/MonthlyTimetables';
 import UserInfo from '../components/UserInfo';
-import { setTimetables } from '../redux/timetableSlice';
 
 const Profile = () => {
   const connectedUser = useSelector((state) => state.auth.user); 
   const { id_user } = useParams(); 
-  const dispatch = useDispatch();
 
   const [displayedUser, setDisplayedUser] = useState(null); 
-  const [displayedFiches, setDisplayedFiches] = useState(null);
+  const [displayedFiches, setDisplayedFiches] = useState([]); // Assure-toi que l'état initial est un tableau vide
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); 
-
   const fetchDataExecuted = useRef(false);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true); 
+      let fetchedUser = null;
+
+      if (connectedUser?.id_user) {
+        const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(connectedUser.id_user);
+        setDisplayedFiches(fetchedFiches); // Met à jour directement l'état des fiches
+        fetchedUser = connectedUser;
+      }
+
+      if (id_user) {
+        // Si un id_user est dans l'URL, charger cet utilisateur
+        fetchedUser = await User.fetchUser(id_user);
+      }
+
+      if (fetchedUser) {
+        setDisplayedUser(fetchedUser);
+        const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(fetchedUser.id_user);
+        setDisplayedFiches(fetchedFiches); // Met à jour l'état des fiches
+      } else {
+        throw new Error("Utilisateur introuvable.");
+      }
+    } catch (err) {
+      console.error("Erreur lors de la récupération des données :", err);
+      setError("Impossible de récupérer les données utilisateur.");
+    } finally {
+      setLoading(false); 
+    }
+  };
+
+  const handleUpdateTimetables = () => {
+    fetchData(); 
+  };
 
   useEffect(() => {
     if (fetchDataExecuted.current) return; // Empêche de refaire le fetch plusieurs fois
     fetchDataExecuted.current = true;
 
-    const fetchData = async () => {
-      try {
-        setLoading(true); 
-        let fetchedUser = null;
-
-        if (connectedUser?.id_user) {
-          const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(connectedUser.id_user);
-          dispatch(setTimetables(fetchedFiches)); 
-          fetchedUser = connectedUser;
-        }
-
-        if (id_user) {
-          // Si un id_user est dans l'URL, charger cet utilisateur
-          fetchedUser = await User.fetchUser(id_user);
-        }
-
-        if (fetchedUser) {
-          setDisplayedUser(fetchedUser);
-          const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(fetchedUser.id_user);
-          setDisplayedFiches(fetchedFiches);
-        } else {
-          throw new Error("Utilisateur introuvable.");
-        }
-      } catch (err) {
-        console.error("Erreur lors de la récupération des données :", err);
-        setError("Impossible de récupérer les données utilisateur.");
-      } finally {
-        setLoading(false); 
-      }
-    };
-
-    fetchData();
-  }, [id_user, connectedUser, dispatch]);
+    fetchData(); // Appelle la fonction pour récupérer les données au premier rendu
+  }, [id_user, connectedUser]);
 
   if (loading) {
     return <p>Chargement des informations utilisateur...</p>;
@@ -70,11 +71,10 @@ const Profile = () => {
     return <p>Aucun utilisateur à afficher.</p>;
   }
 
-  
   return (
     <div className="user-dashboard">
-      <UserInfo user={displayedUser} /> 
-      <MonthlyTimetables fiches={displayedFiches} admin={!!id_user} />
+      <UserInfo user={displayedUser} admin={!!id_user} /> 
+      <MonthlyTimetables key={Math.random()} fiches={displayedFiches} admin={!!id_user} onUpdateTimetables={handleUpdateTimetables} />
     </div>
   );
 };

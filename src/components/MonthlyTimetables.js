@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Profile.css';
 import MensualTimetable from '../pages/MensualTimetable';
 
-const MonthlyTimetables = ({ fiches, admin = null }) => {
+const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
   const [selectedFiche, setSelectedFiche] = useState(null);
   const navigate = useNavigate();
 
@@ -37,6 +37,10 @@ const MonthlyTimetables = ({ fiches, admin = null }) => {
     setSelectedFiche(fiche);
   };
 
+  const handleOnUpdate = () => {
+    onUpdateTimetables()
+  }
+
 
   return (
     <div className="fiches-horaires">
@@ -69,6 +73,7 @@ const MonthlyTimetables = ({ fiches, admin = null }) => {
         <MensualTimetable 
           user_id={selectedFiche.id_user} 
           user_id_timetable={selectedFiche.id_timetable} 
+          onUpdate={handleOnUpdate}
         />
       )}
     </div>

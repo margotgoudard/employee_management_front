@@ -1,7 +1,17 @@
 import React from 'react';
+import { FaFileAlt } from 'react-icons/fa'; // Import de l'icône
 import '../assets/styles/Profile.css';
 
-const UserInfo = ({ user }) => {
+import { useNavigate } from 'react-router-dom';
+
+const UserInfo = ({ user, admin }) => {
+  const navigate = useNavigate();
+
+
+  const handleViewDoc = () => {
+    navigate(`/documents`)
+  }
+
   return (
     <div className="user-info">
       <h2>Informations personnelles</h2>
@@ -25,6 +35,11 @@ const UserInfo = ({ user }) => {
         <label>Profession</label>
         <input type="text" value={user?.role || ''} readOnly />
       </div>
+
+      {admin && <button className="view-documents-button" onClick={() => handleViewDoc()}>
+        <FaFileAlt className="file-icon" />
+        Voir tous les documents
+      </button>}
     </div>
   );
 };
