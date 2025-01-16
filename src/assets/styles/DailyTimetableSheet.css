@@ -39,14 +39,12 @@ label {
 }
 
 input,
-select
-{
+select {
   margin-bottom: 10px;
   padding: 8px;
 }
 
-input
-{
+input {
   margin-left: 2%;
 }
 
@@ -55,7 +53,6 @@ input
   margin-top: 10px;
   border-radius: 4px;
 }
-
 
 .status-oncall-section {
   display: flex;
@@ -223,7 +220,6 @@ button.add-expense-button {
   border-radius: 8px;
 }
 
-
 button.add-time-slot-button {
   color: var(--blue-color);
   border: none;
@@ -251,7 +247,8 @@ button.add-time-slot-button {
   justify-content: center;
   align-items: center;
 }
-.compliance-check-result-title span{
+
+.compliance-check-result-title span {
   margin: 0 10px;
 }
 
@@ -285,11 +282,9 @@ button.add-time-slot-button {
   cursor: not-allowed;
 }
 
-/* Styles généraux pour les écrans petits */
 @media (max-width: 768px) {
-  /* Conteneur principal */
   .daily-timetable-sheet {
-    width: 90%; /* Réduction de la largeur */
+    width: 90%; 
     padding: 15px;
     margin: 0 auto;
   }
@@ -299,19 +294,19 @@ button.add-time-slot-button {
   }
 
   .date-container h2 {
-    font-size: 1rem; /* Réduction de la taille de la police */
+    font-size: 1rem; 
   }
 
   .status-container {
-    flex-wrap: wrap; /* Passer en colonne si nécessaire */
+    flex-wrap: wrap; 
     gap: 10px;
-    justify-content: center; /* Centrer les éléments */
+    justify-content: center; 
   }
 
   .status-container label,
   .status-container select,
   .status-container input[type="checkbox"] {
-    font-size: 0.9rem; /* Réduction de la taille */
+    font-size: 0.9rem;
   }
 
   .compliance-check-result {
@@ -322,69 +317,66 @@ button.add-time-slot-button {
 
   .compliance-check-result-item {
     padding: 8px;
-    font-size: 0.85rem; /* Réduction de la taille du texte */
+    font-size: 0.85rem;
   }
 
-  /* Conteneurs des créneaux horaires et des dépenses */
   .time-slot-container,
   .expense-container {
-    width: 100%; /* Prendre toute la largeur */
+    width: 100%;
   }
 
   .time-slot-item,
   .expense-note-item {
-    flex-direction: column; /* Passer en colonne */
-    align-items: flex-start; /* Aligner les éléments au début */
-    gap: 5px; /* Réduire l'espacement */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
   }
 
   .time-slot-item input,
   .time-slot-item select,
   .expense-note-item input,
   .expense-note-item select {
-    width: 100%; /* Largeur à 100% */
+    width: 100%;
   }
 
-  /* Boutons */
   .button-container {
-    flex-direction: column; /* Empiler les boutons */
+    flex-direction: column;
     gap: 10px;
   }
 
   button.save-button,
   button.cancel-button {
-    width: 100%; /* Largeur à 100% */
-    padding: 12px; /* Espacement suffisant */
+    width: 100%;
+    padding: 12px;
     font-size: 1rem;
   }
 
   .add-expense-button,
   .add-time-slot-button {
-    width: 100%; /* Largeur à 100% */
+    width: 100%;
     padding: 10px;
   }
 }
 
-/* Styles pour les écrans très petits */
 @media (max-width: 480px) {
   .daily-timetable-sheet {
     padding: 10px;
   }
 
   .date-container h2 {
-    font-size: 0.9rem; /* Réduction supplémentaire */
+    font-size: 0.9rem;
   }
 
   .compliance-check-result-title {
-    font-size: 0.85rem; /* Ajustement pour le texte d'alerte */
+    font-size: 0.85rem;
   }
 
   .button-container {
-    gap: 5px; /* Espacement réduit */
+    gap: 5px;
   }
 
   button {
     padding: 10px;
-    font-size: 0.9rem; /* Réduction de la taille */
+    font-size: 0.9rem;
   }
 }

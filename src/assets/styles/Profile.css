@@ -10,11 +10,11 @@
 .user-info-container {
   display: flex;
   gap: 20px;
-  margin-bottom: 30px; /* Espacement entre UserInfo/MonthlyTimetables et Permissions */
+  margin-bottom: 30px;
 }
 
 .user-info {
-  flex: 1; /* Prend la moitié de l'espace */
+  flex: 1;
   background: var(--white-color);
   padding: 20px;
   border-radius: 8px;
@@ -22,7 +22,7 @@
 }
 
 .monthly-timetables {
-  flex: 1; /* Prend la moitié de l'espace */
+  flex: 1;
   background: var(--white-color);
   padding: 20px;
   border-radius: 8px;

@@ -44,7 +44,7 @@ h2 {
 
 .dashboard-table-container {
     width: 100%;
-    overflow-x: auto; /* Permet le défilement horizontal */
+    overflow-x: auto; 
 }
 
 .dashboard-table {
@@ -54,7 +54,7 @@ h2 {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-    min-width: 700px; /* Taille minimale pour éviter que le tableau soit trop compact */
+    min-width: 700px; 
 }
 
 .dashboard-table th,
@@ -95,7 +95,6 @@ h2 {
     border-bottom: none;
 }
 
-/* Media queries pour les petits écrans */
 @media (max-width: 768px) {
     .filters {
         flex-direction: column;

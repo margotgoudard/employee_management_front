@@ -1,140 +1,127 @@
-/* Conteneur principal */
 .notifications-page {
-  
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    margin-top: 70px; /* Correspond à la hauteur de la navbar */
-    
-    
-  }
-  
-  
-  
-  /* Colonnes */
-  .notification-columns {
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-  }
-  
-  .notification-column {
-    flex: 1;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: calc(100vh - 100px); 
-    min-height: 200px;  /* Hauteur minimum */
-    max-height: calc(100vh - 100px);  /* Hauteur maximale pour empêcher l'extension infinie */
-    overflow-y: auto;
-  }
-  
-  .column-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  /* Notifications */
-  .notification-item {
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 10px;
-    background-color: #fff;
-    border-left: 5px solid;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
-    font-size: 14px;
-    display: flex;
-    align-items: center; /* Centrer le contenu verticalement */
-    justify-content: space-between; /* Espacer le texte et la croix */
-  }
-  
-  .notification-item p {
-    margin: 0;
-    color: #333;
-  }
-  
-  .success {
-    border-left-color: #28a745;
-    background-color: #eaf9e6;
-  }
-  
-  .information {
-    border-left-color: #007bff;
-    background-color: #eaf2ff;
-  }
-  
-  .warning {
-    border-left-color: #ffc107;
-    background-color: #fff7e6;
-  }
-  
-  /* Messages vides */
-  .empty-message {
-    font-size: 14px;
-    color: #888;
-    text-align: center;
-  }
-  .delete-btn {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 12px;
-    margin-top: 5px;
-    align-self: flex-end;
-  }
-  
-  .delete-btn:hover {
-    background-color: #c82333;
-  }
-    
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  margin-top: 70px;
+}
 
-  /* MEDIA QUERIES POUR LES ÉCRANS PETITS (MOBILE) */
+.notification-columns {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
 
-/* Mobile : Afficher les notifications en une seule colonne */
+.notification-column {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 100px);
+  min-height: 200px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.column-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.notification-item {
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-left: 5px solid;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notification-item p {
+  margin: 0;
+  color: #333;
+}
+
+.success {
+  border-left-color: #28a745;
+  background-color: #eaf9e6;
+}
+
+.information {
+  border-left-color: #007bff;
+  background-color: #eaf2ff;
+}
+
+.warning {
+  border-left-color: #ffc107;
+  background-color: #fff7e6;
+}
+
+.empty-message {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-top: 5px;
+  align-self: flex-end;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
 @media (max-width: 768px) {
   .notification-columns {
-    flex-direction: column; 
-    gap: 10px; 
+      flex-direction: column;
+      gap: 10px;
   }
 
   .notification-column {
-    width: 100%; 
-    height: auto; 
+      width: 100%;
+      height: auto;
   }
 
   .notification-item {
-    padding: 10px; 
-    font-size: 12px; 
+      padding: 10px;
+      font-size: 12px;
   }
 
   .column-title {
-    font-size: 16px; 
+      font-size: 16px;
   }
 
   .empty-message {
-    font-size: 12px;
+      font-size: 12px;
   }
 
   .delete-btn {
-    font-size: 10px;
-    padding: 3px 8px;
+      font-size: 10px;
+      padding: 3px 8px;
   }
 }
 
-/* Optionnel : Mobile très petit, par exemple les très petits téléphones */
 @media (max-width: 480px) {
   .notification-item {
-    font-size: 10px; 
-    padding: 8px; 
+      font-size: 10px;
+      padding: 8px;
   }
 
   .delete-btn {
-    font-size: 9px; 
-    padding: 3px 6px; 
+      font-size: 9px;
+      padding: 3px 6px;
   }
 }

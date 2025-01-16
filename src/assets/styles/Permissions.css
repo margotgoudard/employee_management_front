@@ -1,4 +1,3 @@
-/* Conteneur global des permissions */
 .permissions-container {
   padding: 20px;
   background-color: #f9f9f9;
@@ -7,28 +6,25 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Conteneur des permissions attribuées */
 .assigned-permissions {
   margin-bottom: 20px;
 }
 
-/* Titre Permissions */
 .h2Permission {
   font-weight: 100;
   font-size: 1.5rem;
-  color: var(--white-color); /* Texte blanc */
-  background-color: var(--blue-color); /* Fond bleu */
-  padding: 10px 20px; /* Espacement interne */
-  border-radius: 5px; /* Bord arrondi pour le titre */
-  margin: 0; /* Retirer la marge par défaut */
-  text-align: left; /* Aligner à gauche */
+  color: var(--white-color);
+  background-color: var(--blue-color);
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 0;
+  text-align: left;
 }
 
-/* Conteneur des permissions */
 .permissions-list {
-  display: flex; /* Aligner les éléments horizontalement */
-  gap: 10px; /* Espacement entre chaque bouton de permission */
-  flex-wrap: wrap; /* Pour que les éléments se déplacent à la ligne suivante si nécessaire */
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-top: 10px;
 }
 
@@ -54,19 +50,18 @@
   font-size: 1rem;
 }
 
-/* Bouton d'ajout de permission */
 .add-permission {
   display: flex;
   align-items: center;
   cursor: pointer;
   background-color: var(--green-color);
   color: var(--white-color);
-  padding: 5px 10px;  /* Réduire l'espace interne */
+  padding: 5px 10px;
   border-radius: 5px;
   font-size: 1rem;
   transition: background-color 0.3s;
   margin-top: 20px;
-  width: auto;  /* Laisser la largeur s'ajuster au contenu */
+  width: auto;
 }
 
 .add-permission:hover {
@@ -77,7 +72,6 @@
   margin-right: 10px;
 }
 
-/* Conteneur des permissions disponibles */
 .available-permissions {
   margin-top: 20px;
 }
@@ -94,19 +88,17 @@
   font-size: 0.9rem;
 }
 
-/* Conteneur des permissions */
 .permissions-list {
-  display: flex; /* Aligner les éléments horizontalement */
-  gap: 10px; /* Espacement entre chaque bouton de permission */
-  flex-wrap: wrap; /* Pour que les éléments se déplacent à la ligne suivante si nécessaire */
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-top: 10px;
 }
 
-/* Bouton de permission */
 .permission-item {
   background-color: var(--white-color);
-  border: 1px solid var(--blue-color); /* Contour bleu fin */
-  padding: 8px 15px; /* Padding pour espacer le texte des bords */
+  border: 1px solid var(--blue-color);
+  padding: 8px 15px;
   border-radius: 4px;
   font-size: 0.9rem;
   color: var(--blue-color);
@@ -114,19 +106,17 @@
   transition: background-color 0.3s, border-color 0.3s;
 }
 
-/* Au survol du bouton */
 .permission-item:hover {
   background-color: var(--blue-color);
-  color: var(--white-color); /* Change la couleur du texte en blanc au survol */
-  border-color: var(--blue-color); /* Conserver le même contour bleu */
+  color: var(--white-color);
+  border-color: var(--blue-color);
 }
 
-/* Icône plus et moins */
-.icon-plus, .icon-minus {
+.icon-plus,
+.icon-minus {
   font-size: 1rem;
 }
 
-/* Bouton pour fermer l'ajout de permission */
 .close-permission-button {
   background-color: var(--blue-color);
   color: var(--white-color);
@@ -142,7 +132,6 @@
   background-color: #324b73;
 }
 
-/* Bouton pour ajouter ou fermer la section */
 .add-permission {
   display: flex;
   justify-content: center;
@@ -161,6 +150,7 @@
   background-color: var(--green-color);
 }
 
-.icon-plus, .icon-minus {
+.icon-plus,
+.icon-minus {
   margin-right: 8px;
 }

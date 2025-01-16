@@ -179,11 +179,11 @@
   }
 
   .navbar-logo {
-    display: none; /* Hide the logo to save space on mobile */
+    display: none; 
   }
 
   .navbar-links {
-    display: none; /* Hide navigation links by default on mobile */
+    display: none; 
     flex-direction: column;
     width: 100%;
   }
@@ -219,12 +219,11 @@
   }
 
   .profile-name {
-    display: none; /* Hide profile name on mobile to save space */
+    display: none; 
   }
 }
 
 
-/* Tablet - Reduce size of fields to fit in one row */
 @media (max-width: 1024px) {
   .navbar {
     padding: 0.5rem;
@@ -250,6 +249,6 @@
   }
 
   .profile-name {
-    display: none; /* Hide name to save space */
+    display: none; 
   }
 }
