@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import '../assets/styles/Profile.css';
 import MensualTimetableSheet from '../services/MensualTimetableSheet';
 import User from '../services/User';
 import MonthlyTimetables from '../components/MonthlyTimetables';
 import UserInfo from '../components/UserInfo';
+import Permissions from '../components/Permissions';
 
 const Profile = () => {
   const connectedUser = useSelector((state) => state.auth.user); 
@@ -53,10 +54,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    //if (fetchDataExecuted.current) return; // Empêche de refaire le fetch plusieurs fois
-    fetchDataExecuted.current = true;
-
-    fetchData(); // Appelle la fonction pour récupérer les données au premier rendu
+    fetchData(); // Charge les données au premier rendu
   }, [id_user, connectedUser]);
 
   if (loading) {
@@ -73,8 +71,16 @@ const Profile = () => {
 
   return (
     <div className="user-dashboard">
-      <UserInfo user={displayedUser} admin={!!id_user} /> 
-      <MonthlyTimetables fiches={displayedFiches} admin={!!id_user} onUpdateTimetables={handleUpdateTimetables} />
+      <div className="user-info-container">
+        <UserInfo user={displayedUser} admin={!!id_user} />
+        <MonthlyTimetables 
+          fiches={displayedFiches} 
+          admin={!!id_user} 
+          onUpdateTimetables={handleUpdateTimetables} 
+        />
+      </div>
+      
+      {id_user && <Permissions id_user={id_user} />}
     </div>
   );
 };
