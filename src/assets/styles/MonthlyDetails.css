@@ -1,92 +1,100 @@
 h3 {
-    color: #515151;
-    font-weight: normal;
-    margin: 0;
-    margin-bottom: 3%;
-    margin-top: 3%;
+  color: #515151;
+  font-weight: normal;
+  margin: 0;
+  margin-bottom: 3%;
+  margin-top: 3%;
 }
 
 .monthly-details {
-    flex : 1;
-    min-width: 300px;
-    max-width: 100%; 
-    padding: 15px;
-    margin-top: 0;
-    border-radius: 8px;
-    background-color: #f5f5f5;
-    box-sizing: border-box;
-  }
-  
-  .detail-item label {
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-  
-  .detail-item input,
-  .detail-item textarea {
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding-left: 10%;
-    margin-left: 4%;
-    max-width: calc(100% - 60px);
-    box-sizing: border-box;
-  }
-
-  textarea {
-    resize: none;
-  }  
-  
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
-
-  .detail-item {
-    display: grid;
-    grid-template-columns: 1fr 2fr; 
-    align-items: center; 
-    gap: 10px; 
-    margin-bottom: 10px;
-    color: #515151;
-    overflow: hidden;
-}
-  
-  .input-container {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .input-suffix {
-    position: absolute;
-    left: 40%; 
-    top: 50%;
-    transform: translateY(-50%);
-    color: gray;
-    pointer-events: none; 
-    font-size: 0.9rem; 
-    white-space: nowrap; 
-  }
-  
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  flex: 1;
+  min-width: 300px;
+  max-width: 100%;
+  padding: 15px;
+  margin-top: 0;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  box-sizing: border-box;
 }
 
-input[type="number"] {
-    -moz-appearance: textfield;
+.detail-item label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.detail-item input,
+.detail-item textarea {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 40px; 
+}
+
+textarea {
+  resize: none;
+  height: 80px; 
+  outline: none;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.detail-item {
+  display: grid;
+  grid-template-columns: 1fr 3fr auto; 
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: #515151;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  width: 100%
+}
+
+.input-container input {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 80px;
+}
+
+.input-suffix {
+  font-size: 0.9rem;
+  color: gray;
+  white-space: nowrap;
+  text-align: right;
+  width: 50px; 
+  line-height: 40px; 
 }
 
 .search-icon {
-    cursor: pointer; 
-    margin-left: 10px;
-    transition: transform 0.2s, color 0.2s; 
+  position: relative;
+  top: 2px; 
+  cursor: pointer;
+  transition: transform 0.2s, color 0.2s;
 }
 
 .search-icon:hover {
-    transform: scale(1.2); 
-    color: var(--blue-color); 
+  transform: scale(1.2);
+  color: var(--blue-color);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .submit-button-container {
@@ -104,4 +112,3 @@ input[type="number"] {
   border-radius: 5px;
   cursor: pointer;
 }
-
