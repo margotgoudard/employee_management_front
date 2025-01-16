@@ -270,7 +270,7 @@ button.add-time-slot-button {
   font-weight: 500;
 }
 
-button:disabled {
+.button-container :disabled {
   background-color: #ccc;
   color: #666; 
   cursor: not-allowed; 
@@ -278,7 +278,7 @@ button:disabled {
   pointer-events: none; 
 }
 
-button:disabled:hover {
+.button-container button:disabled:hover {
   background-color: #ccc; 
   color: #666;
   border: 1px solid #aaa;
