@@ -18,12 +18,14 @@ const Dashboard = () => {
   const navigate = useNavigate(); 
 
   useEffect(() => {
+    if (!user?.id_user) return;
+    
     const fetchSubordinates = async () => {
       try {
-        const fetchedSubordinates = await Department.fetchAllSubordinatesByManager(user.id_user);
+        const fetchedSubordinates = await Department.fetchAllSubordinatesByManager(user?.id_user);
         const enrichedData = await Promise.all(
           fetchedSubordinates.map(async (sub) => {
-            const lastTimetable = await MensualTimetableSheet.getLastMensualTimetable(sub.user.id_user);
+            const lastTimetable = await MensualTimetableSheet.getLastMensualTimetable(sub.user?.id_user);
   
             if (!lastTimetable) {
               return {
@@ -61,7 +63,7 @@ const Dashboard = () => {
     };
   
     fetchSubordinates();
-  }, [user.id_user]);
+  }, [user?.id_user]);
   
   useEffect(() => {
     const applyFilters = () => {
@@ -142,8 +144,8 @@ const Dashboard = () => {
         <tbody>
           {filteredData.map((sub) => (
             <tr
-              key={sub.user.id_user}
-              onClick={() => handleRowClick(sub.user.id_user)} 
+              key={sub.user?.id_user}
+              onClick={() => handleRowClick(sub.user?.id_user)} 
               style={{ cursor: 'pointer' }} 
             >
               <td>{`${sub.user.first_name} ${sub.user.last_name}`}</td>

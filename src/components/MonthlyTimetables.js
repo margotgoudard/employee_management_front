@@ -21,7 +21,7 @@ const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
 
   const getStatusClass = (status) => {
     switch (status) {
-      case 'Validée':
+      case 'Acceptée':
         return 'status-green';
       case 'En attente d\'approbation':
         return 'status-orange';
@@ -44,16 +44,14 @@ const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
     onUpdateTimetables()
   }
 
-
   const handleResize = () => {
     if (fichesRef.current) {
       const containerWidth = fichesRef.current.offsetWidth;
       const ficheWidth = 250; 
-      const count = Math.min(Math.floor(containerWidth / ficheWidth), 4); 
+      const count = Math.min(Math.floor(containerWidth / ficheWidth), fiches.length, 4); 
       setVisibleCount(count > 0 ? count : 1);
     }
   };
-  
 
   const handleNext = () => {
     setStartIndex((prevIndex) => (prevIndex + visibleCount) % fiches.length);

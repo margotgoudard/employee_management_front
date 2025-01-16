@@ -17,7 +17,6 @@ const MonthlyDetails = ({
   const [totalHours, setTotalHours] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
 
-  // Calcul des heures totales
   useEffect(() => {
     const fetchTotalHours = async () => {
       if (!selectedTimetable?.id_timetable) return;
@@ -27,7 +26,6 @@ const MonthlyDetails = ({
     fetchTotalHours();
   }, [selectedTimetable]);
 
-  // Calcul des dépenses totales
   useEffect(() => {
     const fetchTotalExpenses = () => {
       if (expenseReports?.length === 0) {
@@ -147,7 +145,6 @@ const MonthlyDetails = ({
 
       <div className="submit-button-container">
         {managerView && selectedTimetable?.status === "En attente d'approbation" ? (
-          // Affiche les boutons "Valider" et "Refuser" pour le manager
           <div className="approval-buttons">
             <button 
               className="approve-button" 
@@ -163,12 +160,10 @@ const MonthlyDetails = ({
             </button>
           </div>
         ) : isDisabled ? (
-          // Affiche le bouton désactivé avec le statut actuel
           <button className="submit-button" disabled>
             {selectedTimetable?.status || "Statut inconnu"}
           </button>
         ) : (
-          // Affiche le bouton "Soumettre" pour les utilisateurs standard
           <button className="submit-button" onClick={handleSubmit}>
             Soumettre
           </button>

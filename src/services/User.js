@@ -9,8 +9,11 @@ class User {
     try {
       await API.put(endpoint, user); 
       const response = await API.get(endpoint); 
-
-      store.dispatch(updateUser(response.data));
+      const currentUser = store.getState().auth.user;
+      
+      if(currentUser.id_user === user.id_user){
+        store.dispatch(updateUser(response.data));
+      }
 
       return response.data; 
     } catch (error) {

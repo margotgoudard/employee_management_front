@@ -1,7 +1,6 @@
 import API from "./API";
 
 class Notification {
-  // Récupérer les notifications par utilisateur
   static async fetchNotificationsByUser() {
     try {
       const endpoint = `/notifications`; 
@@ -13,7 +12,6 @@ class Notification {
     }
   }
 
-  // Supprimer une notification par ID
   static async deleteNotification(notificationId) {
     try {
       const endpoint = `/notifications/${notificationId}`;
@@ -26,7 +24,6 @@ class Notification {
     }
   }
 
-  // Récupérer le nombre de notifications non vues
   static async fetchUnreadNotificationCount() {
     try {
       const endpoint = `/notifications/unread-count`; 
@@ -38,7 +35,6 @@ class Notification {
     }
   }
 
-  // Marquer toutes les notifications comme vues
   static async markAllAsViewed() {
     try {
       const endpoint = `/notifications/mark-all-as-viewed`; 

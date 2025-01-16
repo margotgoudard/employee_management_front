@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaFileAlt } from 'react-icons/fa'; // Import de l'icône
+import { FaFileAlt } from 'react-icons/fa'; 
 import '../assets/styles/Profile.css';
 import { useSelector } from 'react-redux';
 import User from '../services/User';
@@ -28,7 +28,7 @@ const UserInfo = ({ user, admin }) => {
     }
 
     setEditedUser(user || {});
-  }, [currentUser]);
+  }, [currentUser?.id_user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,9 +48,6 @@ const UserInfo = ({ user, admin }) => {
       const response = User.update(editedUser);
       if(response){
         setIsEditMode(false); 
-        if(currentUser.id_user === editedUser.id_user){
-          dispatch(updateUser(editedUser));
-        }
       }
     } catch (error) {
       console.error('Failed to update user profile:', error);
@@ -111,10 +108,14 @@ const UserInfo = ({ user, admin }) => {
         />
       </div>
 
-      {admin && <button className="view-documents-button" onClick={() => handleViewDoc()}>
-        <FaFileAlt className="file-icon" />
-        Voir tous les documents
-      </button>}
+      {admin && 
+        <div className="button-container">
+          <button className="view-documents-button" onClick={() => handleViewDoc()}>
+            <FaFileAlt className="file-icon" />
+            Voir tous les documents
+          </button>
+        </div>
+      }
 
       { !isDisabled &&
         <div className="button-container">
