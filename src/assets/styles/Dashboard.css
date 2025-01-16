@@ -22,17 +22,19 @@ h2 {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
 }
 
 .filters input,
 .filters select {
-    width: 32%;
+    flex: 1;
     padding: 10px 15px;
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
     outline: none;
     transition: border-color 0.3s ease;
+    min-width: 120px;
 }
 
 .filters input:focus,
@@ -40,14 +42,19 @@ h2 {
     border-color: #4CAF50;
 }
 
+.dashboard-table-container {
+    width: 100%;
+    overflow-x: auto; /* Permet le défilement horizontal */
+}
+
 .dashboard-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 0 auto;
     background-color: #ffffff;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    min-width: 700px; /* Taille minimale pour éviter que le tableau soit trop compact */
 }
 
 .dashboard-table th,
@@ -88,6 +95,7 @@ h2 {
     border-bottom: none;
 }
 
+/* Media queries pour les petits écrans */
 @media (max-width: 768px) {
     .filters {
         flex-direction: column;
@@ -97,5 +105,26 @@ h2 {
     .filters input,
     .filters select {
         width: 100%;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 18px;
+    }
+
+    .filters {
+        padding: 5px;
+        box-shadow: none;
+    }
+
+    .dashboard-table th,
+    .dashboard-table td {
+        padding: 10px 12px;
+        font-size: 12px;
     }
 }
