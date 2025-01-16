@@ -73,17 +73,7 @@ const CalendarComponent = ({
       if(date.getDay() === 1){
         const weekNumber = getISOWeek(date); 
         return (
-          <div
-          style={{
-            position: 'absolute',
-            left: '-200%', 
-            top: '50%', 
-            transform: 'translateY(-50%)', 
-            color: '#555',
-            fontWeight: 'bold',
-            whiteSpace: 'nowrap !important', 
-          }}
-          >
+          <div className='week'>
             {`Semaine ${weekNumber}`}
           </div>
         );
@@ -91,16 +81,7 @@ const CalendarComponent = ({
         const hours = weeklyHours[date];
   
         return (
-          <div
-            style={{
-              position: 'absolute',
-              left: '150%', 
-              top: '50%', 
-              transform: 'translateY(-50%)', 
-              color: '#555',
-              fontWeight: 'bold',
-            }}
-          >
+          <div className='hours'>
             {hours ? `${hours}H` : null}
           </div>
         );
@@ -108,7 +89,6 @@ const CalendarComponent = ({
     return null; 
   };
 }
-  
   
   return (
     <div className="calendar-wrapper">

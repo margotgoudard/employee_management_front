@@ -127,4 +127,8 @@
     .arrow {
         display: none;
     }
+
+    .fiches-horaires h2 {
+        font-size: 18px;
+    }
 }

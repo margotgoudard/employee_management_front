@@ -49,20 +49,77 @@
   font-size: 1em;
   font-weight: 600;
 }
-  
-  .expense-report-details {
-    flex: 1;
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+.expense-report-details {
+  flex: 1;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.export-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Styles pour les petits écrans */
+@media (max-width: 768px) {
+  .content-layout {
+    flex-direction: column;
+    gap: 10px;
   }
-  
+
+  .timetable-layout {
+    max-width: 100%; 
+    flex: none; 
+    padding: 15px;
+  }
+
+  .main-section {
+    padding: 15px;
+  }
+
+  .expense-details-section {
+    padding: 15px;
+    margin-top: 20px;
+  }
+
   .export-button {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    border: none;
-    cursor: pointer;
+    top: -10px;
+    right: -10px;
+    font-size: 14px;
   }
-  
+}
+
+/* Styles pour les très petits écrans (ex. smartphones) */
+@media (max-width: 480px) {
+  .mensual-timetable {
+    padding: 10px;
+  }
+
+  .content-layout {
+    gap: 5px;
+  }
+
+  .timetable-layout {
+    padding: 10px;
+  }
+
+  .main-section {
+    padding: 10px;
+  }
+
+  .expense-details-section {
+    padding: 10px;
+  }
+
+  .export-button {
+    top: -8px;
+    right: -8px;
+    font-size: 12px;
+  }
+}

@@ -284,3 +284,107 @@ button.add-time-slot-button {
   border: 1px solid #aaa;
   cursor: not-allowed;
 }
+
+/* Styles généraux pour les écrans petits */
+@media (max-width: 768px) {
+  /* Conteneur principal */
+  .daily-timetable-sheet {
+    width: 90%; /* Réduction de la largeur */
+    padding: 15px;
+    margin: 0 auto;
+  }
+
+  .date-container {
+    padding: 10px;
+  }
+
+  .date-container h2 {
+    font-size: 1rem; /* Réduction de la taille de la police */
+  }
+
+  .status-container {
+    flex-wrap: wrap; /* Passer en colonne si nécessaire */
+    gap: 10px;
+    justify-content: center; /* Centrer les éléments */
+  }
+
+  .status-container label,
+  .status-container select,
+  .status-container input[type="checkbox"] {
+    font-size: 0.9rem; /* Réduction de la taille */
+  }
+
+  .compliance-check-result {
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+  }
+
+  .compliance-check-result-item {
+    padding: 8px;
+    font-size: 0.85rem; /* Réduction de la taille du texte */
+  }
+
+  /* Conteneurs des créneaux horaires et des dépenses */
+  .time-slot-container,
+  .expense-container {
+    width: 100%; /* Prendre toute la largeur */
+  }
+
+  .time-slot-item,
+  .expense-note-item {
+    flex-direction: column; /* Passer en colonne */
+    align-items: flex-start; /* Aligner les éléments au début */
+    gap: 5px; /* Réduire l'espacement */
+  }
+
+  .time-slot-item input,
+  .time-slot-item select,
+  .expense-note-item input,
+  .expense-note-item select {
+    width: 100%; /* Largeur à 100% */
+  }
+
+  /* Boutons */
+  .button-container {
+    flex-direction: column; /* Empiler les boutons */
+    gap: 10px;
+  }
+
+  button.save-button,
+  button.cancel-button {
+    width: 100%; /* Largeur à 100% */
+    padding: 12px; /* Espacement suffisant */
+    font-size: 1rem;
+  }
+
+  .add-expense-button,
+  .add-time-slot-button {
+    width: 100%; /* Largeur à 100% */
+    padding: 10px;
+  }
+}
+
+/* Styles pour les écrans très petits */
+@media (max-width: 480px) {
+  .daily-timetable-sheet {
+    padding: 10px;
+  }
+
+  .date-container h2 {
+    font-size: 0.9rem; /* Réduction supplémentaire */
+  }
+
+  .compliance-check-result-title {
+    font-size: 0.85rem; /* Ajustement pour le texte d'alerte */
+  }
+
+  .button-container {
+    gap: 5px; /* Espacement réduit */
+  }
+
+  button {
+    padding: 10px;
+    font-size: 0.9rem; /* Réduction de la taille */
+  }
+}
