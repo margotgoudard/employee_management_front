@@ -1,15 +1,3 @@
-:root {
-  --green-color: #2fac66;
-  --green-hover-color: #218838;
-  --blue-color: #3b568e;
-  --white-color: #ffffff;
-  --input-color: #eaeaea;
-  --border-color: #ccc;
-  --text-color: #000000;
-  --background-overlay: rgba(255, 255, 255, 0.95);
-  --box-shadow-color: rgba(0, 0, 0, 0.2);
-}
-
 .user-dashboard {
   display: flex;
   flex-direction: column;

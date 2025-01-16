@@ -10,6 +10,17 @@
   background-color: white;
   border-bottom: 1px solid #ddd;
   z-index: 1000;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
 }
 
 .navbar-left {
@@ -26,9 +37,11 @@
 
 .navbar-links {
   display: flex;
+  flex-direction: row;
   list-style: none;
   margin: 0;
   padding: 0;
+  transition: max-height 0.3s ease-in-out;
 }
 
 .navbar-links li {
@@ -38,14 +51,10 @@
   position: relative;
 }
 
-.navbar-links li:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 25%;
-  bottom: 25%;
-  width: 1px;
-  background-color: var(--blue-color);
+.navbar-links.active {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .navbar-button {
@@ -59,22 +68,18 @@
 }
 
 .navbar-button:hover {
-  color: var(--green-color)
+  color: var(--green-color);
 }
 
 .navbar-button.active {
-  color: var(--green-color); 
+  color: var(--green-color);
 }
-  
+
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-
-
-
-
 
 .navbar-profile {
   display: flex;
@@ -100,7 +105,7 @@
 }
 
 .navbar-notification {
-  position: relative; 
+  position: relative;
   background: none;
   border: none;
   cursor: pointer;
@@ -113,17 +118,17 @@
 
 .icon-notification {
   color: var(--blue-color);
-  font-size: 1.8rem; 
+  font-size: 1.8rem;
 }
 
 .notification-badge {
-  position: absolute; 
-  top: -1; 
-  right: -1; 
-  transform: translate(50%, -50%); 
+  position: absolute;
+  top: -1;
+  right: -1;
+  transform: translate(50%, -50%);
   background-color: red;
   color: white;
-  border-radius: 50%; 
+  border-radius: 50%;
   font-size: 12px;
   width: 20px;
   height: 20px;
@@ -132,11 +137,11 @@
   justify-content: center;
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  z-index: 10; 
+  z-index: 10;
 }
 
 .navbar-logout {
-  background-color: #dc3545; 
+  background-color: #dc3545;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -147,5 +152,104 @@
 }
 
 .navbar-logout:hover {
-  background-color: #c82333; 
+  background-color: #c82333;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+  }
+
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .menu-toggle {
+    display: block;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .navbar-logo {
+    display: none; /* Hide the logo to save space on mobile */
+  }
+
+  .navbar-links {
+    display: none; /* Hide navigation links by default on mobile */
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+
+  .navbar-notification,
+  .profile-link,
+  .navbar-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .navbar-logout {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+
+  .icon-notification,
+  .icon-profile {
+    font-size: 1.5rem;
+  }
+
+  .profile-name {
+    display: none; /* Hide profile name on mobile to save space */
+  }
+}
+
+
+/* Tablet - Reduce size of fields to fit in one row */
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 0.5rem;
+  }
+
+  .navbar-links {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .navbar-button {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .navbar-logo {
+    height: 40px;
+  }
+
+  .icon-notification,
+  .icon-profile {
+    font-size: 1.2rem;
+  }
+
+  .profile-name {
+    display: none; /* Hide name to save space */
+  }
 }
