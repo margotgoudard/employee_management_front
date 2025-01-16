@@ -34,7 +34,7 @@
     background-position: center;
   }
   
-  .form-container {
+  .login-container .form-container {
     background: var(--background-overlay);
     padding: 2rem;
     border-radius: 8px;
