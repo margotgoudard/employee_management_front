@@ -1,0 +1,179 @@
+/* Couleurs et variables */
+:root {
+  --green-color: #2fac66;
+  --green-hover-color: #218838;
+  --blue-color: #3b568e;
+  --white-color: #ffffff;
+  --input-color: #eaeaea;
+  --border-color: #ccc;
+  --text-color: #000000;
+  --background-overlay: rgba(255, 255, 255, 0.95);
+  --box-shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Conteneur global des permissions */
+.permissions-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  margin-top: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Conteneur des permissions attribuées */
+.assigned-permissions {
+  margin-bottom: 20px;
+}
+
+/* Titre Permissions */
+.h2Permission {
+  font-weight: 100;
+  font-size: 1.5rem;
+  color: var(--white-color); /* Texte blanc */
+  background-color: var(--blue-color); /* Fond bleu */
+  padding: 10px 20px; /* Espacement interne */
+  border-radius: 5px; /* Bord arrondi pour le titre */
+  margin: 0; /* Retirer la marge par défaut */
+  text-align: left; /* Aligner à gauche */
+}
+
+/* Conteneur des permissions */
+.permissions-list {
+  display: flex; /* Aligner les éléments horizontalement */
+  gap: 10px; /* Espacement entre chaque bouton de permission */
+  flex-wrap: wrap; /* Pour que les éléments se déplacent à la ligne suivante si nécessaire */
+  margin-top: 10px;
+}
+
+.permission-item {
+  background-color: var(--input-color);
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  transition: background-color 0.3s;
+}
+
+.permission-item:hover {
+  background-color: var(--green-hover-color);
+}
+
+.icon-minus {
+  font-size: 1rem;
+}
+
+/* Bouton d'ajout de permission */
+.add-permission {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: var(--green-color);
+  color: var(--white-color);
+  padding: 5px 10px;  /* Réduire l'espace interne */
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+  width: auto;  /* Laisser la largeur s'ajuster au contenu */
+}
+
+.add-permission:hover {
+  background-color: var(--green-hover-color);
+}
+
+.add-permission .icon-plus {
+  margin-right: 10px;
+}
+
+/* Conteneur des permissions disponibles */
+.available-permissions {
+  margin-top: 20px;
+}
+
+.search-bar {
+  margin-bottom: 15px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  font-size: 0.9rem;
+}
+
+/* Conteneur des permissions */
+.permissions-list {
+  display: flex; /* Aligner les éléments horizontalement */
+  gap: 10px; /* Espacement entre chaque bouton de permission */
+  flex-wrap: wrap; /* Pour que les éléments se déplacent à la ligne suivante si nécessaire */
+  margin-top: 10px;
+}
+
+/* Bouton de permission */
+.permission-item {
+  background-color: var(--white-color);
+  border: 1px solid var(--blue-color); /* Contour bleu fin */
+  padding: 8px 15px; /* Padding pour espacer le texte des bords */
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--blue-color);
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Au survol du bouton */
+.permission-item:hover {
+  background-color: var(--blue-color);
+  color: var(--white-color); /* Change la couleur du texte en blanc au survol */
+  border-color: var(--blue-color); /* Conserver le même contour bleu */
+}
+
+/* Icône plus et moins */
+.icon-plus, .icon-minus {
+  font-size: 1rem;
+}
+
+/* Bouton pour fermer l'ajout de permission */
+.close-permission-button {
+  background-color: var(--blue-color);
+  color: var(--white-color);
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 15px;
+}
+
+.close-permission-button:hover {
+  background-color: #324b73;
+}
+
+/* Bouton pour ajouter ou fermer la section */
+.add-permission {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10%;
+  cursor: pointer;
+  background-color: var(--blue-color);
+  color: var(--white-color);
+  padding: 8px 15px;
+  border-radius: 4px;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.add-permission:hover {
+  background-color: var(--green-color);
+}
+
+.icon-plus, .icon-minus {
+  margin-right: 8px;
+}
