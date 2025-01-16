@@ -1,10 +1,11 @@
 .add-expense-report-form {
+  position: relative; 
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 100%; 
-  box-sizing: border-box; 
+  max-width: 100%;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -69,4 +70,12 @@ select {
   background-color: #ccc;
   color: black;
   border: none;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center; 
+  gap: 10px;
+  margin-top: 20px; 
 }

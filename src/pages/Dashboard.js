@@ -130,34 +130,36 @@ const Dashboard = () => {
         </select>
       </div>
 
-      <table className="dashboard-table">
-        <thead>
-          <tr>
-            <th>Employé</th>
-            <th>Heures totales (mois en cours)</th>
-            <th>Département</th>
-            <th>Notes de frais (mois en cours)</th>
-            <th>Commission (mois en cours)</th>
-            <th>Fiche horaire (mois en cours)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((sub) => (
-            <tr
-              key={sub.user?.id_user}
-              onClick={() => handleRowClick(sub.user?.id_user)} 
-              style={{ cursor: 'pointer' }} 
-            >
-              <td>{`${sub.user.first_name} ${sub.user.last_name}`}</td>
-              <td>{sub.totalHours}</td>
-              <td>{sub.user.department.name}</td>
-              <td>{sub.totalExpenses}</td>
-              <td>{sub.commission != null ? sub.commission : 0.00}</td>
-              <td>{sub.timetableStatus}</td>
+      <div className="dashboard-table-container">
+        <table className="dashboard-table">
+          <thead>
+            <tr>
+              <th>Employé</th>
+              <th>Heures totales (mois en cours)</th>
+              <th>Département</th>
+              <th>Notes de frais (mois en cours)</th>
+              <th>Commission (mois en cours)</th>
+              <th>Fiche horaire (mois en cours)</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredData.map((sub) => (
+              <tr
+                key={sub.user?.id_user}
+                onClick={() => handleRowClick(sub.user?.id_user)} 
+                style={{ cursor: 'pointer' }} 
+              >
+                <td>{`${sub.user.first_name} ${sub.user.last_name}`}</td>
+                <td>{sub.totalHours}</td>
+                <td>{sub.user.department.name}</td>
+                <td>{sub.totalExpenses}</td>
+                <td>{sub.commission != null ? sub.commission : 0.00}</td>
+                <td>{sub.timetableStatus}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

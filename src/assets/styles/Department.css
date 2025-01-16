@@ -5,12 +5,13 @@
     width: 90%;
   }
   
-  h2 {
-    margin-left: 2%;
+  .department-hierarchy h2 {
+    margin-left: 0; 
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 600;
     padding-bottom: 10px;
-  }
+    text-align: left; 
+  }  
   
   .department-hierarchy ul {
     list-style-type: none;

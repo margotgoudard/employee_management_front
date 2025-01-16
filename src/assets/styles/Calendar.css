@@ -1,15 +1,3 @@
-:root {
-    --green-color: #2fac66;
-    --green-hover-color: #218838;
-    --blue-color: #3b568e;
-    --white-color: #ffffff;
-    --input-color: #eaeaea;
-    --border-color: #ccc;
-    --text-color: #000000;
-    --background-overlay: rgba(255, 255, 255, 0.95);
-    --box-shadow-color: rgba(0, 0, 0, 0.2);
-  }
-  
   .calendar-section {
     display: flex;
     flex-direction: column;
@@ -29,11 +17,12 @@
 .react-calendar__tile {
   border-radius: 100%; 
   height: 40px; 
-  max-width: 40px !important;
   transition: transform 0.2s;
   margin: 10px; 
   position: relative; 
   overflow: visible !important;
+  max-width: 40px !important; 
+  width: 50px;
 }
 
 .react-calendar__tile:hover {
@@ -43,16 +32,12 @@
     color: white !important
 }
 
-.react-calendar__month-view__days__day {
-    margin: 5px; 
-}
-
 .react-calendar__month-view__days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr); 
-    gap: 10px; 
-    justify-content: center;
-    align-items: center;
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px; 
+  justify-content: center;
+  align-items: center;
 }
 
 .disabled-day {
@@ -180,5 +165,84 @@
     text-align: right;
   }
 
+
+  .calendar-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .calendar-section {
+    flex: 3;
+  }
+  
+  .weekly-hours-summary {
+    flex: 1;
+    margin-left: 20px;
+    padding: 10px;
+    margin-top: 8.5%;
+  }
+  
+  .weekly-hours-summary {
+    flex: 1;
+    margin-left: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .weekly-hours-summary h3 {
+    font-size: 1em;
+  }
+  
+  .weekly-hours-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .weekly-hours-summary li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .hours-value {
+    text-align: right;
+  }
+
+  .week {
+      position: absolute;
+      left: -200%;
+      top: 50%;
+      transform: translateY(-50%); 
+      color: #555;
+      font-weight: bold;
+      white-space: nowrap !important;
+  }
+  
+  .hours {
+      position: absolute;
+      left: 150%;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #555;
+      font-weight: bold;
+  }
+
+@media (max-width: 768px) {
+  .week,
+  .hours {
+    display: none !important;
+  }
+
+  .react-calendar__tile {
+    height: 30px; 
+    height: 40px;
+  }
+  
+}
 
   

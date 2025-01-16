@@ -1,15 +1,3 @@
-:root {
-  --green-color: #2fac66;
-  --green-hover-color: #218838;
-  --blue-color: #3b568e;
-  --white-color: #ffffff;
-  --input-color: #eaeaea;
-  --border-color: #ccc;
-  --text-color: #000000;
-  --background-overlay: rgba(255, 255, 255, 0.95);
-  --box-shadow-color: rgba(0, 0, 0, 0.2);
-}
-
 .user-dashboard {
   display: flex;
   flex-direction: column;
@@ -22,11 +10,11 @@
 .user-info-container {
   display: flex;
   gap: 20px;
-  margin-bottom: 30px; /* Espacement entre UserInfo/MonthlyTimetables et Permissions */
+  margin-bottom: 30px;
 }
 
 .user-info {
-  flex: 1; /* Prend la moitié de l'espace */
+  flex: 1;
   background: var(--white-color);
   padding: 20px;
   border-radius: 8px;
@@ -34,7 +22,7 @@
 }
 
 .monthly-timetables {
-  flex: 1; /* Prend la moitié de l'espace */
+  flex: 1;
   background: var(--white-color);
   padding: 20px;
   border-radius: 8px;

@@ -16,11 +16,13 @@
 
   html, body {
     height: 100%;
+    width: 100%;
     margin: 0;
   }
   
   * {
     font-family: 'Roboto', sans-serif;
+    max-width: 100%;
   }
   
   .login-container {
@@ -34,7 +36,7 @@
     background-position: center;
   }
   
-  .form-container {
+  .login-container .form-container {
     background: var(--background-overlay);
     padding: 2rem;
     border-radius: 8px;
@@ -90,9 +92,11 @@
   }
   
   @media (max-width: 768px) {
-    .form-container {
-      width: 90%;
+    .login-container .form-container {
+      width: 50%;
       padding: 1.5rem;
+      margin-left: 10%;
+      margin-right: 20%;
     }
   
     .logo {
@@ -102,27 +106,6 @@
     .submit-btn {
       font-size: 0.9rem;
       padding: 0.6rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .form-container {
-      width: 95%;
-      padding: 1rem;
-    }
-  
-    .logo {
-      max-width: 60px;
-    }
-  
-    .input-group input {
-      font-size: 0.9rem;
-      padding: 0.4rem;
-    }
-  
-    .submit-btn {
-      font-size: 0.8rem;
-      padding: 0.5rem;
     }
   }
   

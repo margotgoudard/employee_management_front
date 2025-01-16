@@ -17,6 +17,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [unreadCount, setUnreadCount] = useState(0); 
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname.startsWith(path);
 
@@ -25,6 +26,10 @@ const Navbar = () => {
       navigate('/'); 
     }
   }, [user, navigate]);
+
+  const handleMenuClick = () => {
+    setMenuOpen(false);
+  };
 
   const fetchUnreadNotifications = async () => {
     try {
@@ -40,6 +45,7 @@ const Navbar = () => {
   }, []); 
 
   const handleTimetableClick = () => {
+    handleMenuClick();
     if (timetables && timetables.length > 0) {
       const currentDate = new Date();
       let selected = timetables.find(
@@ -61,6 +67,7 @@ const Navbar = () => {
 
   const handleDocumentsClick = async () => {
     try {
+      handleMenuClick();
       navigate(`/documents/${user.id_user}`);
     } catch (err) {
       console.error('Erreur lors de la récupération de la fiche horaire :', err);
@@ -69,6 +76,7 @@ const Navbar = () => {
 
   const handleNotificationsClick = async () => {
     try {
+      handleMenuClick();
       navigate(`/notifications`);
       await Notification.markAllAsViewed()
       await fetchUnreadNotifications()
@@ -79,6 +87,7 @@ const Navbar = () => {
 
   const handleDepartmentsClick = async () => {
     try {
+      handleMenuClick();
       navigate(`/departments`);
     } catch (err) {
       console.error('Erreur lors de la récupération des départements :', err);
@@ -87,6 +96,7 @@ const Navbar = () => {
 
   const handleDashboardClick = async () => {
     try {
+      handleMenuClick();
       navigate(`/dashboard`);
     } catch (err) {
       console.error('Erreur lors de la récupération des dashboard :', err);
@@ -94,6 +104,7 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
+    handleMenuClick();
     navigate('/'); 
     dispatch(logout()); 
   };
@@ -101,8 +112,11 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
+      <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
+      </button>
         <img src={logo} alt="PSS Logo" className="navbar-logo" />
-        <ul className="navbar-links">
+        <ul className={`navbar-links ${menuOpen ? 'active' : ''}`}>
           <li>
             <button
               onClick={handleTimetableClick}

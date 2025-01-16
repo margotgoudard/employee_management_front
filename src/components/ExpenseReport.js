@@ -10,12 +10,14 @@ const ExpenseReports = ({
   onAddNewExpense,
   onDeleteExpense,
   onDeleteNewExpense,
+  onShowAddForm,
 }) => {
   const [showAddForm, setShowAddForm] = useState(false);
 
   const handleAddNewExpense = (newExpense) => {
     onAddNewExpense(newExpense);
     setShowAddForm(false); 
+    onShowAddForm(false);
   };
 
   return (
@@ -80,7 +82,10 @@ const ExpenseReports = ({
       <div className="button-container">
         <button
           className="add-expense-button"
-          onClick={() => setShowAddForm(true)}
+          onClick={() => {
+            setShowAddForm(true);
+            onShowAddForm(true);
+          }}
         >
           Ajouter une note de frais <LuCirclePlus />
         </button>
@@ -91,7 +96,10 @@ const ExpenseReports = ({
         <AddExpenseReportForm
         feeCategories={feeCategories}
         onAdd={handleAddNewExpense}
-        onCancel={() => setShowAddForm(false)}
+        onCancel={() => {
+          setShowAddForm(false);
+          onShowAddForm(false); 
+        }}
       />      
       )}
     </div>

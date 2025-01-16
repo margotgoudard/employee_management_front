@@ -1,14 +1,19 @@
 .documents-page {
-    display: flex;
-    margin-top: 3%;
-  }
-  
-  .sidebar {
-    width: 250px;
-    background-color:var(--blue-color);
-    color: white;
-    padding: 20px;
-  }
+  display: flex;
+  height: 100vh;
+  margin-top: 3%;
+  overflow: hidden;
+}
+
+.sidebar {
+  flex: 0 0 250px;
+  background-color: var(--blue-color);
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
   
   .sidebar h3 {
     margin-bottom: 20px;
@@ -32,6 +37,7 @@
     margin-top: 3%;
     margin-left: 3%;
     margin-right: 3%;
+    overflow-y: auto;
   }
   
   .header {
@@ -243,6 +249,7 @@
   
   .pagination-buttons button:disabled {
     opacity: 0.5;
+    pointer-events: none; 
   }
   
   .pagination-buttons span {
@@ -252,7 +259,103 @@
   
   @media (max-width: 768px) {
     .documents-page {
-      margin-top: 10%;
+      flex-direction: column;
+      height: auto;
+      margin-top: 17%;
+    }
+  
+    .sidebar {
+      flex: 0 0 auto;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      background-color: var(--blue-color);
+      text-align: center;
+    }
+  
+    .sidebar ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+    }
+  
+    .sidebar li {
+      flex: 1 1 auto;
+      padding: 10px 5px;
+      margin: 5px;
+      font-size: 14px;
+      text-align: center;
+      max-width: 120px;
+    }
+  
+    .main-content {
+      margin: 0;
+      padding: 10px;
+    }
+  
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  
+    .filters {
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+    }
+  
+    .filters input {
+      width: 100%;
+    }
+  
+    .documents-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+    }
+  
+    .document-card {
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+  
+    .document-info h4 {
+      font-size: 12px;
+    }
+  
+    .document-info p {
+      font-size: 10px;
+    }
+  
+    .upload-section {
+      padding: 10px;
+      margin: 10px 0;
+    }
+  
+    .upload-section input,
+    .upload-section select {
+      font-size: 12px;
+      padding: 8px;
+    }
+  
+    .upload-section h3 {
+      font-size: 16px;
+    }
+  
+    .upload-section .upload-buttons button {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  
+    .pagination-buttons {
+      gap: 5px;
+    }
+  
+    .pagination-buttons span {
+      font-size: 14px;
     }
   }
   

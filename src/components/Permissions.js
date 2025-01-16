@@ -13,15 +13,12 @@ const Permissions = ({ id_user }) => {
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
-        // Récupérer les permissions assignées à l'utilisateur 
         const userPermissionsResponse = await PermissionService.getPermissionsByUserId(id_user);
         setAssignedPermissions(userPermissionsResponse);
 
-        // Récupérer toutes les permissions disponibles
         const allPermissionsResponse = await PermissionService.getPermissions();
         const allPermissions = allPermissionsResponse;
 
-        // Déterminer les permissions disponibles (non assignées)
         const unassignedPermissions = allPermissions.filter(
           (permission) => !userPermissionsResponse.some(
             (assignedPermission) => assignedPermission.id_permission === permission.id_permission
@@ -44,7 +41,6 @@ const Permissions = ({ id_user }) => {
     try {
       await PermissionService.addPermissionToUser(id_user, permission.id_permission);
 
-      // Mettre à jour les états localement
       setAssignedPermissions((prevAssigned) => [...prevAssigned, permission]);
       setAvailablePermissions((prevAvailable) =>
         prevAvailable.filter((perm) => perm.id_permission !== permission.id_permission)
@@ -58,7 +54,6 @@ const Permissions = ({ id_user }) => {
     try {
       await PermissionService.removePermissionFromUser(id_user, permission.id_permission);
 
-      // Mettre à jour les états localement
       setAssignedPermissions((prevAssigned) =>
         prevAssigned.filter((perm) => perm.id_permission !== permission.id_permission)
       );

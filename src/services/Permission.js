@@ -2,7 +2,6 @@ import API from "./API";
 
 class Permission {
     
-  // Créer une nouvelle permission
   static async createPermission(data) {
     try {
       const endpoint = `/permissions`; 
@@ -14,7 +13,6 @@ class Permission {
     }
   }
 
-  // Récupérer toutes les permissions
   static async getPermissions() {
     try {
       const endpoint = `/permissions`; 
@@ -26,7 +24,6 @@ class Permission {
     }
   }
 
-  // Récupérer une permission par ID
   static async getPermissionById(id_permission) {
     try {
       const endpoint = `/permissions/${id_permission}`; 
@@ -38,7 +35,6 @@ class Permission {
     }
   }
 
-  // Mettre à jour une permission par ID
   static async updatePermission(id_permission, data) {
     try {
       const endpoint = `/permissions/${id_permission}`;
@@ -50,7 +46,6 @@ class Permission {
     }
   }
 
-  // Supprimer une permission par ID
   static async deletePermission(id_permission) {
     try {
       const endpoint = `/permissions/${id_permission}`; 
@@ -62,7 +57,6 @@ class Permission {
     }
   }
 
-  // Assigner une permission à un utilisateur
   static async addPermissionToUser(userId, permissionId) {
     try {
       const endpoint = `/permissions/user/addPermission`;
@@ -75,7 +69,6 @@ class Permission {
     }
   }
 
-  // Retirer une permission d'un utilisateur
   static async removePermissionFromUser(userId, permissionId) {
     try {
       const endpoint = `/permissions/user/${userId}/removePermission/${permissionId}`; 
@@ -87,7 +80,6 @@ class Permission {
     }
   }
 
-  // Récupérer toutes les permissions d'un utilisateur par son ID
   static async getPermissionsByUserId(userId) {
     try {
       const endpoint = `/permissions/user/${userId}`; 

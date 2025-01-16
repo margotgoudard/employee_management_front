@@ -101,7 +101,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   const fetchUserInfo = async (id_user) => {
     try {
       const user = await User.fetchUser(id_user); 
-      console.log(user)
       setUserInfo(user);
     } catch (error) {
       console.error("Erreur lors de la récupération des informations de l'utilisateur :", error);
