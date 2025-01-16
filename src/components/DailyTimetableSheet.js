@@ -24,7 +24,8 @@
     const [alert, setAlert] = useState({ show: false, message: "", type: "" });
     const [initialTimeSlots, setInitialTimeSlots] = useState([]);
     const [initialExpenseNotes, setInitialExpenseNotes] = useState([]);
-    
+    const [isAddExpenseFormOpen, setIsAddExpenseFormOpen] = useState(false); 
+
     const showAlert = (message, type) => {
       setAlert({ show: true, message, type });
       setTimeout(() => setAlert({ show: false, message: "", type: "" }), 2000);
@@ -279,15 +280,16 @@
               onUpdateExpense={handleUpdateExpense}
               onUpdateNewExpense={handleUpdateNewExpense}
               onDeleteExpense={handleDeleteExpense}
-              onDeleteNewExpense={handleDeleteNewExpense} /></>   
+              onDeleteNewExpense={handleDeleteNewExpense}
+              onShowAddForm={setIsAddExpenseFormOpen} /></>   
         )}
 
         {!isDisabled && 
           <div className="button-container">
-            <button className="save-button" onClick={handleSave}>
+            <button className="save-button" onClick={handleSave} disabled={isAddExpenseFormOpen}>
               Enregistrer
             </button>
-            <button className="cancel-button" onClick={handleCancel}>
+            <button className="cancel-button" onClick={handleCancel} disabled={isAddExpenseFormOpen}>
               Annuler
             </button>
           </div>

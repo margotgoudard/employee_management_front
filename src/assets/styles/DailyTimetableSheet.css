@@ -24,8 +24,8 @@
   padding: 0;
   font-size: 1em;
   font-weight: bold;
+  color: white;
 }
-
 
 .status-section,
 .time-section,
@@ -268,4 +268,19 @@ button.add-time-slot-button {
   border-radius: 5px; 
   padding: 10px; 
   font-weight: 500;
+}
+
+button:disabled {
+  background-color: #ccc;
+  color: #666; 
+  cursor: not-allowed; 
+  border: 1px solid #aaa;
+  pointer-events: none; 
+}
+
+button:disabled:hover {
+  background-color: #ccc; 
+  color: #666;
+  border: 1px solid #aaa;
+  cursor: not-allowed;
 }
