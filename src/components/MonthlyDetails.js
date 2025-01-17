@@ -176,17 +176,21 @@ const MonthlyDetails = ({
               Refuser
             </button>
           </div>
-        ) : isDisabled ? (
-          <button className="submit-button" disabled>
-            {selectedTimetable?.status || "Statut inconnu"}
-          </button>
         ) : (
-          <button className="submit-button" onClick={handleSubmit}>
-            Soumettre
-          </button>
+          <>
+            {!managerView && !isDisabled && (
+              <button className="submit-button" onClick={handleSubmit}>
+                Soumettre
+              </button>
+            )}
+            {isDisabled && (
+              <button className="submit-button" disabled>
+                {selectedTimetable?.status || "Statut inconnu"}
+              </button>
+            )}
+          </>
         )}
       </div>
-
     </div>
   );
 };
