@@ -56,10 +56,6 @@ const Profile = () => {
     }
   }, [selectedTimetable, displayedUser]);
 
-  const handleUpdateTimetables = () => {
-    fetchData(); 
-  };
-
   useEffect(() => {
     if (!connectedUser?.id_user) return;
 
@@ -87,7 +83,6 @@ const Profile = () => {
         <MonthlyTimetables 
           fiches={displayedFiches} 
           admin={!!id_user} 
-          onUpdateTimetables={handleUpdateTimetables} 
         />
       </div>
       

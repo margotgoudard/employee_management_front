@@ -14,7 +14,7 @@ import ComplianceCheck from "../services/ComplianceCheck";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 import ExportManager from "../components/ExportManager";
 
-const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }) => {
+const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
   const managerView = user_id !== null;
   const timetables = useSelector((state) => state.timetable.timetables);
   const { id_timetable } = useParams();
@@ -56,16 +56,11 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
 
   const fetchExpenseReports = async () => {
     try {
-      const data = await ExpenseReport.getExpenseReportsByMensualTimetable(
-        selectedTimetable.id_timetable
-      );
+      const data = await ExpenseReport.getExpenseReportsByMensualTimetable(selectedTimetable.id_timetable);
 
       const reportsWithDetails = await Promise.all(
         data.map(async (report) => {
-          const dailyTimetable =
-            await DailyTimetableSheetService.fetchDailyTimetableById(
-              report.id_daily_timetable
-            );
+          const dailyTimetable = await DailyTimetableSheetService.fetchDailyTimetableById(report.id_daily_timetable);
 
           return {
             ...report,
@@ -79,10 +74,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
       console.error("Error fetching expense reports:", error);
     }
   };
-
-  const handleTimetableUpdate = async () => {
-    onUpdate()
-  }
  
   const fetchWeeklyHours = async () => {
     if (selectedTimetable.id_timetable) {
@@ -254,8 +245,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
           />
           </div>
             <CalendarComponent
-              selectedDate={selectedDate}
-              selectedTimetable={selectedTimetable}
+            selectedDate={selectedDate}
               complianceCheckResult={complianceCheckResult}
               weeklyHours={weeklyHours}
               onDateChange={handleDateChange}
@@ -264,9 +254,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
               managerView={managerView} 
             />
             <MonthlyDetails
-              selectedTimetable={selectedTimetable}
               expenseReports={expenseReports}
-              setSelectedTimetable={(timetable) => dispatch(setSelectedTimetable(timetable))}
               isDisabled={isDisabled}
               onToggleExpenseDetails={() => (
                 setShowExpenseDetails(!showExpenseDetails),
@@ -276,7 +264,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
               )}
               onSubmitSuccess={onSubmitSuccess}
               managerView={managerView} 
-              onTimetableUpdate={handleTimetableUpdate}
             />
             
           </div>
@@ -286,7 +273,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
           <div className="expense-details-section">
             <ExpenseReportDetails
               expenseReports={expenseReports}
-              mensualTimetableId={selectedTimetable?.id_timetable}
             />
           </div>
         )}

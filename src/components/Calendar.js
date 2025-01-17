@@ -4,11 +4,9 @@ import 'react-calendar/dist/Calendar.css';
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import '../assets/styles/Calendar.css';
 import { getISOWeek } from 'date-fns'; 
-import ComplianceCheck from '../services/ComplianceCheck';
 
 const CalendarComponent = ({
   selectedDate,
-  complianceCheckResult,
   weeklyHours,
   onDateChange,
   onMonthChange,
