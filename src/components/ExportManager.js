@@ -32,15 +32,7 @@ const ExportManager = ({ showAlert }) => {
         if (!selectedTimetable || !selectedTimetable.daily_timetable_sheets) return;
       
         const csvRows = [];
-        csvRows.push(`Employé : ${userInfo.first_name} ${userInfo.last_name}\n`);
-        csvRows.push(`Mois;${selectedTimetable.month}/${selectedTimetable.year}\n`);
-        csvRows.push("Jour;Début;Fin;Total heures jour;Total heures semaine;Total heures mois;Total notes de frais journée;Total commissions;Total notes de frais mensuel\n");
-      
-        let totalMonthlyHours = 0;
-        let totalMonthlyExpenses = 0;
-        let totalMonthlyCommissions = selectedTimetable.commission || 0;
-        let weeklyHours = 0;
-        let currentWeek = null;
+        csvRows.push("Jour;Début;Fin;Statut\n");
       
         const sortedDailyTimetables = [...selectedTimetable.daily_timetable_sheets].sort(
           (a, b) => new Date(a.day) - new Date(b.day)
@@ -50,39 +42,13 @@ const ExportManager = ({ showAlert }) => {
           const date = new Date(daySheet.day);
           const day = date.toLocaleDateString("fr-FR");
           const timeSlots = await TimeSlot.getTimeSlotsByDailyTimetable(daySheet.id_daily_timetable) || [];
-          const expenses = await ExpenseReportService.getExpenseReportsByDailyTimetable(daySheet.id_daily_timetable) || [];
-      
-          const dayTotalHours = timeSlots.reduce((total, slot) => {
-            const [startHour, startMinute, startSecond] = slot.start.split(":").map(Number);
-            const [endHour, endMinute, endSecond] = slot.end.split(":").map(Number);
-      
-            const start = new Date();
-            start.setHours(startHour, startMinute, startSecond, 0);
-      
-            const end = new Date();
-            end.setHours(endHour, endMinute, endSecond, 0);
-      
-            const hours = (end - start) / (1000 * 60 * 60);
-            return total + hours;
-          }, 0);
-      
-          totalMonthlyHours += dayTotalHours;
-          const weekNumber = getISOWeek(date);
-          if (currentWeek !== weekNumber) {
-            currentWeek = weekNumber;
-            weeklyHours = 0;
-          }
-          weeklyHours += dayTotalHours;
-      
-          const expenseTotal = expenses.reduce((sum, expense) => sum + expense.amount, 0) || 0;
-          totalMonthlyExpenses += expenseTotal;
-      
+                
           if (timeSlots.length > 0) {
             timeSlots.forEach((slot) => {
-              csvRows.push(`${day};${slot.start};${slot.end};${dayTotalHours.toFixed(2)};${weeklyHours.toFixed(2)};${totalMonthlyHours.toFixed(2)};${expenseTotal.toFixed(2)};${totalMonthlyCommissions.toFixed(2)};${totalMonthlyExpenses.toFixed(2)}\n`);
+              csvRows.push(`${day};${slot.start};${slot.end};${slot.status}\n`);
             });
           } else {
-            csvRows.push(`${day};;;0.00;${weeklyHours.toFixed(2)};${totalMonthlyHours.toFixed(2)};${expenseTotal.toFixed(2)};${totalMonthlyCommissions.toFixed(2)};${totalMonthlyExpenses.toFixed(2)}\n`);
+            csvRows.push(`${day};;;${daySheet.status}\n`);
           }
         }
       
@@ -125,13 +91,13 @@ const ExportManager = ({ showAlert }) => {
           "Jour",
           ...timeSlotColumns,
           "Total heures jour",
+          "Statut",
           "Total heures semaine",
-          "Total heures mois",
           "Total notes de frais journée",
-          "Total notes de frais mensuel"
         ];
       
         const tableRows = [];
+        const rowStyles = [];
       
         for (const daySheet of sortedDailyTimetables) {
           const date = new Date(daySheet.day);
@@ -155,8 +121,13 @@ const ExportManager = ({ showAlert }) => {
       
           totalMonthlyHours += dayTotalHours;
           const weekNumber = getISOWeek(date);
-          if (currentWeek !== weekNumber) {
-            currentWeek = weekNumber;
+      
+          console.log("number", weekNumber)
+          console.log("current", currentWeek)
+          const isNewWeek = currentWeek !== weekNumber;
+          console.log(isNewWeek)
+          if (isNewWeek) {
+            currentWeek = weekNumber; 
             weeklyHours = 0;
           }
           weeklyHours += dayTotalHours;
@@ -177,36 +148,46 @@ const ExportManager = ({ showAlert }) => {
             day,
             ...timeSlotColumnsData,
             dayTotalHours.toFixed(2),
+            daySheet.status,
             weeklyHours.toFixed(2),
-            totalMonthlyHours.toFixed(2),
             expenseTotal.toFixed(2),
-            totalMonthlyExpenses.toFixed(2)
           ];
           tableRows.push(row);
+      
+          rowStyles.push({
+            fillColor: isNewWeek ? [255, 0, 0] : [255, 255, 255], 
+            fontStyle: isNewWeek ? 'bold' : 'normal',
+          });
+          
         }
       
         doc.autoTable({
-          head: [tableColumns],
-          body: tableRows,
-          startY: 20,
-          theme: "grid",
-          headStyles: { fillColor: [0, 0, 128] },
-          styles: { fontSize: 8, cellPadding: 2 },
-        });
+            head: [tableColumns],
+            body: tableRows,
+            startY: 20,
+            theme: "grid",
+            headStyles: { fillColor: [0, 0, 128] },
+            styles: { fontSize: 8, cellPadding: 2 },
+            rowStyles: rowStyles.map((style) => ({
+              fillColor: style.fillColor,
+              fontStyle: style.fontStyle,
+            })),
+          });
+          
       
-        doc.setFontSize(10); 
-        doc.setTextColor(128, 128, 128); 
+        doc.setFontSize(10);
+        doc.setTextColor(128, 128, 128);
       
         doc.text(`Total heures mensuelles : ${totalMonthlyHours.toFixed(2)} heures`, 14, doc.lastAutoTable.finalY + 10);
         doc.text(`Total notes de frais mensuelles : ${totalMonthlyExpenses.toFixed(2)} CHF`, 14, doc.lastAutoTable.finalY + 16);
         doc.text(`Total commissions mensuelles : ${totalMonthlyCommissions.toFixed(2)} CHF`, 14, doc.lastAutoTable.finalY + 22);
       
-        doc.setFontSize(12); 
-        doc.setTextColor(0, 0, 0); 
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
       
         const pdfBlob = doc.output("blob");
         callback(pdfBlob);
-      };  
+      };           
       
       const exportToZip = async () => {
         if (!selectedTimetable || !selectedTimetable.daily_timetable_sheets) return;

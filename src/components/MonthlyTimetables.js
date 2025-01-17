@@ -63,7 +63,7 @@ const MonthlyTimetables = ({ fiches, admin = null }) => {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  });
 
   const visibleFiches = [
     ...fiches.slice(startIndex, startIndex + visibleCount),
