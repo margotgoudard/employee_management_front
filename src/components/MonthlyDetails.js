@@ -21,7 +21,7 @@ const MonthlyDetails = ({
     const fetchTotalHours = async () => {
       if (!selectedTimetable?.id_timetable) return;
       const response = await MensualTimetableSheet.getMensualWorkedHours(selectedTimetable.id_timetable);
-      setTotalHours(response.totalHours);
+      setTotalHours(response);
     };
     fetchTotalHours();
   }, [selectedTimetable]);
