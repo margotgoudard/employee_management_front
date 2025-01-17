@@ -26,7 +26,7 @@ const ExportManager = ({ showAlert }) => {
           };
 
           fetchUserInfo(selectedTimetable.id_user);
-    })
+    }, [selectedTimetable?.id_user]);
    
     const exportToCSV = async (callback) => {
         if (!selectedTimetable || !selectedTimetable.daily_timetable_sheets) return;

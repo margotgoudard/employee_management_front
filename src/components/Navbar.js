@@ -106,8 +106,8 @@ const Navbar = () => {
   const handleLogout = () => {
     handleMenuClick();
     navigate('/'); 
-    dispatch(logout()); 
     dispatch(resetTimetableState())
+    dispatch(logout()); 
   };
 
   return (
