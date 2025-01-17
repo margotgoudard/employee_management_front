@@ -4,18 +4,19 @@ import 'react-calendar/dist/Calendar.css';
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import '../assets/styles/Calendar.css';
 import { getISOWeek } from 'date-fns'; 
+import { useSelector } from 'react-redux';
 
 const CalendarComponent = ({
   selectedDate,
   weeklyHours,
   onDateChange,
   onMonthChange,
-  selectedTimetable,
   onDayClick,
   managerView,
 }) => {
   const [activeStartDate, setActiveStartDate] = useState(selectedDate);
   const [activatedDate, setActivatedDate] = useState(null);
+  const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
 
   useEffect(() => {
     setActiveStartDate(selectedDate);
