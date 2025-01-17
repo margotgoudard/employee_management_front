@@ -24,7 +24,7 @@ const UserInfo = ({ user, admin }) => {
     }
 
     setEditedUser(user || {});
-  }, [currentUser?.id_user]);
+  }, [currentUser, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -20,31 +20,6 @@ const Profile = () => {
   const fetchDataExecuted = useRef(false);
   const dispatch = useDispatch();
   
-  const fetchData = async () => {
-    try {
-      setLoading(true); 
-
-      if (connectedUser?.id_user) {
-        const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(connectedUser.id_user);
-        setDisplayedFiches(fetchedFiches); 
-        dispatch(setTimetables(fetchedFiches))
-        setDisplayedUser(connectedUser);
-      }
-
-      if (id_user) {
-        const fetchedUser = await User.fetchUser(id_user);
-        setDisplayedUser(fetchedUser);
-        const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(fetchedUser.id_user);
-        setDisplayedFiches(fetchedFiches); 
-      }
-
-    } catch (err) {
-      console.error("Erreur lors de la récupération des données :", err);
-      setError("Impossible de récupérer les données utilisateur.");
-    } finally {
-      setLoading(false); 
-    }
-  };
 
   useEffect(() => {
     if (selectedTimetable && displayedUser) { 
@@ -61,8 +36,34 @@ const Profile = () => {
 
     fetchDataExecuted.current = true;
 
+    const fetchData = async () => {
+      try {
+        setLoading(true); 
+  
+        if (connectedUser?.id_user) {
+          const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(connectedUser.id_user);
+          setDisplayedFiches(fetchedFiches); 
+          dispatch(setTimetables(fetchedFiches))
+          setDisplayedUser(connectedUser);
+        }
+  
+        if (id_user) {
+          const fetchedUser = await User.fetchUser(id_user);
+          setDisplayedUser(fetchedUser);
+          const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(fetchedUser.id_user);
+          setDisplayedFiches(fetchedFiches); 
+        }
+  
+      } catch (err) {
+        console.error("Erreur lors de la récupération des données :", err);
+        setError("Impossible de récupérer les données utilisateur.");
+      } finally {
+        setLoading(false); 
+      }
+    };
+
     fetchData();
-  }, [id_user, connectedUser?.id_user]);
+  }, [id_user, connectedUser, dispatch]);
 
   if (loading) {
     return <p>Chargement des informations utilisateur...</p>;

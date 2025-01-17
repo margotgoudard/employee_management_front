@@ -17,15 +17,16 @@ const ExportManager = ({ showAlert }) => {
     useEffect(() => {
         const fetchUserInfo = async (id_user) => {
             try {
-              const user = await User.fetchUser(id_user); 
-              setUserInfo(user);
-
+                if(id_user){
+                    const user = await User.fetchUser(id_user); 
+                    setUserInfo(user);
+                }
             } catch (error) {
               console.error("Erreur lors de la récupération des informations de l'utilisateur :", error);
             }
           };
 
-          fetchUserInfo(selectedTimetable.id_user);
+          fetchUserInfo(selectedTimetable?.id_user);
     }, [selectedTimetable?.id_user]);
    
     const exportToCSV = async (callback) => {
@@ -122,10 +123,7 @@ const ExportManager = ({ showAlert }) => {
           totalMonthlyHours += dayTotalHours;
           const weekNumber = getISOWeek(date);
       
-          console.log("number", weekNumber)
-          console.log("current", currentWeek)
           const isNewWeek = currentWeek !== weekNumber;
-          console.log(isNewWeek)
           if (isNewWeek) {
             currentWeek = weekNumber; 
             weeklyHours = 0;

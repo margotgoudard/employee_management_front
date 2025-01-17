@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import DailyTimetableSheet from "../components/DailyTimetableSheet";
@@ -54,7 +54,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
     }
   };
 
-  const fetchExpenseReports = async () => {
+  const fetchExpenseReports = useCallback(async () => {
     try {
       const data = await ExpenseReport.getExpenseReportsByMensualTimetable(selectedTimetable.id_timetable);
 
@@ -73,25 +73,25 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
     } catch (error) {
       console.error("Error fetching expense reports:", error);
     }
-  };
+  }, [selectedTimetable]);
  
-  const fetchWeeklyHours = async () => {
+  const fetchWeeklyHours = useCallback(async () => {
     if (selectedTimetable.id_timetable) {
       const data = await ComplianceCheck.fetchWeeklyHours(selectedTimetable.id_timetable);
       if (data) {
         setWeeklyHours(data);
       }
     }
-  }
+  }, [selectedTimetable])
 
-  const fetchComplianceCheckResult = async () => {
+  const fetchComplianceCheckResult = useCallback(async () => {
     try {
       const result = await ComplianceCheck.fetchComplianceCheckResult(selectedTimetable.id_timetable);
       setComplianceCheckResult(result);
     } catch (error) {   
       console.error("Error fetching compliance check result:", error);
     }
-  };
+  }, [selectedTimetable]);
   
   useEffect(() => {
 
@@ -123,7 +123,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
     };
 
     fetchTimetableData();
-  }, [timetables,user_id, user_id_timetable]);
+  }, [timetables,user_id, user_id_timetable, dispatch, id_timetable]);
   
   useEffect(() => {
     if (!selectedTimetable || !selectedTimetable?.id_timetable) {
@@ -151,7 +151,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
     if(selectedTimetable.status === "En attente d'approbation") {
       fetchComplianceCheckResult();
     }
-  }, [selectedTimetable?.id_timetable]);
+  }, [selectedTimetable, dispatch, fetchExpenseReports, fetchWeeklyHours, fetchComplianceCheckResult]);
 
   const handleMonthChange = (increment) => {
     const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + increment, 1);
@@ -253,19 +253,18 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
               onDayClick={handleDayClick}
               managerView={managerView} 
             />
-            <MonthlyDetails
-              expenseReports={expenseReports}
-              isDisabled={isDisabled}
-              onToggleExpenseDetails={() => (
-                setShowExpenseDetails(!showExpenseDetails),
-                setShowDailyDetails(false),
-                setSelectedDailyTimetable(null),
-                setComplianceCheckResultForDailyTimetable(null)
-              )}
-              onSubmitSuccess={onSubmitSuccess}
-              managerView={managerView} 
-            />
-            
+          <MonthlyDetails
+            expenseReports={expenseReports}
+            isDisabled={isDisabled}
+            onToggleExpenseDetails={() => {
+              setShowExpenseDetails(!showExpenseDetails);
+              setShowDailyDetails(false);
+              setSelectedDailyTimetable(null);
+              setComplianceCheckResultForDailyTimetable(null);
+            }}
+            onSubmitSuccess={onSubmitSuccess}
+            managerView={managerView}
+          />
           </div>
         </div>
               

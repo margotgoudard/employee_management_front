@@ -100,7 +100,7 @@ const MonthlyTimetables = ({ fiches, admin = null }) => {
       
       {selectedFiche && (
         <MensualTimetable 
-          user_id={selectedFiche.id_user} 
+          user_id={selectedFiche?.id_user} 
           user_id_timetable={selectedFiche.id_timetable} 
         />
       )}

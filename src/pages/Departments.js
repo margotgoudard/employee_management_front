@@ -75,7 +75,7 @@ const Departments = () => {
     };
 
     fetchData();
-  }, [user?.id_user]);
+  }, [user]);
 
   const toggleUsers = (departmentId) => {
     setExpandedUsers((prev) => ({

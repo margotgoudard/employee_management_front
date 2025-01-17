@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'; 
 import Department from '../services/Department';
@@ -21,7 +21,7 @@ const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate(); 
 
-  const STATUSES = ["Acceptée", "En attente d'approbation", "À compléter"];
+  const STATUSES = useMemo(() => ["Acceptée", "En attente d'approbation", "À compléter"], []);
 
   useEffect(() => {
     if (!user?.id_user) return;
@@ -96,7 +96,7 @@ const Dashboard = () => {
     };
 
     fetchAllTimetables();
-  }, [user?.id_user, selectedMonth]);
+  }, [user?.id_user, selectedMonth, STATUSES]);
 
   useEffect(() => {
     const applyFilters = () => {
