@@ -23,26 +23,21 @@ const Profile = () => {
   const fetchData = async () => {
     try {
       setLoading(true); 
-      let fetchedUser = null;
 
       if (connectedUser?.id_user) {
         const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(connectedUser.id_user);
         setDisplayedFiches(fetchedFiches); 
         dispatch(setTimetables(fetchedFiches))
-        fetchedUser = connectedUser;
+        setDisplayedUser(connectedUser);
       }
 
       if (id_user) {
-        fetchedUser = await User.fetchUser(id_user);
-      }
-
-      if (fetchedUser) {
+        const fetchedUser = await User.fetchUser(id_user);
         setDisplayedUser(fetchedUser);
         const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(fetchedUser.id_user);
         setDisplayedFiches(fetchedFiches); 
-      } else {
-        throw new Error("Utilisateur introuvable.");
       }
+
     } catch (err) {
       console.error("Erreur lors de la récupération des données :", err);
       setError("Impossible de récupérer les données utilisateur.");
