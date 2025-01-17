@@ -20,8 +20,11 @@ const timetableSlice = createSlice({
         state.selectedTimetable.daily_timetable_sheets = action.payload;
       }
     },
+    resetTimetableState: (state) => {
+      return initialState; 
+    },
   },
 });
 
-export const { setTimetables, setSelectedTimetable, updateDailyTimetables } = timetableSlice.actions;
+export const { setTimetables, setSelectedTimetable, updateDailyTimetables, resetTimetableState } = timetableSlice.actions;
 export default timetableSlice.reducer;

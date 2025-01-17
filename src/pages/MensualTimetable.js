@@ -11,7 +11,6 @@ import ExpenseReport from "../services/ExpenseReport";
 import Alert from "../components/Alert";
 import {
   setSelectedTimetable,
-  setTimetables,
   updateDailyTimetables,
 } from "../redux/timetableSlice";
 import ComplianceCheck from "../services/ComplianceCheck";

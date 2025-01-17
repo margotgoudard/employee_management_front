@@ -5,7 +5,7 @@ import logo from '../assets/images/logo.png';
 import { HiBellAlert } from "react-icons/hi2";
 import { IoPerson } from "react-icons/io5";
 import { useSelector, useDispatch } from 'react-redux';
-import { setSelectedTimetable } from '../redux/timetableSlice';
+import { resetTimetableState, setSelectedTimetable } from '../redux/timetableSlice';
 import Notification from '../services/Notification'; 
 import { logout } from '../redux/authSlice'; 
 
@@ -107,6 +107,7 @@ const Navbar = () => {
     handleMenuClick();
     navigate('/'); 
     dispatch(logout()); 
+    dispatch(resetTimetableState())
   };
 
   return (
