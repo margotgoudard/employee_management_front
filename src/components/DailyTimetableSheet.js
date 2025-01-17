@@ -159,6 +159,19 @@
           return;
         }
 
+        if (status === "Demi-journée") {
+          const workedSlots = allTimeSlots.filter((slot) => slot.status === "Travaillé");
+          const otherSlots = allTimeSlots.filter((slot) => slot.status !== "Travaillé");
+    
+          if (workedSlots.length === 0 || otherSlots.length === 0) {
+            showAlert(
+              "Pour une journée de statut 'Demi-journée', vous devez avoir au minimum deux plages horaires : une 'Travaillé' et une d'un autre type.",
+              "error"
+            );
+            return;
+          }
+        }
+        
         const modifiedTimeSlots = timeSlots.filter((slot) => {
           const initialSlot = initialTimeSlots.find((s) => s.id_time_slot === slot.id_time_slot);
           return initialSlot && JSON.stringify(initialSlot) !== JSON.stringify(slot); 
@@ -231,7 +244,7 @@
     
       return false;
     };
-    
+
     return (
       <div className="daily-timetable-sheet">
           {alert && <Alert message={alert.message} type={alert.type} />}
