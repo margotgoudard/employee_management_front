@@ -3,9 +3,6 @@ import { FaFileAlt } from 'react-icons/fa';
 import '../assets/styles/Profile.css';
 import { useSelector } from 'react-redux';
 import User from '../services/User';
-import { useDispatch } from 'react-redux';
-import { updateUser } from '../redux/authSlice';
-
 import { useNavigate } from 'react-router-dom';
 
 const UserInfo = ({ user, admin }) => {
@@ -13,7 +10,6 @@ const UserInfo = ({ user, admin }) => {
   const [isEditMode, setIsEditMode] = useState(false); 
   const [editedUser, setEditedUser] = useState({}); 
   const [isDisabled, setIsDisabled] = useState(true);
-  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.user);
 
   const handleViewDoc = () => {
