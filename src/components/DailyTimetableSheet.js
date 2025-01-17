@@ -150,6 +150,15 @@
     
     const handleSave = async () => {
       try {
+
+        const allTimeSlots = [...timeSlots, ...newTimeSlots];
+        const hasOverlaps = checkForOverlappingTimeSlots(allTimeSlots);
+
+        if (hasOverlaps) {
+          showAlert("Des plages horaires se chevauchent. Corrigez-les avant d'enregistrer.", "error");
+          return;
+        }
+
         const modifiedTimeSlots = timeSlots.filter((slot) => {
           const initialSlot = initialTimeSlots.find((s) => s.id_time_slot === slot.id_time_slot);
           return initialSlot && JSON.stringify(initialSlot) !== JSON.stringify(slot); 
@@ -208,6 +217,21 @@
       }
     };    
   
+    const checkForOverlappingTimeSlots = (slots) => {
+      const sortedSlots = slots.sort((a, b) => new Date(`1970-01-01T${a.start}`) - new Date(`1970-01-01T${b.start}`));
+    
+      for (let i = 0; i < sortedSlots.length - 1; i++) {
+        const currentSlot = sortedSlots[i];
+        const nextSlot = sortedSlots[i + 1];
+    
+        if (new Date(`1970-01-01T${currentSlot.end}`) > new Date(`1970-01-01T${nextSlot.start}`)) {
+          return true;
+        }
+      }
+    
+      return false;
+    };
+    
     return (
       <div className="daily-timetable-sheet">
           {alert && <Alert message={alert.message} type={alert.type} />}
