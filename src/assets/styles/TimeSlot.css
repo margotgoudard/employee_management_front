@@ -1,0 +1,4 @@
+.time-slot-item.error input,
+.time-slot-item.error select {
+  border: 2px solid red;
+}
