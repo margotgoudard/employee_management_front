@@ -11,7 +11,6 @@ const MonthlyDetails = ({
   isDisabled, 
   onToggleExpenseDetails, 
   onSubmitSuccess, 
-  onTimetableUpdate,
   managerView
 }) => {
   const [totalHours, setTotalHours] = useState(0);
@@ -47,8 +46,12 @@ const MonthlyDetails = ({
     };
   
     setSelectedTimetable(updatedTimetable);
-    await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
+  
+    if (name === "commission" && value !== "") {
+      await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
+    }
   };
+  
 
   const handleSubmit = async () => {
     const updatedTimetable = {
@@ -89,17 +92,31 @@ const MonthlyDetails = ({
 
       <div className="detail-item">
         <label>Total commissions</label>
-        <div className="input-container">
-          <input
-            type="number"
-            name="commission"
-            value={selectedTimetable?.commission || 0}
-            onChange={handleChange}
-            disabled={isDisabled}
-          />
-          <span className="input-suffix">CHF</span>
+          <div className="input-container">
+            <input
+              type="number"
+              name="commission"
+              value={selectedTimetable?.commission === null || selectedTimetable?.commission === undefined ? "" : selectedTimetable?.commission}
+              onChange={(e) => handleChange(e)}
+              onFocus={(e) => {
+                setSelectedTimetable({
+                  ...selectedTimetable,
+                  commission: null,
+                });
+              }}
+              onBlur={() => {
+                if (selectedTimetable?.commission === "" || selectedTimetable?.commission === null || selectedTimetable?.commission === undefined) {
+                  setSelectedTimetable({
+                    ...selectedTimetable,
+                    commission: 0,
+                  });
+                }
+              }}
+              disabled={isDisabled}
+            />
+            <span className="input-suffix">CHF</span>
+          </div>
         </div>
-      </div>
 
       <div className="detail-item">
         <label>Total heures</label>
