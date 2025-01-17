@@ -24,6 +24,16 @@ class ComplianceCheck {
         }
     }
 
+    static async fetchMensualComplianceCheck(id_timetable) {
+        try {
+            const endpoint = `/compliance-checks/mensual/${id_timetable}`;
+            const response = await API.get(endpoint);
+            return response; 
+            
+        } catch (error) {
+            console.error("Erreur lors de la compliance check", error);
+        }
+    }
 }
 
 export default ComplianceCheck;
