@@ -20,7 +20,6 @@ const Profile = () => {
   const fetchDataExecuted = useRef(false);
   const dispatch = useDispatch();
   
-
   useEffect(() => {
     if (selectedTimetable && displayedUser) { 
       setDisplayedFiches((prevFiches) => 

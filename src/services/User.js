@@ -22,6 +22,17 @@ class User {
     }
   }
 
+  static async checkManagerAccess(id_manager, id_user) {
+    try {
+      const endpoint = `/users/check-manager/${id_manager}/${id_user}`;
+      const response = await API.get(endpoint);
+      return response;
+    } catch (error) {
+      console.error("Erreur lors de la vérification des permissions :", error);
+      throw error; 
+    }
+  }
+
   static async ChangePassword(user, newPassword, confirmationPassword) {
     try {
     const endpoint = `/users/${user.id_user}/password`;

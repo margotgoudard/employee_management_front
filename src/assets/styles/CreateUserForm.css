@@ -57,7 +57,7 @@
     color: #444;
   }
   
-  input,
+  /* input,
   select {
     width: 100%;
     padding: 8px;
@@ -65,7 +65,7 @@
     border-radius: 4px;
     font-size: 14px;
   }
-  
+   */
   input:focus,
   select:focus {
     outline: none;

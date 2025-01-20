@@ -50,23 +50,6 @@
   font-size: 1rem;
 }
 
-.add-permission {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  background-color: var(--green-color);
-  color: var(--white-color);
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-  margin-top: 20px;
-  width: auto;
-}
-
-.add-permission:hover {
-  background-color: var(--green-hover-color);
-}
 
 .add-permission .icon-plus {
   margin-right: 10px;
@@ -136,7 +119,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 10%;
+  width: fit-content;
   cursor: pointer;
   background-color: var(--blue-color);
   color: var(--white-color);
