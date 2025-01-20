@@ -22,7 +22,6 @@ const Profile = () => {
     try {
       setLoading(true); 
       let fetchedUser = null;
-
       if (connectedUser?.id_user) {
         const fetchedFiches = await MensualTimetableSheet.fetchMensualTimetablesByUser(connectedUser.id_user);
         setDisplayedFiches(fetchedFiches); 
