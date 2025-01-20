@@ -54,7 +54,7 @@
       setIsDutyCall(dailyTimetable.on_call_duty || false);
 
       fetchData();
-    }, [dailyTimetable?.id_daily_timetable]);
+    }, [dailyTimetable]);
 
     useEffect(() => {
       const fetchData = async () => {

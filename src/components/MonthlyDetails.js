@@ -3,11 +3,11 @@ import "../assets/styles/MonthlyDetails.css";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 import { LiaSearchDollarSolid } from "react-icons/lia";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedTimetable } from "../redux/timetableSlice";
 
 const MonthlyDetails = ({ 
-  selectedTimetable, 
   expenseReports, 
-  setSelectedTimetable, 
   isDisabled, 
   onToggleExpenseDetails, 
   onSubmitSuccess, 
@@ -15,6 +15,8 @@ const MonthlyDetails = ({
 }) => {
   const [totalHours, setTotalHours] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
+  const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchTotalHours = async () => {
@@ -45,8 +47,8 @@ const MonthlyDetails = ({
       [name]: value,
     };
   
-    setSelectedTimetable(updatedTimetable);
-  
+    dispatch(setSelectedTimetable(updatedTimetable));
+      
     if (name === "commission" && value !== "") {
       await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
     }
@@ -59,7 +61,7 @@ const MonthlyDetails = ({
       status: "En attente d'approbation",
     };
 
-    setSelectedTimetable(updatedTimetable);
+    dispatch(setSelectedTimetable(updatedTimetable));
 
     try {
       const resp = await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);

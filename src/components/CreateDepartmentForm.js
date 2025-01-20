@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import '../assets/styles/CreateDepartmentForm.css';
 import CreateUserForm from './CreateUserForm';
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
-import User from '../services/User';
-import Department from '../services/Department';
 
 const CreateDepartmentForm = ({ departments, users, onSubmit, onCancel }) => {
   const [newDepartment, setNewDepartment] = useState({

@@ -5,7 +5,7 @@ import MensualTimetable from '../pages/MensualTimetable';
 import { HiOutlineArrowCircleLeft } from "react-icons/hi";
 import { HiOutlineArrowCircleRight } from "react-icons/hi";
 
-const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
+const MonthlyTimetables = ({ fiches, admin = null }) => {
   const [selectedFiche, setSelectedFiche] = useState(null);
   const [visibleCount, setVisibleCount] = useState(1); 
   const [startIndex, setStartIndex] = useState(0); 
@@ -40,10 +40,6 @@ const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
     setSelectedFiche(fiche);
   };
 
-  const handleOnUpdate = () => {
-    onUpdateTimetables()
-  }
-
   const handleResize = () => {
     if (fichesRef.current) {
       const containerWidth = fichesRef.current.offsetWidth;
@@ -67,7 +63,7 @@ const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  });
 
   const visibleFiches = [
     ...fiches.slice(startIndex, startIndex + visibleCount),
@@ -104,9 +100,8 @@ const MonthlyTimetables = ({ fiches, admin = null, onUpdateTimetables }) => {
       
       {selectedFiche && (
         <MensualTimetable 
-          user_id={selectedFiche.id_user} 
+          user_id={selectedFiche?.id_user} 
           user_id_timetable={selectedFiche.id_timetable} 
-          onUpdate={handleOnUpdate}
         />
       )}
     </div>

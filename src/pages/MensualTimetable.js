@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import DailyTimetableSheet from "../components/DailyTimetableSheet";
@@ -14,7 +14,7 @@ import ComplianceCheck from "../services/ComplianceCheck";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
 import ExportManager from "../components/ExportManager";
 
-const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }) => {
+const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
   const managerView = user_id !== null;
   const timetables = useSelector((state) => state.timetable.timetables);
   const { id_timetable } = useParams();
@@ -54,18 +54,13 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
     }
   };
 
-  const fetchExpenseReports = async () => {
+  const fetchExpenseReports = useCallback(async () => {
     try {
-      const data = await ExpenseReport.getExpenseReportsByMensualTimetable(
-        selectedTimetable.id_timetable
-      );
+      const data = await ExpenseReport.getExpenseReportsByMensualTimetable(selectedTimetable.id_timetable);
 
       const reportsWithDetails = await Promise.all(
         data.map(async (report) => {
-          const dailyTimetable =
-            await DailyTimetableSheetService.fetchDailyTimetableById(
-              report.id_daily_timetable
-            );
+          const dailyTimetable = await DailyTimetableSheetService.fetchDailyTimetableById(report.id_daily_timetable);
 
           return {
             ...report,
@@ -78,29 +73,25 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
     } catch (error) {
       console.error("Error fetching expense reports:", error);
     }
-  };
-
-  const handleTimetableUpdate = async () => {
-    onUpdate()
-  }
+  }, [selectedTimetable]);
  
-  const fetchWeeklyHours = async () => {
+  const fetchWeeklyHours = useCallback(async () => {
     if (selectedTimetable.id_timetable) {
       const data = await ComplianceCheck.fetchWeeklyHours(selectedTimetable.id_timetable);
       if (data) {
         setWeeklyHours(data);
       }
     }
-  }
+  }, [selectedTimetable])
 
-  const fetchComplianceCheckResult = async () => {
+  const fetchComplianceCheckResult = useCallback(async () => {
     try {
       const result = await ComplianceCheck.fetchComplianceCheckResult(selectedTimetable.id_timetable);
       setComplianceCheckResult(result);
     } catch (error) {   
       console.error("Error fetching compliance check result:", error);
     }
-  };
+  }, [selectedTimetable]);
   
   useEffect(() => {
 
@@ -132,7 +123,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
     };
 
     fetchTimetableData();
-  }, [timetables,user_id, user_id_timetable]);
+  }, [timetables,user_id, user_id_timetable, dispatch, id_timetable]);
   
   useEffect(() => {
     if (!selectedTimetable || !selectedTimetable?.id_timetable) {
@@ -254,8 +245,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
           />
           </div>
             <CalendarComponent
-              selectedDate={selectedDate}
-              selectedTimetable={selectedTimetable}
+            selectedDate={selectedDate}
               complianceCheckResult={complianceCheckResult}
               weeklyHours={weeklyHours}
               onDateChange={handleDateChange}
@@ -263,22 +253,18 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
               onDayClick={handleDayClick}
               managerView={managerView} 
             />
-            <MonthlyDetails
-              selectedTimetable={selectedTimetable}
-              expenseReports={expenseReports}
-              setSelectedTimetable={(timetable) => dispatch(setSelectedTimetable(timetable))}
-              isDisabled={isDisabled}
-              onToggleExpenseDetails={() => (
-                setShowExpenseDetails(!showExpenseDetails),
-                setShowDailyDetails(false),
-                setSelectedDailyTimetable(null),
-                setComplianceCheckResultForDailyTimetable(null)
-              )}
-              onSubmitSuccess={onSubmitSuccess}
-              managerView={managerView} 
-              onTimetableUpdate={handleTimetableUpdate}
-            />
-            
+          <MonthlyDetails
+            expenseReports={expenseReports}
+            isDisabled={isDisabled}
+            onToggleExpenseDetails={() => {
+              setShowExpenseDetails(!showExpenseDetails);
+              setShowDailyDetails(false);
+              setSelectedDailyTimetable(null);
+              setComplianceCheckResultForDailyTimetable(null);
+            }}
+            onSubmitSuccess={onSubmitSuccess}
+            managerView={managerView}
+          />
           </div>
         </div>
               
@@ -286,7 +272,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
           <div className="expense-details-section">
             <ExpenseReportDetails
               expenseReports={expenseReports}
-              mensualTimetableId={selectedTimetable?.id_timetable}
             />
           </div>
         )}
