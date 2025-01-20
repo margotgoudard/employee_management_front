@@ -79,12 +79,10 @@ const MonthlyDetails = ({
       };
       await MensualTimetableSheet.updateMensualTimetable(updatedTimetable);
       setSelectedTimetable(updatedTimetable); 
-
     } catch (error) {
       console.error(`Erreur lors de la mise à jour du statut (${newStatus}) :`, error);
     }
   };
-  
 
   return (
     <div className="monthly-details">
@@ -176,17 +174,21 @@ const MonthlyDetails = ({
               Refuser
             </button>
           </div>
-        ) : isDisabled ? (
-          <button className="submit-button" disabled>
-            {selectedTimetable?.status || "Statut inconnu"}
-          </button>
         ) : (
-          <button className="submit-button" onClick={handleSubmit}>
-            Soumettre
-          </button>
+          <>
+            {!managerView && !isDisabled && (
+              <button className="submit-button" onClick={handleSubmit}>
+                Soumettre
+              </button>
+            )}
+            {isDisabled && (
+              <div className="submit-status">
+                {selectedTimetable?.status || "Statut inconnu"}
+              </div>
+            )}
+          </>
         )}
       </div>
-
     </div>
   );
 };

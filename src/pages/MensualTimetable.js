@@ -9,22 +9,10 @@ import ExpenseReportDetails from "../components/ExpenseReportDetails";
 import DailyTimetableSheetService from "../services/DailyTimetableSheet";
 import ExpenseReport from "../services/ExpenseReport";
 import Alert from "../components/Alert";
-import {
-  setSelectedTimetable,
-  setTimetables,
-  updateDailyTimetables,
-} from "../redux/timetableSlice";
+import {setSelectedTimetable, updateDailyTimetables} from "../redux/timetableSlice";
 import ComplianceCheck from "../services/ComplianceCheck";
-import { saveAs } from 'file-saver'; 
-import { getISOWeek } from "date-fns";
-import TimeSlot from "../services/TimeSlot";
-import ExpenseReportService from "../services/ExpenseReport";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
-import JSZip from "jszip";
 import MensualTimetableSheet from "../services/MensualTimetableSheet";
-import { TbFileExport } from "react-icons/tb";
-import User from "../services/User";
+import ExportManager from "../components/ExportManager";
 
 const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }) => {
   const managerView = user_id !== null;
@@ -39,7 +27,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   const [complianceCheckResult, setComplianceCheckResult] = useState({});
   const [complianceCheckResultForDailyTimetable, setComplianceCheckResultForDailyTimetable] = useState(null);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
   const [weeklyHours, setWeeklyHours] = useState([]);
   const selectedTimetable = useSelector((state) => state.timetable.selectedTimetable);
   const dispatch = useDispatch();
@@ -95,17 +82,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
 
   const handleTimetableUpdate = async () => {
     onUpdate()
-
   }
-
-  const fetchUserInfo = async (id_user) => {
-    try {
-      const user = await User.fetchUser(id_user); 
-      setUserInfo(user);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des informations de l'utilisateur :", error);
-    }
-  };
  
   const fetchWeeklyHours = async () => {
     if (selectedTimetable.id_timetable) {
@@ -126,7 +103,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
   };
   
   useEffect(() => {
-    fetchUserInfo(selectedTimetable.id_user);
 
     const fetchTimetableData = async () => {
       try {
@@ -213,7 +189,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
         }
       };
 
-      
       fetchDailyTimetables();
       fetchWeeklyHours()
     }
@@ -268,226 +243,16 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
     return null;
   }
 
-  const exportToCSV = async (callback) => {
-    if (!selectedTimetable || !selectedTimetable.daily_timetable_sheets) return;
-  
-    const csvRows = [];
-    csvRows.push(`Employé : ${userInfo.first_name} ${userInfo.last_name}\n`);
-    csvRows.push(`Mois;${selectedTimetable.month}/${selectedTimetable.year}\n`);
-    csvRows.push("Jour;Début;Fin;Total heures jour;Total heures semaine;Total heures mois;Total notes de frais journée;Total commissions;Total notes de frais mensuel\n");
-  
-    let totalMonthlyHours = 0;
-    let totalMonthlyExpenses = 0;
-    let totalMonthlyCommissions = selectedTimetable.commission || 0;
-    let weeklyHours = 0;
-    let currentWeek = null;
-  
-    const sortedDailyTimetables = [...selectedTimetable.daily_timetable_sheets].sort(
-      (a, b) => new Date(a.day) - new Date(b.day)
-    );
-  
-    for (const daySheet of sortedDailyTimetables) {
-      const date = new Date(daySheet.day);
-      const day = date.toLocaleDateString("fr-FR");
-      const timeSlots = await TimeSlot.getTimeSlotsByDailyTimetable(daySheet.id_daily_timetable) || [];
-      const expenses = await ExpenseReportService.getExpenseReportsByDailyTimetable(daySheet.id_daily_timetable) || [];
-  
-      const dayTotalHours = timeSlots.reduce((total, slot) => {
-        const [startHour, startMinute, startSecond] = slot.start.split(":").map(Number);
-        const [endHour, endMinute, endSecond] = slot.end.split(":").map(Number);
-  
-        const start = new Date();
-        start.setHours(startHour, startMinute, startSecond, 0);
-  
-        const end = new Date();
-        end.setHours(endHour, endMinute, endSecond, 0);
-  
-        const hours = (end - start) / (1000 * 60 * 60);
-        return total + hours;
-      }, 0);
-  
-      totalMonthlyHours += dayTotalHours;
-      const weekNumber = getISOWeek(date);
-      if (currentWeek !== weekNumber) {
-        currentWeek = weekNumber;
-        weeklyHours = 0;
-      }
-      weeklyHours += dayTotalHours;
-  
-      const expenseTotal = expenses.reduce((sum, expense) => sum + expense.amount, 0) || 0;
-      totalMonthlyExpenses += expenseTotal;
-  
-      if (timeSlots.length > 0) {
-        timeSlots.forEach((slot) => {
-          csvRows.push(`${day};${slot.start};${slot.end};${dayTotalHours.toFixed(2)};${weeklyHours.toFixed(2)};${totalMonthlyHours.toFixed(2)};${expenseTotal.toFixed(2)};${totalMonthlyCommissions.toFixed(2)};${totalMonthlyExpenses.toFixed(2)}\n`);
-        });
-      } else {
-        csvRows.push(`${day};;;0.00;${weeklyHours.toFixed(2)};${totalMonthlyHours.toFixed(2)};${expenseTotal.toFixed(2)};${totalMonthlyCommissions.toFixed(2)};${totalMonthlyExpenses.toFixed(2)}\n`);
-      }
-    }
-  
-    const csvContent = csvRows.join("");
-    callback(csvContent);
-  };   
-
-  const exportToPDF = async (callback) => {
-    if (!selectedTimetable || !selectedTimetable.daily_timetable_sheets) return;
-  
-    const doc = new jsPDF();
-    const title = `Employé : ${userInfo.first_name} ${userInfo.last_name} - ${selectedTimetable.month}/${selectedTimetable.year}`;
-    doc.text(title, 14, 10);
-  
-    let totalMonthlyHours = 0;
-    let totalMonthlyExpenses = 0;
-    let totalMonthlyCommissions = selectedTimetable.commission || 0;
-  
-    let weeklyHours = 0;
-    let currentWeek = null;
-  
-    const sortedDailyTimetables = [...selectedTimetable.daily_timetable_sheets].sort(
-      (a, b) => new Date(a.day) - new Date(b.day)
-    );
-  
-    let maxTimeSlots = 0;
-    for (const daySheet of sortedDailyTimetables) {
-      const timeSlots = await TimeSlot.getTimeSlotsByDailyTimetable(daySheet.id_daily_timetable);
-      if (timeSlots.length > maxTimeSlots) {
-        maxTimeSlots = timeSlots.length;
-      }
-    }
-  
-    const timeSlotColumns = [];
-    for (let i = 1; i <= maxTimeSlots; i++) {
-      timeSlotColumns.push(`Début ${i}`, `Fin ${i}`);
-    }
-  
-    const tableColumns = [
-      "Jour",
-      ...timeSlotColumns,
-      "Total heures jour",
-      "Total heures semaine",
-      "Total heures mois",
-      "Total notes de frais journée",
-      "Total notes de frais mensuel"
-    ];
-  
-    const tableRows = [];
-  
-    for (const daySheet of sortedDailyTimetables) {
-      const date = new Date(daySheet.day);
-      const day = date.toLocaleDateString("fr-FR");
-      const timeSlots = await TimeSlot.getTimeSlotsByDailyTimetable(daySheet.id_daily_timetable) || [];
-      const expenses = await ExpenseReportService.getExpenseReportsByDailyTimetable(daySheet.id_daily_timetable) || [];
-  
-      const dayTotalHours = timeSlots.reduce((total, slot) => {
-        const [startHour, startMinute, startSecond] = slot.start.split(":").map(Number);
-        const [endHour, endMinute, endSecond] = slot.end.split(":").map(Number);
-  
-        const start = new Date();
-        start.setHours(startHour, startMinute, startSecond, 0);
-  
-        const end = new Date();
-        end.setHours(endHour, endMinute, endSecond, 0);
-  
-        const hours = (end - start) / (1000 * 60 * 60);
-        return total + hours;
-      }, 0);
-  
-      totalMonthlyHours += dayTotalHours;
-      const weekNumber = getISOWeek(date);
-      if (currentWeek !== weekNumber) {
-        currentWeek = weekNumber;
-        weeklyHours = 0;
-      }
-      weeklyHours += dayTotalHours;
-  
-      const expenseTotal = expenses.reduce((sum, expense) => sum + expense.amount, 0) || 0;
-      totalMonthlyExpenses += expenseTotal;
-  
-      const timeSlotColumnsData = [];
-      timeSlots.forEach((slot) => {
-        timeSlotColumnsData.push(slot.start, slot.end);
-      });
-  
-      while (timeSlotColumnsData.length < maxTimeSlots * 2) {
-        timeSlotColumnsData.push("", "");
-      }
-  
-      const row = [
-        day,
-        ...timeSlotColumnsData,
-        dayTotalHours.toFixed(2),
-        weeklyHours.toFixed(2),
-        totalMonthlyHours.toFixed(2),
-        expenseTotal.toFixed(2),
-        totalMonthlyExpenses.toFixed(2)
-      ];
-      tableRows.push(row);
-    }
-  
-    doc.autoTable({
-      head: [tableColumns],
-      body: tableRows,
-      startY: 20,
-      theme: "grid",
-      headStyles: { fillColor: [0, 0, 128] },
-      styles: { fontSize: 8, cellPadding: 2 },
-    });
-  
-    doc.setFontSize(10); 
-    doc.setTextColor(128, 128, 128); 
-  
-    doc.text(`Total heures mensuelles : ${totalMonthlyHours.toFixed(2)} heures`, 14, doc.lastAutoTable.finalY + 10);
-    doc.text(`Total notes de frais mensuelles : ${totalMonthlyExpenses.toFixed(2)} CHF`, 14, doc.lastAutoTable.finalY + 16);
-    doc.text(`Total commissions mensuelles : ${totalMonthlyCommissions.toFixed(2)} CHF`, 14, doc.lastAutoTable.finalY + 22);
-  
-    doc.setFontSize(12); 
-    doc.setTextColor(0, 0, 0); 
-  
-    const pdfBlob = doc.output("blob");
-    callback(pdfBlob);
-  };  
-  
-  const exportToZip = async () => {
-    if (!selectedTimetable || !selectedTimetable.daily_timetable_sheets) return;
-  
-    showAlert("Exportation en cours...", "warning");
-  
-    const zip = new JSZip();
-  
-    const csvPromise = new Promise((resolve) => {
-      exportToCSV((csvContent) => {
-        zip.file(`Mensual_Timetable_${userInfo.first_name}_${userInfo.last_name}_${selectedTimetable.month}_${selectedTimetable.year}.csv`, csvContent);
-        resolve();
-      });
-    });
-  
-    const pdfPromise = new Promise((resolve) => {
-      exportToPDF((pdfBlob) => {
-        zip.file(`Mensual_Timetable_${userInfo.first_name}_${userInfo.last_name}_${selectedTimetable.month}_${selectedTimetable.year}.pdf`, pdfBlob);
-        resolve();
-      });
-    });
-  
-    await Promise.all([csvPromise, pdfPromise]);
-  
-    zip.generateAsync({ type: "blob" }).then((content) => {
-      saveAs(content, `Mensual_Timetable_${selectedTimetable.month}_${selectedTimetable.year}.zip`);
-      
-      showAlert("Exportation terminée avec succès", "success");
-    }).catch(() => {
-      showAlert("Erreur lors de l'exportation", "error");
-    });
-  }; 
-  
   return (
     <div className="mensual-timetable">
       <div className="content-layout">
         <div className="timetable-layout">
           <div className="main-section">
-          <button onClick={exportToZip} className="export-button" title="Exporter en pdf/csv">
-            <TbFileExport size={20}/>
-            </button>
+          <div className="export-button">
+          <ExportManager
+            showAlert={showAlert}
+          />
+          </div>
             <CalendarComponent
               selectedDate={selectedDate}
               selectedTimetable={selectedTimetable}
@@ -539,8 +304,6 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null, onUpdate }
         
       </div>
       
-      
-
       {alert.message && (
         <Alert message={alert.message} type={alert.type} />
       )}

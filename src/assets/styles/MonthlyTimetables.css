@@ -115,6 +115,10 @@
     background-color: #45A049;
 }
 
+.submit-status {
+    color: var(--blue-color)
+}
+
 @media (max-width: 768px) {
     .fiches-container {
         flex-direction: column;
