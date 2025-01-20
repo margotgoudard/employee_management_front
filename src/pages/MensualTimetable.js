@@ -151,7 +151,7 @@ const MensualTimetable = ({ user_id = null, user_id_timetable = null }) => {
     if(selectedTimetable.status === "En attente d'approbation") {
       fetchComplianceCheckResult();
     }
-  }, [selectedTimetable, dispatch, fetchExpenseReports, fetchWeeklyHours, fetchComplianceCheckResult]);
+  }, [selectedTimetable?.id_timetable]);
 
   const handleMonthChange = (increment) => {
     const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + increment, 1);

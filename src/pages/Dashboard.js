@@ -55,7 +55,6 @@ const Dashboard = () => {
             const totalExpenses = expenseReports.reduce((sum, report) => sum + report.amount, 0);
 
             const complianceErrors = await ComplianceCheck.fetchMensualComplianceCheck(filteredTimetable.id_timetable);
-            console.log(complianceErrors.length)
             const firstKey = Object.keys(complianceErrors)[0];
             const errorsArray = complianceErrors[firstKey];
             return {
